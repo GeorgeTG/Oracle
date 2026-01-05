@@ -1,0 +1,65 @@
+/* Map Detail Component Styles */
+
+/* Dark Dialog Styling */
+::ng-deep .p-dialog.dark-dialog {
+  background: rgb(15, 23, 42) !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-header {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1.5rem !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-title {
+  color: rgba(99, 102, 241, 1) !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-content {
+  background: rgb(15, 23, 42) !important;
+  color: rgb(226, 232, 240) !important;
+  padding: 1.5rem !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-footer {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1.5rem !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-close-icon {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-close-icon:hover {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+/* Style dialog header actions */
+::ng-deep .p-dialog-header-actions {
+  gap: var(--p-dialog-header-gap);
+}
+
+/* Style the close button to be red and visible */
+::ng-deep .p-dialog-close-button {
+  color: #f87171 !important;
+  background-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+::ng-deep .p-dialog-close-button:hover {
+  background-color: rgba(239, 68, 68, 0.3) !important;
+  color: #fca5a5 !important;
+}
+
+/* Style the maximize button */
+::ng-deep .p-dialog-maximize-button {
+  color: #e2e8f0 !important;
+  background-color: rgba(148, 163, 184, 0.15) !important;
+}
+
+::ng-deep .p-dialog-maximize-button:hover {
+  background-color: rgba(148, 163, 184, 0.3) !important;
+  color: #f1f5f9 !important;
+}

@@ -1,0 +1,126 @@
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-3xl font-bold">Market Tracking</h1>
+    <div class="flex items-center gap-4">
+      @if (playerName) {
+        <div class="text-gray-400">
+          Viewing transactions for: <span class="text-primary font-bold">{{ playerName }}</span>
+        </div>
+      }
+      <p-select
+        [options]="sessions"
+        [(ngModel)]="selectedSession"
+        (onChange)="onSessionChange(dt)"
+        optionLabel="label"
+        placeholder="Filter by Session"
+        [showClear]="true"
+        appendTo="body"
+        [style]="{'min-width': '250px', 'margin-left': '1rem'}"
+      ></p-select>
+    </div>
+  </div>
+
+  <p-table
+    #dt
+    [value]="transactions"
+    [lazy]="true"
+    (onLazyLoad)="loadTransactions($event)"
+    [paginator]="true"
+    [rows]="20"
+    [totalRecords]="totalRecords"
+    [loading]="loading"
+    [showCurrentPageReport]="true"
+    currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries"
+    styleClass="p-datatable-sm p-datatable-striped"
+    [rowsPerPageOptions]="[10, 20, 50, 100]"
+    dataKey="id"
+  >
+    <ng-template pTemplate="header">
+      <tr>
+        <th pSortableColumn="timestamp">
+          Timestamp <p-sortIcon field="timestamp"></p-sortIcon>
+        </th>
+        <th pSortableColumn="action">
+          Action <p-sortIcon field="action"></p-sortIcon>
+        </th>
+        <th pSortableColumn="item_name">
+          Item <p-sortIcon field="item_name"></p-sortIcon>
+        </th>
+        <th pSortableColumn="quantity">
+          Quantity <p-sortIcon field="quantity"></p-sortIcon>
+        </th>
+        <th>
+          Session
+        </th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>
+          <p-select
+            [options]="actionOptions"
+            [(ngModel)]="filterAction"
+            (onChange)="onFilterChange(dt)"
+            optionLabel="label"
+            optionValue="value"
+            [style]="{'width': '100%'}"
+            appendTo="body"
+          >
+          </p-select>
+        </th>
+        <th>
+          <input pInputText type="text" [(ngModel)]="filterItemName" (input)="onFilterChange(dt)" placeholder="Search by item" class="w-full" />
+        </th>
+        <th>
+          <input pInputText type="number" [(ngModel)]="filterMinQuantity" (input)="onFilterChange(dt)" placeholder="Min qty" class="w-full" />
+        </th>
+        <th></th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-transaction>
+      <tr>
+        <td>
+          <span class="text-sm">{{ formatTimestamp(transaction.timestamp) }}</span>
+        </td>
+        <td>
+          @if (transaction.action === 'gained') {
+            <span class="px-2 py-1 rounded text-xs font-semibold bg-green-900 text-green-300">GAINED</span>
+          } @else if (transaction.action === 'lost') {
+            <span class="px-2 py-1 rounded text-xs font-semibold bg-red-900 text-red-300">LOST</span>
+          } @else if (transaction.action === 'bought') {
+            <span class="px-2 py-1 rounded text-xs font-semibold bg-blue-900 text-blue-300">BOUGHT</span>
+          } @else if (transaction.action === 'sold') {
+            <span class="px-2 py-1 rounded text-xs font-semibold bg-yellow-900 text-yellow-300">SOLD</span>
+          } @else {
+            <span class="px-2 py-1 rounded text-xs font-semibold bg-gray-700 text-gray-300">{{ transaction.action }}</span>
+          }
+        </td>
+        <td>
+          <span class="font-semibold">{{ transaction.item_name || 'Item #' + transaction.item_id }}</span>
+        </td>
+        <td>
+          <span class="font-bold">{{ transaction.quantity }}</span>
+        </td>
+        <td>
+          @if (transaction.session_title) {
+            <span class="text-sm text-gray-400">{{ transaction.session_title }}</span>
+          } @else if (transaction.session_id) {
+            <span class="text-sm text-gray-400">Session #{{ transaction.session_id }}</span>
+          } @else {
+            <span class="text-sm text-gray-500">-</span>
+          }
+        </td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="5" class="text-center py-4">
+          @if (loading) {
+            <span>Loading transactions...</span>
+          } @else {
+            <span>No market transactions found</span>
+          }
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+</div>

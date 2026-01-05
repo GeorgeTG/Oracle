@@ -1,0 +1,186 @@
+/* Session Select Styling */
+::ng-deep .p-select {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep .p-select:hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+}
+
+::ng-deep .p-select .p-select-label {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+::ng-deep .p-select .p-select-dropdown-icon {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+::ng-deep .p-select-overlay {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3) !important;
+}
+
+::ng-deep .p-select-option {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+::ng-deep .p-select-option:hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+::ng-deep .p-select-option.p-focus {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+::ng-deep .p-select-option.p-selected {
+  background: rgba(59, 130, 246, 0.3) !important;
+  color: rgba(147, 197, 253, 1) !important;
+  font-weight: 500 !important;
+}
+
+/* Dark Table Styling */
+::ng-deep .p-datatable {
+  background: transparent !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: rgba(30, 41, 59, 0.4) !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  border: 1px solid rgba(71, 85, 105, 0.3) !important;
+  padding: 0.75rem !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: rgba(30, 41, 59, 0.2) !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: rgba(30, 41, 59, 0.4) !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  border: 1px solid rgba(71, 85, 105, 0.3) !important;
+  padding: 0.75rem !important;
+}
+
+::ng-deep .p-datatable .p-paginator {
+  background: rgba(30, 41, 59, 0.3) !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  border: 1px solid rgba(71, 85, 105, 0.3) !important;
+  padding: 0.5rem !important;
+}
+
+::ng-deep .p-datatable .p-paginator .p-paginator-pages .p-paginator-page {
+  color: rgba(226, 232, 240, 0.9) !important;
+  min-width: 2rem !important;
+  height: 2rem !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep .p-datatable .p-paginator .p-paginator-pages .p-paginator-page:hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+::ng-deep .p-datatable .p-paginator .p-paginator-pages .p-paginator-page.p-paginator-page-active {
+  background: rgba(59, 130, 246, 0.3) !important;
+  color: rgba(147, 197, 253, 1) !important;
+}
+
+::ng-deep .p-datatable .p-paginator .p-dropdown {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+}
+
+::ng-deep .p-datatable .p-sortable-column-icon {
+  color: rgba(226, 232, 240, 0.6) !important;
+}
+
+::ng-deep .p-datatable .p-sortable-column.p-sortable-column-sorted .p-sortable-column-icon {
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+/* Input Styling */
+::ng-deep input[pInputText] {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.5rem !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep input[pInputText]:hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+}
+
+::ng-deep input[pInputText]:focus {
+  outline: none !important;
+  border-color: rgba(96, 165, 250, 1) !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1) !important;
+}
+
+::ng-deep input[pInputText]::placeholder {
+  color: rgba(148, 163, 184, 0.5) !important;
+}
+
+/* MultiSelect Styling */
+::ng-deep .p-multiselect {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep .p-multiselect:hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+}
+
+::ng-deep .p-multiselect .p-multiselect-label {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.5rem !important;
+}
+
+::ng-deep .p-multiselect .p-multiselect-dropdown-icon {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+::ng-deep .p-multiselect-overlay {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 8px !important;
+}
+
+::ng-deep .p-multiselect-option {
+  color: rgba(226, 232, 240, 0.9) !important;
+}
+
+::ng-deep .p-multiselect-option:hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+}
+
+::ng-deep .p-multiselect-option.p-focus {
+  background: rgba(59, 130, 246, 0.2) !important;
+}
+
+::ng-deep .p-checkbox .p-checkbox-box {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+}
+
+::ng-deep .p-checkbox .p-checkbox-box.p-checked {
+  background: rgba(59, 130, 246, 0.8) !important;
+  border-color: rgba(96, 165, 250, 1) !important;
+}

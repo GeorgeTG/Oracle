@@ -1,0 +1,25 @@
+{
+  "name": "oracle-build-tools",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "setup": "bun run setup.ts",
+    "build": "bun run build.ts",
+    "build:server": "bun run build.ts --target=server",
+    "build:frontend": "bun run build.ts --target=frontend",
+    "build:launcher": "bun run build.ts --target=launcher",
+    "build:all": "bun run build.ts --target=all",
+    "package": "bun run build.ts --target=package --release",
+    "release": "bun run build.ts --target=package --release --clean"
+  },
+  "dependencies": {
+    "chalk": "^5.3.0",
+    "commander": "^12.1.0",
+    "glob": "^13.0.0",
+    "ora": "^8.0.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/node": "^22.10.5"
+  }
+}

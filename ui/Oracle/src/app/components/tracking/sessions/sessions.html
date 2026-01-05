@@ -1,0 +1,126 @@
+<div class="sessions-container p-4">
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <h2 class="text-3xl font-bold text-white">Sessions</h2>
+      <p class="text-gray-400 text-sm">View and manage your farming sessions</p>
+    </div>
+    <div class="flex items-center gap-4">
+      @if (playerName) {
+        <div class="text-gray-400">
+          Current player: <span class="text-primary font-bold">{{ playerName }}</span>
+        </div>
+      }
+      <p-select
+        [(ngModel)]="selectedPlayerFilter"
+        (onChange)="onPlayerFilterChange()"
+        [options]="players"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Filter by Player"
+        [showClear]="false"
+        [loading]="loadingPlayers"
+        appendTo="body"
+        [style]="{'min-width': '200px'}"
+      ></p-select>
+    </div>
+  </div>
+
+  <p-dataview
+    [value]="sessions"
+    [loading]="loading"
+    [paginator]="true"
+    [rows]="pageSize"
+    [totalRecords]="totalRecords"
+    (onPage)="onPageChange($event)"
+    [lazy]="true"
+    layout="grid"
+  >
+    <ng-template #header>
+      <div class="flex justify-between items-center">
+        <div class="text-sm text-gray-400">
+          Showing {{ sessions.length }} of {{ totalRecords }} sessions
+        </div>
+      </div>
+    </ng-template>
+
+    <ng-template #grid let-items>
+      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+        <div *ngFor="let session of items"  (click)="openSessionDetails(session)">
+          <p-card styleClass="bg-surface-800 border-surface-700 session-card" class="session-card-wrapper cursor-pointer">
+            <ng-template #content>
+              <div class="space-y-3 relative">
+
+                <!-- Session Header -->
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-2">
+                    <h3 class="text-base font-semibold text-white">{{ session.title }}</h3>
+                    @if (session.is_active) {
+                      <p-tag severity="success" value="Active" styleClass="text-xs"></p-tag>
+                    }
+                  </div>
+                </div>
+
+                <!-- Session Info -->
+                <div class="text-xs text-gray-400 space-y-1">
+                  <div class="flex items-center gap-1">
+                    <i class="pi pi-user text-xs"></i>
+                    <span>{{ session.player_name }}</span>
+                  </div>
+                  <div class="flex items-center gap-1">
+                    <i class="pi pi-calendar text-xs"></i>
+                    <span>{{ formatDate(session.started_at) }}</span>
+                  </div>
+                  @if (session.ended_at) {
+                    <div class="flex items-center gap-1">
+                      <i class="pi pi-clock text-xs"></i>
+                      <span>{{ getSessionDuration(session) | duration }}</span>
+                    </div>
+                  } @else if (session.is_active) {
+                    <div class="flex items-center gap-1">
+                      <p-tag severity="success" value="Active" styleClass="text-xs" icon="pi pi-circle-fill"></p-tag>
+                    </div>
+                  }
+                </div>
+
+                @if (session.description) {
+                  <p class="text-gray-500 text-xs">{{ session.description }}</p>
+                }
+
+                <!-- Session Stats Grid - Horizontal -->
+                <div class="grid grid-cols-3 gap-3">
+                  <div class="bg-surface-700 p-3 rounded-lg text-center border border-surface-600 hover:border-surface-500 transition-all">
+                    <div class="text-xl font-bold text-blue-400">{{ session.total_maps }}</div>
+                    <div class="text-xs text-gray-500 mt-1">Maps</div>
+                  </div>
+                  <div class="bg-surface-700 p-3 rounded-lg text-center border border-surface-600 hover:border-surface-500 transition-all">
+                    <div class="text-xl font-bold" [ngClass]="getCurrencyClass(session.total_currency_delta)">
+                      {{ session.total_currency_delta | currency }}
+                    </div>
+                    <div class="text-xs text-gray-500 mt-1">Total</div>
+                  </div>
+                  <div class="bg-surface-700 p-3 rounded-lg text-center border border-surface-600 hover:border-surface-500 transition-all">
+                    <div class="text-xl font-bold text-yellow-400">{{ session.currency_per_hour | currency:true }}</div>
+                    <div class="text-xs text-gray-500 mt-1">Per {{ periodicUnitShort === 'h' ? 'Hour' : 'Minute' }}</div>
+                  </div>
+                </div>
+
+
+              </div>
+
+            </ng-template>
+
+              <!-- Magnifying Glass Icon - Shows on Hover -->
+              <div class="magnifying-glass-overlay"></div>
+          </p-card>
+        </div>
+      </div>
+    </ng-template>
+  </p-dataview>
+  
+  <app-session-details
+    [visible]="detailsDialogVisible"
+    (visibleChange)="detailsDialogVisible = $event"
+    [sessionDetails]="sessionDetails"
+    [sessionTitle]="selectedSessionTitle"
+  ></app-session-details>
+</div>

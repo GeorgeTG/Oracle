@@ -1,0 +1,12 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "stats-overlay",
+  "description": "Capability for the stats overlay window",
+  "windows": ["stats-overlay"],
+  "permissions": [
+    "core:default",
+    "core:window:allow-set-decorations",
+    "core:window:allow-close",
+    "core:window:allow-destroy"
+  ]
+}

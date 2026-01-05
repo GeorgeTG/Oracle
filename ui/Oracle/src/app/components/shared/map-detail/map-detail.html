@@ -1,0 +1,188 @@
+<p-dialog 
+  [(visible)]="visible"
+  (visibleChange)="visibleChange.emit($event)"
+  [header]="'Map Details - ' + (mapDetail?.map_name || 'Unknown Map')"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [closable]="true"
+  [maximizable]="true"
+  styleClass="dark-dialog"
+  [baseZIndex]="10000">
+  <ng-template pTemplate="header">
+    <div class="text-lg font-semibold text-primary">{{ mapDetail?.map_name || 'Map Details' }}</div>
+  </ng-template>
+  
+  @if (loading) {
+    <div class="flex items-center justify-center py-8">
+      <div class="text-gray-400">Loading...</div>
+    </div>
+  }
+  
+  @if (!loading && mapDetail) {
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Map Name</p>
+          <p class="font-semibold text-gray-100">{{ mapDetail.map_name || 'N/A' }}</p>
+        </div>
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Difficulty</p>
+          <p class="font-semibold text-gray-100">{{ (mapDetail.map_difficulty | difficulty) || 'N/A' }}</p>
+        </div>
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Duration</p>
+          <p class="font-semibold text-gray-100">{{ formatDuration(mapDetail.duration) }}</p>
+        </div>
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Exp Change</p>
+          <p class="font-semibold text-blue-400">{{ formatNumber(mapDetail.exp_gained, 0) }}</p>
+        </div>
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Net Currency Change</p>
+          <p class="font-semibold text-yellow-400">{{ formatNumber(mapDetail.currency_gained, 2) }}</p>
+        </div>
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Entry Cost</p>
+          <p class="font-semibold text-orange-400">{{ formatNumber(getEntryPrice(), 2) }}</p>
+        </div>
+        @if (mapDetail.affixes && mapDetail.affixes.length > 0) {
+          <div class="col-span-2">
+            <fieldset class="border border-surface-600 rounded p-3">
+              <legend 
+                class="text-sm font-semibold text-gray-300 px-2 cursor-pointer select-none hover:text-primary-400 transition"
+                (click)="affixesCollapsed = !affixesCollapsed"
+              >
+                {{ affixesCollapsed ? '▶' : '▼' }} Map Affixes ({{ mapDetail.affixes.length }})
+              </legend>
+              @if (!affixesCollapsed) {
+                <div class="mt-2 max-h-64 overflow-y-auto space-y-2">
+                  @for (affix of mapDetail.affixes; track affix.affix_id) {
+                    <div class="flex items-center justify-between p-2 rounded bg-surface-800 hover:bg-surface-750 transition">
+                      <div class="flex-1">
+                        <p class="text-sm font-medium text-purple-300">
+                          Affix #{{ affix.affix_id }}
+                        </p>
+                        <p class="text-xs text-gray-400">{{ affix.description || 'No description' }}</p>
+                      </div>
+                    </div>
+                  }
+                </div>
+              }
+            </fieldset>
+          </div>
+        }
+        <div class="col-span-2">
+          <fieldset class="border border-surface-600 rounded p-3">
+            <legend 
+              class="text-sm font-semibold text-gray-300 px-2 cursor-pointer select-none hover:text-primary-400 transition"
+              (click)="consumedCollapsed = !consumedCollapsed"
+            >
+              {{ consumedCollapsed ? '▶' : '▼' }} Entry Items ({{ consumedItems.length }})
+            </legend>
+            @if (!consumedCollapsed && consumedItems.length > 0) {
+              <div class="mt-2 max-h-64 overflow-y-auto space-y-2">
+                @for (item of consumedItems; track item.id) {
+                  <div class="flex items-center justify-between p-2 rounded bg-surface-800 hover:bg-surface-750 transition">
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-gray-200">
+                        {{ item.name || 'Item #' + item.id }}
+                      </p>
+                      <p class="text-xs text-gray-400">{{ item.category || 'Unknown' }}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <span class="px-2 py-1 rounded text-sm font-semibold bg-orange-900 text-orange-300">
+                        {{ item.quantity }}
+                      </span>
+                      <span class="text-sm font-semibold text-yellow-400 w-20 text-right">
+                        {{ formatNumber(item.total_price, 2) }}
+                      </span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+            @if (!consumedCollapsed && consumedItems.length === 0) {
+              <p class="text-sm text-gray-400 mt-2">No entry items used</p>
+            }
+          </fieldset>
+        </div>
+        <div class="col-span-2">
+          <fieldset class="border border-surface-600 rounded p-3">
+            <legend 
+              class="text-sm font-semibold text-gray-300 px-2 cursor-pointer select-none hover:text-primary-400 transition"
+              (click)="itemsCollapsed = !itemsCollapsed"
+            >
+              {{ itemsCollapsed ? '▶' : '▼' }} Item Changes ({{ mapItems.length }})
+            </legend>
+            @if (!itemsCollapsed && mapItems.length > 0) {
+              <div class="mt-2 max-h-64 overflow-y-auto space-y-2">
+                @for (item of mapItems; track item.id) {
+                  <div class="flex items-center justify-between p-2 rounded bg-surface-800 hover:bg-surface-750 transition">
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-gray-200">
+                        {{ item.name || 'Item #' + item.id }}
+                      </p>
+                      <p class="text-xs text-gray-400">{{ item.category || 'Unknown' }}</p>
+                    </div>
+                    <div class="flex items-center gap-3">
+                      <span 
+                        class="px-2 py-1 rounded text-sm font-semibold"
+                        [ngClass]="{
+                          'bg-green-900 text-green-300': item.delta > 0,
+                          'bg-red-900 text-red-300': item.delta < 0
+                        }"
+                      >
+                        {{ item.delta > 0 ? '+' : '' }}{{ item.delta }}
+                      </span>
+                      <span class="text-sm font-semibold text-yellow-400 w-20 text-right">
+                        {{ formatNumber(item.total_price, 2) }}
+                      </span>
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+            @if (!itemsCollapsed && mapItems.length === 0) {
+              <p class="text-sm text-gray-400 mt-2">No item changes recorded</p>
+            }
+          </fieldset>
+        </div>
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Started At</p>
+          <p class="font-semibold text-gray-100">{{ formatDate(mapDetail.started_at) }}</p>
+        </div>
+        <div class="col-span-2">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Completed At</p>
+          <p class="font-semibold text-gray-100">{{ formatDate(mapDetail.completed_at) }}</p>
+        </div>
+        <div class="col-span-2 border-t border-surface-700 pt-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-2">Description</p>
+          <textarea 
+            [(ngModel)]="mapDetail.description"
+            (blur)="saveDescription()"
+            placeholder="Add a description..."
+            class="w-full px-3 py-2 rounded bg-surface-800 border border-surface-600 text-gray-100 focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+            rows="3"
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  }
+  
+  <ng-template pTemplate="footer">
+    <div class="flex gap-2 justify-end">
+      <button 
+        (click)="closeDialog()"
+        class="px-4 py-2 rounded bg-surface-700 hover:bg-surface-600 text-gray-200 transition"
+      >
+        Close
+      </button>
+      <button 
+        (click)="deleteMap()"
+        class="px-4 py-2 rounded bg-red-600 hover:bg-red-700 text-white transition"
+      >
+        Delete
+      </button>
+    </div>
+  </ng-template>
+</p-dialog>

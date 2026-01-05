@@ -1,0 +1,183 @@
+<p-dialog
+  [(visible)]="visible"
+  (onHide)="onHide()"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{'width': '90vw', 'max-width': '1200px'}"
+  [header]="sessionTitle"
+  styleClass="dark-dialog"
+  [maximizable]="true"
+>
+  @if (sessionDetails) {
+    <p-tabs value="summary">
+      <p-tablist>
+        <p-tab value="summary">Summary</p-tab>
+        <p-tab [value]="'maps'">Maps ({{ sessionDetails.maps.length }})</p-tab>
+        <p-tab [value]="'market'">Market ({{ sessionDetails.market_transactions.length }})</p-tab>
+      </p-tablist>
+      
+      <p-tabpanels>
+        <!-- Summary Tab -->
+        <p-tabpanel value="summary">
+          <div class="space-y-4 p-4">
+            <!-- Session Header Info -->
+            <div class="bg-surface-800 p-4 rounded-lg border border-surface-700 space-y-3">
+              <div>
+                <label class="text-xs text-gray-400 mb-1 block">Title</label>
+                <input 
+                  pInputText 
+                  [(ngModel)]="sessionDetails.title" 
+                  class="w-full bg-surface-900 border-surface-600 text-white"
+                  placeholder="Session title"
+                />
+              </div>
+              <div>
+                <label class="text-xs text-gray-400 mb-1 block">Description</label>
+                <textarea 
+                  pTextarea 
+                  [(ngModel)]="sessionDetails.description" 
+                  class="w-full bg-surface-900 border-surface-600 text-white"
+                  rows="2"
+                  placeholder="Session description"
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- Session Metadata -->
+            <div class="bg-surface-800 p-4 rounded-lg border border-surface-700">
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <div class="text-xs text-gray-400 mb-1">Player</div>
+                  <div class="font-semibold text-white">{{ sessionDetails.player_name }}</div>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-400 mb-1">Status</div>
+                  <p-tag [severity]="sessionDetails.is_active ? 'success' : 'secondary'" 
+                         [value]="sessionDetails.is_active ? 'Active' : 'Completed'">
+                  </p-tag>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-400 mb-1">Started</div>
+                  <div class="text-sm text-gray-300">{{ formatDate(sessionDetails.started_at) }}</div>
+                </div>
+                @if (sessionDetails.ended_at) {
+                  <div>
+                    <div class="text-xs text-gray-400 mb-1">Ended</div>
+                    <div class="text-sm text-gray-300">{{ formatDate(sessionDetails.ended_at) }}</div>
+                  </div>
+                }
+                <div>
+                  <div class="text-xs text-gray-400 mb-1">Duration</div>
+                  <div class="text-sm text-gray-300">{{ sessionDetails.duration_seconds | duration }}</div>
+                </div>
+                <div>
+                  <div class="text-xs text-gray-400 mb-1">Total Maps</div>
+                  <div class="text-sm text-blue-400 font-semibold">{{ sessionDetails.total_maps }}</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Currency Stats -->
+            <div class="grid grid-cols-2 gap-4">
+              <div class="bg-surface-800 p-4 rounded-lg border border-surface-700">
+                <div class="text-sm text-gray-400 mb-1">Maps Currency</div>
+              <div class="text-2xl font-bold" [ngClass]="getCurrencyClass(mapsCurrency)">
+                {{ mapsCurrency | currency }}
+                </div>
+              </div>
+              <div class="bg-surface-800 p-4 rounded-lg border border-surface-700">
+                <div class="text-sm text-gray-400 mb-1">Market Currency</div>
+              <div class="text-2xl font-bold" [ngClass]="getCurrencyClass(marketCurrency)">
+                {{ marketCurrency | currency }}
+                </div>
+              </div>
+              <div class="bg-surface-800 p-4 rounded-lg border border-surface-700">
+                <div class="text-sm text-gray-400 mb-1">Total Currency</div>
+              <div class="text-2xl font-bold" [ngClass]="getCurrencyClass(totalCurrency)">
+                {{ totalCurrency | currency }}
+                </div>
+              </div>
+              <div class="bg-surface-800 p-4 rounded-lg border border-surface-700">
+                <div class="text-sm text-gray-400 mb-1">Efficiency</div>
+                <div class="flex items-baseline gap-2">
+                  <div class="text-2xl font-bold text-yellow-400">
+                    {{ currencyPerHour | currency:true }}
+                  </div>
+                  <span [ngClass]="getCurrencyClass(currencyPerMap)" class="text-sm font-semibold">
+                    {{ currencyPerMap | currency:false }}/map
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </p-tabpanel>
+
+        <!-- Maps Tab -->
+        <p-tabpanel value="maps">
+          <div class="space-y-2 p-4 max-h-[60vh] overflow-y-auto">
+            @for (map of sessionDetails.maps; track map.id) {
+              <div class="map-card-wrapper cursor-pointer" (click)="openMapDetail(map.id)">
+                <div class="bg-surface-800 p-3 rounded-lg border border-surface-700">
+                  <div class="flex justify-between items-start">
+                    <div class="flex-1">
+                      <div class="font-semibold text-white">{{ map.map_name }}</div>
+                      <div class="text-xs text-gray-500">
+                        {{ formatDate(map.completed_at) }} • {{ (map.duration / 60).toFixed(1) }}m
+                      </div>
+                    </div>
+                    <div class="flex gap-4 text-sm">
+                      <span [ngClass]="getCurrencyClass(map.currency_gained)">
+                        {{ map.currency_gained | currency }}
+                      </span>
+                      <span class="text-purple-400">{{ map.exp_gained.toFixed(0) }} XP</span>
+                      <span class="text-blue-400">{{ map.items_gained }} items</span>
+                    </div>
+                  </div>
+                  
+                  @if (map.items && map.items.length > 0) {
+                    <div class="mt-2 pt-2 border-t border-surface-700">
+                      <div class="text-xs text-gray-500 mb-1">Notable Items:</div>
+                      <div class="flex flex-wrap gap-2">
+                        @for (item of map.items.slice(0, 10); track item.item_id) {
+                          <span class="text-xs bg-surface-800 px-2 py-1 rounded">
+                            {{ item.name }} ({{ item.delta > 0 ? '+' : '' }}{{ item.delta }})
+                          </span>
+                        }
+                      </div>
+                    </div>
+                  }
+                </div>
+                <div class="magnifying-glass-overlay"></div>
+              </div>
+            }
+          </div>
+        </p-tabpanel>
+
+        <!-- Market Tab -->
+        <p-tabpanel value="market">
+          <div class="space-y-2 p-4 max-h-[60vh] overflow-y-auto">
+            @for (tx of sessionDetails.market_transactions; track tx.id) {
+              <div class="bg-surface-800 p-3 rounded-lg border border-surface-700 flex justify-between items-center">
+                <div class="flex-1">
+                  <div class="font-semibold text-white">{{ tx.item_name }}</div>
+                  <div class="text-xs text-gray-500">{{ formatDate(tx.timestamp) }}</div>
+                </div>
+                <div class="flex gap-4 items-center text-sm">
+                  <p-tag [severity]="tx.action === 'gained' ? 'success' : 'danger'" [value]="tx.action"></p-tag>
+                  <span class="text-gray-400">{{ tx.quantity }}x</span>
+                  <span class="text-yellow-400 font-semibold">{{ tx.total_value.toFixed(2) }}fe</span>
+                </div>
+              </div>
+            }
+          </div>
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
+  }
+</p-dialog>
+
+<app-map-detail
+  [(visible)]="mapDetailVisible"
+  [mapId]="selectedMapId"
+></app-map-detail>

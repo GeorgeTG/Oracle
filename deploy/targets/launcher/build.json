@@ -1,0 +1,23 @@
+{
+  "name": "launcher",
+  "version": "0.1",
+  "build": "",
+  "script": "build.ts",
+  "requires": ["frontend", "server"],
+  "output_to_root": true,
+  "targets": [
+    {
+      "glob_source": "dist/Oracle-Launcher.exe",
+      "output": "/Oracle-Launcher.exe",
+      "release_only": true
+    },
+    {
+      "glob_source": "../launcher/README.md",
+      "output": "/Launcher-README.md"
+    },
+    {
+      "glob_source": "../launcher/LICENSE",
+      "output": "/Launcher-LICENSE.txt"
+    }
+  ]
+}

@@ -1,0 +1,174 @@
+/* Table header styling */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: rgba(30, 41, 59, 0.8) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1rem 0.75rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Dark Dialog Styling */
+::ng-deep .p-dialog.dark-dialog {
+  background: rgb(15, 23, 42) !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-header {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1.5rem !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-title {
+  color: rgba(99, 102, 241, 1) !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-content {
+  background: rgb(15, 23, 42) !important;
+  color: rgb(226, 232, 240) !important;
+  padding: 1.5rem !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-footer {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1.5rem !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-close-icon {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 1.5rem !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-close-icon:hover {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-header-close {
+  color: rgba(255, 255, 255, 0.8) !important;
+  background: transparent !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-dialog-header-close:hover {
+  color: rgba(255, 255, 255, 1) !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Dialog buttons */
+::ng-deep .p-dialog.dark-dialog .p-button {
+  padding: 0.75rem 1.5rem !important;
+  border-radius: 0.375rem !important;
+  font-weight: 500 !important;
+  transition: all 0.2s ease !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-button-primary {
+  background: rgba(99, 102, 241, 0.8) !important;
+  border: 1px solid rgba(99, 102, 241, 1) !important;
+  color: white !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-button-primary:hover {
+  background: rgba(99, 102, 241, 1) !important;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4) !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-button-secondary,
+::ng-deep .p-dialog.dark-dialog .p-button-text {
+  background: transparent !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: rgba(255, 255, 255, 0.8) !important;
+}
+
+::ng-deep .p-dialog.dark-dialog .p-button-secondary:hover,
+::ng-deep .p-dialog.dark-dialog .p-button-text:hover {
+  background: rgba(71, 85, 105, 0.3) !important;
+  border-color: rgba(71, 85, 105, 0.8) !important;
+  color: white !important;
+}
+
+/* Sort icons */
+::ng-deep .p-datatable .p-sortable-column-icon {
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-left: 0.5rem !important;
+}
+
+::ng-deep .p-datatable .p-sortable-column:hover .p-sortable-column-icon {
+  color: rgba(99, 102, 241, 0.8) !important;
+}
+
+/* Filter row styling */
+::ng-deep .p-datatable .p-datatable-thead > tr:nth-child(2) > th {
+  background: rgba(15, 23, 42, 0.9) !important;
+  padding: 0.75rem !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+}
+
+/* Input fields in filters */
+::ng-deep .p-datatable .p-datatable-thead input.p-inputtext {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: white !important;
+  padding: 0.5rem !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead input.p-inputtext:focus {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  outline: none !important;
+}
+
+::ng-deep .p-datatable .p-datatable-thead input.p-inputtext::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Table body styling */
+::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border-color: rgba(71, 85, 105, 0.3) !important;
+  transition: background 0.2s ease !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  box-shadow: -3px 0 0 0 rgba(99, 102, 241, 0.6) inset !important;
+}
+
+/* Striped rows */
+::ng-deep .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.4) !important;
+}
+
+::ng-deep .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even):hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Table cells */
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  color: rgba(255, 255, 255, 0.9) !important;
+  padding: 0.5rem 0.75rem !important;
+  border-color: rgba(71, 85, 105, 0.3) !important;
+  font-size: 0.875rem !important;
+}
+
+/* Loading overlay */
+::ng-deep .p-datatable .p-datatable-loading-overlay {
+  background: rgba(15, 23, 42, 0.8) !important;
+}
+
+::ng-deep .p-datatable .p-datatable-loading-icon {
+  color: rgba(99, 102, 241, 0.8) !important;
+}
+
+/* Empty message */
+::ng-deep .p-datatable .p-datatable-tbody > tr > td.text-center {
+  padding: 0.5rem 1rem !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 1rem !important;
+}

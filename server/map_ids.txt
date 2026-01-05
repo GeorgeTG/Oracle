@@ -1,0 +1,258 @@
+--- Glacial Abyss
+
+5300
+DD_ZaWuJieQu000
+Deserted District
+
+5301
+SQ_MingShaJuLuo100
+Singing Sand
+
+5302
+GeBuLinCunLuo01
+Demiman Village
+
+5303
+KD_AiRenKuangDong01
+Abandoned Mines
+
+5304
+KD_WeiJiKuangDong01
+Swirling Mines
+
+5305
+SD_ZhongXiGaoQiang200
+Wall of the Last Breath
+
+5306
+YL_BeiFengLinDi201
+Grimwind Woods
+
+5307
+XZ_YuJinZhiXiBiNanSuo200
+Sunset Dome Bottom
+
+5308
+SD_GeBuLinShanZhai
+Shadow Outpost
+
+5309
+YL_YinYiZhiDi201
+Forest of Divine Legacy
+
+5310
+YJ_XieDuYuZuo200
+Defiled Side Chamber
+
+5311
+SD_GeBuLinYingDi
+Blustery Canyon
+
+--- Blistering Lava Sea
+
+5312
+KD_YuanSuKuangDong
+Elemental Mine
+
+5313
+SQ_BianChuiZhiDi200
+Savage Grasslands
+
+5314
+KD_AiRenDiSanCeng
+Heart of the Mountains
+
+5315
+SD_ShouGuSiDi000
+Dragonrest Canyon
+
+5316
+KD_RongHuoHeXin000
+Smelting Plant
+
+5317
+SD_ShouGuLinDi000
+Twisted Valley
+
+5318
+JH_ShengDeLanXiuDaoYuan000
+Confession Chapel
+
+5319
+YJ_LuoRiQiongDi200
+Sunset Dome Bottom
+
+5320
+DD_DiDuTingYuan200
+Court of Darkness
+
+5321
+JH_MengZhongShengDi000
+Shimmering Hall
+
+5322
+DD_ChaoBaiZhiLu200
+Path of Sacrifice
+
+5232
+JH_ZuiRenMiDian000
+Where Lies Confession
+
+---- Steel Forge
+
+5324
+SD_YuanGuTongDao101
+Beast Plains
+
+5325
+SQ_JingJiHuiTu100
+Thorny Filth
+
+5326
+SD_DuiLongJuQiang211
+Cloud Walls
+
+5327
+DD_YinYanJieXiang200
+Alleys of the Lost
+
+5328
+DD_JueWangZhiQiang000
+Wall of The Pure
+
+5329
+YJ_YingLingShenDian200
+Corona Shrine
+
+5330
+YJ_RiXiShenMiao200
+Sun Temple
+
+5331
+SQ_ZheFengBiZhang200
+Windbreath Cliff
+
+5332
+JH_JueXingMiDian000
+Shrine of Despair
+
+5333
+KD_AiRenDiErCeng01
+Weeping Mines
+
+5334
+YJ_TaiYangWangTing200
+City of Eternal Fire
+
+5335
+JH_TongKuMiDian000
+Shrine of Punishment
+
+---- Thunder Wastes
+
+5336
+GeBuLinCunLuo01
+Grove of Calamity
+	
+5337
+SQ_EWuHuangCun100
+Desolate Village
+
+5338
+SQ_NvShenQunBai100
+Defiled Oasis
+
+5339
+SQ_XiongShiZhiXin200
+King's Hub
+
+5340
+SD_ShengHuoLing0203
+Rainmist Jungle
+
+5341
+DD_DiDuTingYuan000
+Sacred Courtyard
+
+5342
+JH_JiaoTangDaTing000
+Prayer Sanctuary
+
+5343
+DD_TanXiZhiQiang000
+Wall of Sorrows
+
+5344
+YJ_ShuXiDaTing200
+Hall in the Mirror
+
+5345
+KD_CangBaoDongKu000
+Thirsty Mines
+
+5346
+DD_XinTuJieXiang000
+Alleys of Pilgrims
+
+5347
+YJ_LiuJinJieQu200
+Gallery of Moon
+
+
+--- Voidlands
+
+5348
+YL_MaNeiLaYuLin100
+Filthy Forest
+
+5349
+YL_MiWuYuLin200
+Dreamless Thicket
+
+5350
+JH_YiWangMiDian000
+Shrine of Agony
+
+5351
+YL_KuangReYuLin100
+Shimmering Swamp
+
+5352
+YL_XiDiChongGu200
+Jungle of the Brood
+
+5353
+YJ_YongZhouHuiLang200
+Gallery of Stars
+
+5354
+YL_BeiFengLinDi201
+Grimwind Woods
+
+5355
+KD_YuanSuKuangDong000
+Elemental Mine
+
+5356
+JH_ShenHeJuSuo000
+Luminescent Mine
+
+5357
+DD_ShengTingZhuangYuan000
+Mundane Palace
+
+5358
+DD_QunLangJieXiang200
+Grim Alleys
+
+5359
+JH_YinNiShengTang000
+Yesterday Chamber
+
+
+--- Hideout
+
+110
+XZ_YuJinZhiXiBiNanSuo200
+Hideout - Ember's Rest
+

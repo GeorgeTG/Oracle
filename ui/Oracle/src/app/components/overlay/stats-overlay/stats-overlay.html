@@ -1,0 +1,56 @@
+<div [ngClass]="isTransparentMode ? 'transparent-container' : 'p-3 bg-gray-900 min-h-screen'">
+  @if (stats) {
+    <div class="grid grid-cols-2 gap-2" [ngClass]="isTransparentMode ? 'transparent-grid' : ''">
+      <div class="bg-gray-800 p-2 rounded">
+        <div class="text-gray-400 text-xs">Total Maps</div>
+        <div class="text-sm font-bold">{{ stats.total_maps }}</div>
+      </div>
+      
+      <div class="bg-gray-800 p-2 rounded">
+        <div class="text-gray-400 text-xs">Session Duration</div>
+        <div class="text-sm font-bold">{{ stats.session_duration | duration }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_total ?? 0)">
+        <div class="text-gray-400 text-xs">Net Currency</div>
+        <div class="text-sm font-bold">{{ (stats.currency_total ?? 0) | currency:false:'fe':2 }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_per_hour ?? 0)">
+        <div class="text-gray-400 text-xs">{{ currencyLabel }}</div>
+        <div class="text-sm font-bold">{{ (stats.currency_per_hour ?? 0) | currency:true }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-2 rounded">
+        <div class="text-gray-400 text-xs">{{ expLabel }}</div>
+        <div class="text-sm font-bold">{{ (stats.exp_per_hour ?? 0) | currency:true:'exp':0 }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_per_map ?? 0)">
+        <div class="text-gray-400 text-xs">Currency / Map</div>
+        <div class="text-sm font-bold">{{ (stats.currency_per_map ?? 0) | currency:false:'fe':2 }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-2 rounded">
+        <div class="text-gray-400 text-xs">Map Timer</div>
+        <div class="text-sm font-bold">{{ (stats.map_timer ?? 0) | duration }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_current_per_hour ?? 0)">
+        <div class="text-gray-400 text-xs">Current / {{ currentUnit }}</div>
+        <div class="text-sm font-bold">{{ (stats.currency_current_per_hour ?? 0) | currency:true:'fe':2 }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_current_raw ?? 0)">
+        <div class="text-gray-400 text-xs">Current Currency</div>
+        <div class="text-sm font-bold">{{ (stats.currency_current_raw ?? 0) | currency:false:'fe':2 }}</div>
+      </div>
+
+
+    </div>
+  } @else {
+    <div class="text-center text-gray-500 py-4">
+      <p class="text-xs">Waiting for stats...</p>
+    </div>
+  }
+</div>

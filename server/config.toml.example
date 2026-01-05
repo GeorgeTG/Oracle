@@ -1,0 +1,23 @@
+[server]
+host = "127.0.0.1"
+port = 8000
+
+[websocket]
+host = "127.0.0.1"
+port = 8765
+
+[database]
+path = "oracle.db"
+
+[parser]
+log = true
+log_path = "G:/SteamLibrary/steamapps/common/Torchlight Infinite/UE_game/TorchLight/Saved/Logs/UE_game.log"
+
+[logger]
+level = "INFO"
+
+[inventory]
+update_interval = 1
+
+[price_db]
+url ="http://invalid.com"

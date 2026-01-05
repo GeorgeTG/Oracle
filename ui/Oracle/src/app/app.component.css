@@ -1,0 +1,25 @@
+:host {
+  display: block;
+  height: 100vh;
+  width: 100vw;
+}
+
+/* Menu Toggle Button */
+.menu-toggle-btn {
+  background: rgba(15, 23, 42, 0.95);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+}
+
+.menu-toggle-btn:hover {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(99, 102, 241, 0.8);
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+}
+
+.menu-toggle-btn:hover i {
+  color: rgba(99, 102, 241, 1);
+}
+
+.menu-toggle-btn:active {
+  transform: scale(0.95);
+}

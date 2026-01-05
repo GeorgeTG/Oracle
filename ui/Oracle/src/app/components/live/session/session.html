@@ -1,0 +1,323 @@
+<div class="p-6 space-y-6">
+  <!-- Session Header -->
+  <div class="p-6">
+    <!-- Collapse Header -->
+    <div 
+      class="collapse-header flex items-center justify-between cursor-pointer py-2 px-2 rounded-lg"
+      (click)="toggleHeaderCollapse()"
+    >
+      <div class="flex items-center gap-4">
+        <i class="chevron-icon pi transition-transform duration-200" 
+           [ngClass]="headerCollapsed ? 'pi-pencil' : 'pi-pencil'" 
+           style="font-size: 1rem"></i>
+        <h2 class="text-2xl font-bold text-gray-100">
+          {{ playerName || 'No Active Session' }}
+        </h2>
+        @if (sessionId) {
+          <span class="text-sm text-gray-400">Session #{{ sessionId }}</span>
+        }
+      </div>
+      <div class="flex items-center gap-4">
+        <button 
+          (click)="startNewSession(); $event.stopPropagation()"
+          class="bg-green-600 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/50 hover:scale-105 text-white font-bold py-2 px-4 rounded transition-all duration-200 cursor-pointer"
+        >
+          New
+        </button>
+        <div class="text-sm text-gray-400">
+          {{ totalMaps }} maps completed
+        </div>
+      </div>
+    </div>
+    <div class="border-b border-surface-700 my-4"></div>
+    
+    <!-- Collapsible Content -->
+    @if (!headerCollapsed) {
+      <div>
+        <!-- Title (In-place Edit) -->
+        <div class="mb-2">
+          @if (sessionId) {
+            @if (isEditingTitle) {
+              <input
+                type="text"
+                [(ngModel)]="title"
+                (blur)="saveTitle()"
+                (keyup.enter)="saveTitle()"
+                (keyup.escape)="isEditingTitle = false"
+                class="w-full bg-surface-900 text-gray-200 border border-surface-700 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 font-semibold text-lg"
+                [placeholder]="'Session #' + sessionId"
+                autofocus
+              />
+            } @else {
+              <div 
+                (click)="isEditingTitle = true"
+                class="cursor-pointer hover:bg-surface-800/50 rounded-lg px-3 py-1.5 transition-colors font-semibold text-lg text-gray-200"
+              >
+                {{ title || 'Click to add title...' }}
+              </div>
+            }
+          }
+        </div>
+        
+        <!-- Description (In-place Edit) -->
+        <div class="mt-2">
+          @if (sessionId) {
+            @if (isEditingDescription) {
+              <textarea
+                [(ngModel)]="description"
+                (blur)="saveDescription()"
+                (keyup.escape)="isEditingDescription = false"
+                placeholder="Add session description..."
+                class="w-full bg-surface-900 text-gray-200 border border-surface-700 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none text-sm"
+                rows="2"
+                autofocus
+              ></textarea>
+            } @else {
+              <div 
+                (click)="isEditingDescription = true"
+                class="cursor-pointer hover:bg-surface-800/50 rounded-lg px-3 py-1.5 transition-colors text-sm text-gray-400"
+              >
+                {{ description || 'Click to add description...' }}
+              </div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Stats Cards -->
+  @if (loadingStats) {
+    <div class="grid grid-cols-3 gap-4">
+      <div class="bg-surface-800 rounded-xl p-6 border border-surface-700">
+        <div class="flex items-center justify-center gap-3">
+          <i class="pi pi-spin pi-spinner text-2xl text-gray-400"></i>
+          <span class="text-gray-400">Waiting for stats...</span>
+        </div>
+      </div>
+      <div class="bg-surface-800 rounded-xl p-6 border border-surface-700">
+        <div class="flex items-center justify-center gap-3">
+          <i class="pi pi-spin pi-spinner text-2xl text-gray-400"></i>
+          <span class="text-gray-400">Waiting for stats...</span>
+        </div>
+      </div>
+      <div class="bg-surface-800 rounded-xl p-6 border border-surface-700">
+        <div class="flex items-center justify-center gap-3">
+          <i class="pi pi-spin pi-spinner text-2xl text-gray-400"></i>
+          <span class="text-gray-400">Waiting for stats...</span>
+        </div>
+      </div>
+    </div>
+  } @else {
+    <div class="grid grid-cols-3 gap-4">
+      <!-- Net Currency Card -->
+    <div class="bg-gradient-to-br rounded-xl p-6 border transition-all duration-300"
+         [ngClass]="{
+           'from-purple-900/20 to-purple-800/10 border-purple-700/30': netCurrency >= 0,
+           'from-red-900/20 to-red-800/10 border-red-700/30': netCurrency < 0
+         }">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+             [ngClass]="{
+               'bg-purple-600/20': netCurrency >= 0,
+               'bg-red-600/20': netCurrency < 0
+             }">
+          <i class="pi pi-wallet text-xl"
+             [ngClass]="{
+               'text-purple-400': netCurrency >= 0,
+               'text-red-400': netCurrency < 0
+             }"></i>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm text-gray-400">Net Currency</div>
+          <div class="text-2xl font-bold"
+               [ngClass]="{
+                 'text-purple-400': netCurrency >= 0,
+                 'text-red-400': netCurrency < 0
+               }">{{ netCurrency >= 0 ? '+' : '' }}{{ netCurrency.toFixed(2) }}</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Currency/Hour Card -->
+    <div class="bg-gradient-to-br rounded-xl p-6 border transition-all duration-300"
+         [ngClass]="{
+           'from-red-900/20 to-red-800/10 border-red-700/30': currencyPerHour < 0,
+           'from-yellow-900/20 to-yellow-800/10 border-yellow-700/30': currencyPerHour === 0,
+           'from-green-900/20 to-green-800/10 border-green-700/30': currencyPerHour > 0
+         }">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 rounded-lg flex items-center justify-center"
+             [ngClass]="{
+               'bg-red-600/20': currencyPerHour < 0,
+               'bg-yellow-600/20': currencyPerHour === 0,
+               'bg-green-600/20': currencyPerHour > 0
+             }">
+          <i class="pi pi-dollar text-xl"
+             [ngClass]="{
+               'text-red-400': currencyPerHour < 0,
+               'text-yellow-400': currencyPerHour === 0,
+               'text-green-400': currencyPerHour > 0
+             }"></i>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm text-gray-400 flex items-center gap-2">
+            {{ currencyLabel }}
+            <i class="pi pi-shopping-cart text-xs" title="Includes market transactions"></i>
+          </div>
+          <div class="text-2xl font-bold"
+               [ngClass]="{
+                 'text-red-400': currencyPerHour < 0,
+                 'text-yellow-400': currencyPerHour === 0,
+                 'text-green-400': currencyPerHour > 0
+               }">{{ currencyPerHour.toFixed(2) }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EXP/Hour Card -->
+    <div class="bg-gradient-to-br from-blue-900/20 to-blue-800/10 rounded-xl p-6 border border-blue-700/30">
+      <div class="flex items-center gap-3 mb-2">
+        <div class="w-10 h-10 bg-blue-600/20 rounded-lg flex items-center justify-center">
+          <i class="pi pi-chart-line text-blue-400 text-xl"></i>
+        </div>
+        <div>
+          <div class="text-sm text-gray-400">{{ expLabel }}</div>
+          <div class="text-2xl font-bold text-blue-400">{{ expPerHour | currency:true:'exp':0 }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- Map Tiles (Collapsible) -->
+  @if (maps.length > 0) {
+    <div>
+      <!-- Collapse Header -->
+      <div 
+        class="collapse-header flex items-center justify-between py-3 cursor-pointer rounded-lg px-2"
+        (click)="toggleMapsCollapse()"
+      >
+        <div class="flex items-center gap-3">
+          <i class="chevron-icon pi transition-transform duration-200" [ngClass]="mapsCollapsed ? 'pi-chevron-right' : 'pi-chevron-up'" style="font-size: 0.875rem"></i>
+          <h3 class="text-lg font-semibold text-gray-200">Recent Maps</h3>
+          <span class="px-2 py-1 bg-surface-700 rounded text-sm text-gray-400">{{ maps.length }}</span>
+        </div>
+      </div>
+      <div class="border-b border-surface-700 mb-4"></div>
+      
+      <!-- Collapsible Content -->
+      @if (!mapsCollapsed) {
+        <div>
+          <div class="grid grid-cols-2 gap-4">
+            @for (map of maps; track map.id) {
+              <div 
+                class="bg-surface-900 rounded-lg p-4 border border-surface-700 hover:border-surface-600 transition-all cursor-pointer group"
+                (click)="viewMapDetails(map.id)"
+              >
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex-1 mr-2">
+                    <span class="text-gray-200 font-medium group-hover:text-primary transition-colors">
+                      {{ map.name }}
+                    </span>
+                    @if (map.description) {
+                      <span class="text-gray-400 text-sm ml-2">
+                        {{ map.description }}
+                      </span>
+                    }
+                  </div>
+                  <span 
+                    class="px-2 py-1 rounded text-xs font-bold text-white {{ getDifficultyColor(map.difficulty) }}"
+                  >
+                    {{ map.difficulty | difficulty }}
+                  </span>
+                </div>
+                <div class="flex items-center justify-between text-sm">
+                  <span [ngClass]="{
+                    'text-red-400': map.currency < 0,
+                    'text-yellow-400': map.currency === 0,
+                    'text-green-400': map.currency > 0
+                  }">{{ map.currency > 0 ? '+' : '' }}{{ map.currency.toFixed(2) }}</span>
+                  <span class="text-gray-400">{{ map.duration }}</span>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  } @else if (sessionId) {
+    <div class="text-center text-gray-500 py-12">
+      <i class="pi pi-inbox text-4xl mb-2"></i>
+      <p>No maps completed yet</p>
+    </div>
+  } @else {
+    <div class="text-center text-gray-500 py-12">
+      <i class="pi pi-clock text-4xl mb-2"></i>
+      <p>Waiting for session to start...</p>
+    </div>
+  }
+  
+  <!-- Market Transactions (Collapsible) -->
+  @if (sessionId) {
+    <div>
+      <!-- Collapse Header -->
+      <div 
+        class="collapse-header flex items-center justify-between py-3 cursor-pointer rounded-lg px-2"
+        (click)="toggleMarketCollapse()"
+      >
+        <div class="flex items-center gap-3">
+          <i class="chevron-icon pi transition-transform duration-200" [ngClass]="marketCollapsed ? 'pi-chevron-right' : 'pi-chevron-up'" style="font-size: 0.875rem"></i>
+          <h3 class="text-lg font-semibold text-gray-200">Market Transactions</h3>
+          <span class="px-2 py-1 bg-surface-700 rounded text-sm text-gray-400">{{ marketTransactions.length }}</span>
+        </div>
+      </div>
+      <div class="border-b border-surface-700 mb-4"></div>
+      
+      <!-- Collapsible Content -->
+      @if (!marketCollapsed) {
+        <div>
+          @if (loadingMarketTransactions) {
+            <div class="text-center text-gray-500 py-8">
+              <i class="pi pi-spin pi-spinner text-2xl mb-2"></i>
+              <p>Loading transactions...</p>
+            </div>
+          } @else if (marketTransactions.length > 0) {
+            <div class="space-y-2">
+              @for (transaction of marketTransactions; track transaction.id) {
+                <div class="bg-surface-900 rounded-lg p-3 border border-surface-700">
+                  <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                      <div class="text-gray-200 font-medium">{{ transaction.item_name }}</div>
+                      <div class="text-sm text-gray-400">
+                        {{ transaction.timestamp | date:'short' }}
+                      </div>
+                    </div>
+                    <div class="text-right">
+                      <div class="font-bold" [ngClass]="getActionColor(transaction.action)">
+                        {{ transaction.action === 'gained' ? '+' : '' }}{{ transaction.quantity }}
+                      </div>
+                      <div class="text-xs text-gray-400 capitalize">{{ transaction.action }}</div>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="text-center text-gray-500 py-8">
+              <i class="pi pi-shopping-cart text-3xl mb-2"></i>
+              <p>No market transactions yet</p>
+            </div>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>
+
+<!-- Reusable Map Detail Component -->
+<app-map-detail 
+  [(visible)]="showMapDetail"
+  [mapId]="selectedMapId"
+  (onDelete)="onMapDeleted($event)"
+></app-map-detail>

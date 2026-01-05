@@ -1,0 +1,9 @@
+{
+  "name": "package",
+  "version": "0.1",
+  "build": "",
+  "script": "build.ts",
+  "requires": ["frontend", "server", "launcher"],
+  "targets": []
+}
+ 

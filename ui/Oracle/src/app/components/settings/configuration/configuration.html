@@ -1,0 +1,73 @@
+<div class="p-6">
+  <h1 class="text-3xl font-bold mb-6 text-surface-0">Configuration</h1>
+  
+  <div class="bg-surface-800 rounded-lg p-6 max-w-2xl border border-surface-700">
+    <h2 class="text-xl font-semibold mb-6 text-surface-100">WebSocket</h2>
+    
+    <div class="flex gap-4 items-end mb-6">
+        <p-floatlabel>
+          <input pInputText id="ws-ip" [(ngModel)]="wsIp" autocomplete="off" class="w-full" />
+          <label for="ws-ip">IP Address</label>
+        </p-floatlabel>
+      
+        <p-floatlabel>
+          <input pInputText id="ws-port" [(ngModel)]="wsPort" autocomplete="off" class="w-full" />
+          <label for="ws-port">Port</label>
+        </p-floatlabel>
+      
+      <p-button label="Save" icon="pi pi-save" (click)="saveSettings()" severity="success" />
+    </div>
+  </div>
+  
+  <div class="bg-surface-800 rounded-lg p-6 max-w-2xl border border-surface-700 mt-6">
+    <h2 class="text-xl font-semibold mb-6 text-surface-100">Stats Overlay</h2>
+    
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <label for="transparent-overlay" class="text-surface-100 font-medium block mb-1">
+          Transparent Overlay Mode
+        </label>
+        <p class="text-sm text-gray-400">Enable transparent background for stats overlay window</p>
+      </div>
+      <p-toggleswitch [(ngModel)]="transparentOverlay" inputId="transparent-overlay" />
+    </div>
+    
+    <p-button label="Save" icon="pi pi-save" (click)="saveSettings()" severity="success" />
+  </div>
+
+  <div class="bg-surface-800 rounded-lg p-6 max-w-2xl border border-surface-700 mt-6">
+    <h2 class="text-xl font-semibold mb-6 text-surface-100">Display Settings</h2>
+    
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <label for="per-minute-toggle" class="text-surface-100 font-medium block mb-1">
+          Show Data Per Minute
+        </label>
+        <p class="text-sm text-gray-400">Display currency rates as fe/m instead of fe/h</p>
+      </div>
+      <p-toggleswitch [(ngModel)]="showDataPerMinute" inputId="per-minute-toggle" />
+    </div>
+    
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <label for="show-tax-toggle" class="text-surface-100 font-medium block mb-1">
+          Show Tax
+        </label>
+        <p class="text-sm text-gray-400">Deduct 1/8 tax from currency values (shows net after tax)</p>
+      </div>
+      <p-toggleswitch [(ngModel)]="showTax" inputId="show-tax-toggle" />
+    </div>
+    
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <label for="aggregate-numbers-toggle" class="text-surface-100 font-medium block mb-1">
+          Aggregate Large Numbers
+        </label>
+        <p class="text-sm text-gray-400">Display large numbers as 22.32K or 1.26M instead of full numbers</p>
+      </div>
+      <p-toggleswitch [(ngModel)]="aggregateNumbers" inputId="aggregate-numbers-toggle" />
+    </div>
+    
+    <p-button label="Save" icon="pi pi-save" (click)="saveSettings()" severity="success" />
+  </div>
+</div>

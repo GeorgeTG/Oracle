@@ -1,0 +1,18 @@
+::ng-deep .dark-dialog .p-dialog-content input.p-inputtext {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: white !important;
+  padding: 0.625rem 1rem !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep .dark-dialog .p-dialog-content input.p-inputtext:focus {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  outline: none !important;
+}
+
+::ng-deep .dark-dialog .p-dialog-content input.p-inputtext::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}

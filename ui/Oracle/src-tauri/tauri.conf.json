@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "oracle",
+  "version": "0.1.0",
+  "identifier": "com.georg.oracle",
+  "build": {
+    "beforeDevCommand": "bun run start",
+    "devUrl": "http://localhost:1420",
+    "beforeBuildCommand": "bun run build",
+    "frontendDist": "../dist/oracle/browser"
+  },
+  "app": {
+    "windows": [
+      {
+        "title": "oracle",
+        "width": 800,
+        "height": 600
+      }
+    ],
+    "security": {
+      "csp": null,
+      "capabilities": [
+        {
+          "identifier": "main-capability",
+          "windows": ["main"],
+          "permissions": [
+            "core:default",
+            "core:window:allow-create",
+            "core:window:allow-center",
+            "core:window:allow-close",
+            "core:window:allow-destroy",
+            "core:window:allow-maximize",
+            "core:window:allow-minimize",
+            "core:window:allow-set-always-on-top",
+            "core:window:allow-set-decorations",
+            "core:window:allow-set-size",
+            "core:window:allow-set-position",
+            "core:webview:allow-create-webview",
+            "core:webview:allow-create-webview-window",
+            "core:webview:allow-webview-close",
+            "dialog:allow-save",
+            "fs:allow-write-text-file",
+            "global-shortcut:allow-is-registered",
+            "global-shortcut:allow-register",
+            "global-shortcut:allow-unregister"
+          ]
+        },
+        {
+          "identifier": "stats-overlay",
+          "windows": ["stats-overlay"],
+          "permissions": [
+            "core:default",
+            "core:window:allow-set-decorations",
+            "core:window:allow-set-shadow"
+          ]
+        }
+      ]
+    }
+  },
+  "bundle": {
+    "active": true,
+    "targets": ["app"],
+    "icon": [
+      "../src/assets/favicon-32x32.png",
+      "../src/assets/favicon-16x16.png",
+      "../src/assets/favicon.ico"
+    ],
+    "resources": [
+      "../src/assets/favicon-32x32.png",
+      "../src/assets/favicon-16x16.png",
+      "../src/assets/favicon.ico"
+    ]
+  }
+}

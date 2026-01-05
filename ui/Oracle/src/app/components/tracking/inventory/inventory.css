@@ -1,0 +1,147 @@
+/* Tabs Styling */
+::ng-deep .p-tabs {
+  background: transparent !important;
+}
+
+::ng-deep .p-tablist {
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-bottom: 2px solid rgba(71, 85, 105, 0.6) !important;
+  padding: 0.5rem 1rem !important;
+}
+
+::ng-deep .p-tablist-content {
+  background: rgba(15, 23, 42, 0.95) !important;
+}
+
+::ng-deep .p-tablist-tab-list {
+  background: transparent !important;
+  gap: 0.25rem !important;
+}
+
+::ng-deep .p-tab {
+  color: rgba(226, 232, 240, 0.7) !important;
+  padding: 0.75rem 1.5rem !important;
+  border-bottom: 3px solid transparent !important;
+  transition: all 0.2s ease !important;
+  font-weight: 500 !important;
+  border-radius: 0.375rem 0.375rem 0 0 !important;
+  background: transparent !important;
+}
+
+::ng-deep .p-tab:hover {
+  color: rgba(147, 197, 253, 1) !important;
+  background: rgba(59, 130, 246, 0.15) !important;
+}
+
+::ng-deep .p-tab[aria-selected="true"] {
+  color: rgba(96, 165, 250, 1) !important;
+  background: rgba(59, 130, 246, 0.25) !important;
+  border-bottom-color: rgba(59, 130, 246, 1) !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .p-tabpanels {
+  background: rgba(15, 23, 42, 0.6) !important;
+  padding: 0 !important;
+}
+
+::ng-deep .p-tabs-panel {
+  background: rgba(15, 23, 42, 0.6) !important;
+}
+
+/* Item Cards Styling */
+::ng-deep .item-card {
+  background: rgba(15, 23, 42, 0.9) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 0.25rem !important;
+  transition: all 0.3s ease !important;
+  overflow: hidden !important;
+}
+
+::ng-deep .item-card:hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+  transform: translateY(-4px) !important;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(99, 102, 241, 0.3) !important;
+  background: rgba(30, 41, 59, 0.9) !important;
+}
+
+::ng-deep .item-card .p-card-header {
+  padding: 0 !important;
+  background: rgba(15, 23, 42, 0.8) !important;
+  border-bottom: 1px solid rgba(71, 85, 105, 0.3) !important;
+}
+
+::ng-deep .item-card .p-card-body {
+  padding: 1rem !important;
+  background: rgba(15, 23, 42, 0.6) !important;
+}
+
+::ng-deep .item-card .p-card-content {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+::ng-deep .item-card .p-card-title {
+  color: white !important;
+}
+
+/* Search Input Styling */
+::ng-deep input.p-inputtext {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: white !important;
+  padding: 0.625rem 1rem !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep input.p-inputtext:focus {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+  outline: none !important;
+}
+
+::ng-deep input.p-inputtext::placeholder {
+  color: rgba(255, 255, 255, 0.4) !important;
+}
+
+/* Player Select Styling */
+::ng-deep .p-select {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 0.375rem !important;
+}
+
+::ng-deep .p-select:hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+}
+
+::ng-deep .p-select .p-select-label {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.625rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+::ng-deep .p-select-overlay {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3) !important;
+}
+
+::ng-deep .p-select-option {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+::ng-deep .p-select-option:hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+::ng-deep .p-select-option.p-select-option-selected {
+  background: rgba(59, 130, 246, 0.3) !important;
+  color: rgba(147, 197, 253, 1) !important;
+  font-weight: 500 !important;
+}

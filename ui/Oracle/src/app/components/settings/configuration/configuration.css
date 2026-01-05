@@ -1,0 +1,41 @@
+.config-container {
+  padding: 1.5rem;
+}
+
+.config-title {
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+}
+
+.config-card {
+  background-color: #1e1e1e;
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  max-width: 48rem;
+}
+
+.config-section-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.config-form {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  align-items: flex-end;
+}
+
+.config-ip-input {
+  flex: 1;
+}
+
+.config-port-input {
+  width: 10rem;
+}
+
+.config-input {
+  width: 100%;
+}

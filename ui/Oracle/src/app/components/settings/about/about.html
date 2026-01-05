@@ -1,0 +1,24 @@
+<div class="p-6">
+  <h1 class="text-3xl font-bold mb-6">About Oracle</h1>
+  
+  <!-- Warning Banner -->
+  <div class="warning-banner bg-red-900/30 border-2 border-red-500 rounded-lg p-6 mb-6">
+    <div class="flex items-center gap-3 mb-2">
+      <i class="pi pi-exclamation-triangle text-3xl text-red-500"></i>
+      <h2 class="text-2xl font-bold text-red-500 uppercase tracking-wide">Use This Software at Your Own Risk</h2>
+    </div>
+    <p class="text-red-300 text-sm ml-12">
+      This software is provided as-is without any warranties. Use of this software may violate terms of service.
+    </p>
+  </div>
+
+  <!-- License Section -->
+  <div class="license-section">
+    <h3 class="text-xl font-semibold mb-3 text-gray-200">License</h3>
+    <textarea 
+      readonly
+      [value]="licenseText"
+      class="license-text w-full h-96 bg-gray-900 text-gray-300 p-4 rounded-lg border border-gray-700 font-mono text-sm resize-none"
+    ></textarea>
+  </div>
+</div>

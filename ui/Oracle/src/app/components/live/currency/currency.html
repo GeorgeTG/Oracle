@@ -1,0 +1,138 @@
+<div class="p-4">
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-3xl font-bold">Currency Stats</h1>
+    <div class="flex gap-2">
+      <button 
+        (click)="toggleStatsOverlay()"
+        [class]="overlayOpen ? 'bg-orange-600 hover:bg-orange-700 hover:shadow-lg hover:shadow-orange-500/50' : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50'"
+        class="hover:scale-105 text-white font-bold py-2 px-4 rounded transition-all duration-200 cursor-pointer"
+      >
+        {{ overlayOpen ? 'Close Stats Overlay' : 'Open Stats Overlay' }}
+      </button>
+      <button 
+        (click)="resetStats()"
+        class="bg-red-600 hover:bg-red-700 hover:shadow-lg hover:shadow-red-500/50 hover:scale-105 text-white font-bold py-2 px-4 rounded transition-all duration-200 cursor-pointer"
+      >
+        Reset Stats
+      </button>
+    </div>
+  </div>
+
+  @if (currentMap?.map) {
+    <div class="bg-blue-900 p-4 rounded mb-4 border border-blue-700">
+      <div class="text-blue-300 text-sm mb-1">Current Map</div>
+      <div class="text-2xl font-bold">{{ currentMap?.map?.name }}</div>
+      @if (currentMap?.map?.difficulty) {
+        <div class="text-blue-400 text-lg">{{ currentMap?.map?.difficulty | difficulty }}</div>
+      }
+      @if (currentMap?.consumed_items && (currentMap?.consumed_items?.length ?? 0) > 0) {
+        <div class="mt-3 pt-3 border-t border-blue-700">
+          <div class="text-blue-300 text-xs mb-2">Consumed Items</div>
+          <div class="flex flex-wrap gap-2">
+            @for (item of currentMap?.consumed_items; track item.item_id) {
+              <div class="bg-blue-950 px-3 py-1 rounded text-sm">
+                <span class="text-blue-200">{{ item.name || 'Item #' + item.item_id }}</span>
+                <span class="text-blue-400 ml-1">x{{ item.quantity }}</span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  }
+  
+  @if (stats) {
+    <div class="grid grid-cols-4 gap-3">
+      <div class="bg-gray-800 p-3 rounded">
+        <div class="text-gray-400 text-xs">Total Maps</div>
+        <div class="text-lg font-bold">{{ stats.total_maps }}</div>
+      </div>
+      
+      <div class="bg-gray-800 p-3 rounded">
+        <div class="text-gray-400 text-xs">Session Duration</div>
+        <div class="text-lg font-bold">{{ stats.session_duration | duration }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-3 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_per_hour)">
+        <div class="text-gray-400 text-xs mb-1">{{ currencyLabel }}</div>
+        <div class="text-lg font-bold">{{ (stats.currency_per_hour ?? 0) | currency:true }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-3 rounded">
+        <div class="text-gray-400 text-xs mb-1">{{ expLabel }}</div>
+        <div class="text-lg font-bold">{{ (stats.exp_per_hour ?? 0) | currency:true:'exp':0 }}</div>
+      </div>
+ 
+      <div class="bg-gray-800 p-3 rounded">
+        <div class="text-gray-400 text-xs mb-1">Map Timer</div>
+        <div class="text-lg font-bold">{{ (stats.map_timer ?? 0) | duration }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-3 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_current_per_hour)">
+        <div class="text-gray-400 text-xs mb-1">Current / Hour</div>
+        <div class="text-lg font-bold">{{ (stats.currency_current_per_hour ?? 0) | currency:true:'fe':2 }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-3 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_current_raw)">
+        <div class="text-gray-400 text-xs mb-1">Current Currency</div>
+        <div class="text-lg font-bold">{{ (stats.currency_current_raw ?? 0) | currency:false:'fe':2 }}</div>
+      </div>
+
+      <div class="bg-gray-800 p-3 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_per_map)">
+        <div class="text-gray-400 text-xs mb-1">Currency / Map</div>
+        <div class="text-lg font-bold">{{ (stats.currency_per_map ?? 0) | currency:false:'fe':2 }}</div>
+      </div>
+      
+    </div>
+    
+    <!-- Currency Trends Chart -->
+    <div class="mt-6">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-xl font-semibold text-gray-200">Currency Trends</h3>
+        <div class="flex gap-4">
+          <div class="flex items-center gap-2">
+            <p-checkbox 
+              [(ngModel)]="showCurrencyPerMap" 
+              [binary]="true" 
+              inputId="cbCurrencyPerMap"
+              (onChange)="onChartToggle()"
+            />
+            <label for="cbCurrencyPerMap" class="text-sm text-gray-300 cursor-pointer">Currency / Map</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <p-checkbox 
+              [(ngModel)]="showCurrencyPerHour" 
+              [binary]="true" 
+              inputId="cbCurrencyPerHour"
+              (onChange)="onChartToggle()"
+            />
+            <label for="cbCurrencyPerHour" class="text-sm text-gray-300 cursor-pointer">Currency / Hour</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <p-checkbox 
+              [(ngModel)]="showCurrentPerHour" 
+              [binary]="true" 
+              inputId="cbCurrentPerHour"
+              (onChange)="onChartToggle()"
+            />
+            <label for="cbCurrentPerHour" class="text-sm text-gray-300 cursor-pointer">Current / Hour</label>
+          </div>
+          <div class="flex items-center gap-2">
+            <p-checkbox 
+              [(ngModel)]="showCurrentCurrency" 
+              [binary]="true" 
+              inputId="cbCurrentCurrency"
+              (onChange)="onChartToggle()"
+            />
+            <label for="cbCurrentCurrency" class="text-sm text-gray-300 cursor-pointer">Current Currency</label>
+          </div>
+        </div>
+      </div>
+      <div class="bg-gray-800 p-4 rounded">
+        <p-chart type="line" [data]="chartData" [options]="chartOptions" [style]="{'height': '400px'}"></p-chart>
+      </div>
+    </div>
+  } @else {
+    <p class="text-gray-400">Waiting for stats data...</p>
+  }
+</div>

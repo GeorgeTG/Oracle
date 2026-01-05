@@ -1,0 +1,342 @@
+{
+  "5300": {
+    "name": "Deserted District",
+    "asset": "DD_ZaWuJieQu000",
+    "area": "Glacial Abyss"
+  },
+  "5301": {
+    "name": "Singing Sand",
+    "asset": "SQ_MingShaJuLuo100",
+    "area": "Glacial Abyss"
+  },
+  "5302": {
+    "name": "Demiman Village",
+    "asset": "GeBuLinCunLuo01",
+    "area": "Glacial Abyss"
+  },
+  "5303": {
+    "name": "Abandoned Mines",
+    "asset": "KD_AiRenKuangDong01",
+    "area": "Glacial Abyss"
+  },
+  "5304": {
+    "name": "Swirling Mines",
+    "asset": "KD_WeiJiKuangDong01",
+    "area": "Glacial Abyss"
+  },
+  "5305": {
+    "name": "Wall of the Last Breath",
+    "asset": "SD_ZhongXiGaoQiang200",
+    "area": "Glacial Abyss"
+  },
+  "5306": {
+    "name": "Grimwind Woods",
+    "asset": "YL_BeiFengLinDi201",
+    "area": "Glacial Abyss"
+  },
+  "5307": {
+    "name": "Sunset Dome Bottom",
+    "asset": "XZ_YuJinZhiXiBiNanSuo200",
+    "area": "Glacial Abyss"
+  },
+  "5308": {
+    "name": "Shadow Outpost",
+    "asset": "SD_GeBuLinShanZhai",
+    "area": "Glacial Abyss"
+  },
+  "5309": {
+    "name": "Forest of Divine Legacy",
+    "asset": "YL_YinYiZhiDi201",
+    "area": "Glacial Abyss"
+  },
+  "5310": {
+    "name": "Defiled Side Chamber",
+    "asset": "YJ_XieDuYuZuo200",
+    "area": "Glacial Abyss"
+  },
+  "5311": {
+    "name": "Blustery Canyon",
+    "asset": "SD_GeBuLinYingDi",
+    "area": "Glacial Abyss"
+  },
+  "5312": {
+    "name": "Elemental Mine",
+    "asset": "KD_YuanSuKuangDong",
+    "area": "Blistering Lava Sea"
+  },
+  "5313": {
+    "name": "Savage Grasslands",
+    "asset": "SQ_BianChuiZhiDi200",
+    "area": "Blistering Lava Sea"
+  },
+  "5314": {
+    "name": "Heart of the Mountains",
+    "asset": "KD_AiRenDiSanCeng",
+    "area": "Blistering Lava Sea"
+  },
+  "5315": {
+    "name": "Dragonrest Canyon",
+    "asset": "SD_ShouGuSiDi000",
+    "area": "Blistering Lava Sea"
+  },
+  "5316": {
+    "name": "Smelting Plant",
+    "asset": "KD_RongHuoHeXin000",
+    "area": "Blistering Lava Sea"
+  },
+  "5317": {
+    "name": "Twisted Valley",
+    "asset": "SD_ShouGuLinDi000",
+    "area": "Blistering Lava Sea"
+  },
+  "5318": {
+    "name": "Confession Chapel",
+    "asset": "JH_ShengDeLanXiuDaoYuan000",
+    "area": "Blistering Lava Sea"
+  },
+  "5319": {
+    "name": "Sunset Dome Bottom",
+    "asset": "YJ_LuoRiQiongDi200",
+    "area": "Blistering Lava Sea"
+  },
+  "5320": {
+    "name": "Court of Darkness",
+    "asset": "DD_DiDuTingYuan200",
+    "area": "Blistering Lava Sea"
+  },
+  "5321": {
+    "name": "Shimmering Hall",
+    "asset": "JH_MengZhongShengDi000",
+    "area": "Blistering Lava Sea"
+  },
+  "5322": {
+    "name": "Path of Sacrifice",
+    "asset": "DD_ChaoBaiZhiLu200",
+    "area": "Blistering Lava Sea"
+  },
+  "5232": {
+    "name": "Where Lies Confession",
+    "asset": "JH_ZuiRenMiDian000",
+    "area": "Blistering Lava Sea"
+  },
+  "5324": {
+    "name": "Beast Plains",
+    "asset": "SD_YuanGuTongDao101",
+    "area": "- Steel Forge"
+  },
+  "5325": {
+    "name": "Thorny Filth",
+    "asset": "SQ_JingJiHuiTu100",
+    "area": "- Steel Forge"
+  },
+  "5326": {
+    "name": "Cloud Walls",
+    "asset": "SD_DuiLongJuQiang211",
+    "area": "- Steel Forge"
+  },
+  "5327": {
+    "name": "Alleys of the Lost",
+    "asset": "DD_YinYanJieXiang200",
+    "area": "- Steel Forge"
+  },
+  "5328": {
+    "name": "Wall of The Pure",
+    "asset": "DD_JueWangZhiQiang000",
+    "area": "- Steel Forge"
+  },
+  "5329": {
+    "name": "Corona Shrine",
+    "asset": "YJ_YingLingShenDian200",
+    "area": "- Steel Forge"
+  },
+  "5330": {
+    "name": "Sun Temple",
+    "asset": "YJ_RiXiShenMiao200",
+    "area": "- Steel Forge"
+  },
+  "5331": {
+    "name": "Windbreath Cliff",
+    "asset": "SQ_ZheFengBiZhang200",
+    "area": "- Steel Forge"
+  },
+  "5332": {
+    "name": "Shrine of Despair",
+    "asset": "JH_JueXingMiDian000",
+    "area": "- Steel Forge"
+  },
+  "5333": {
+    "name": "Weeping Mines",
+    "asset": "KD_AiRenDiErCeng01",
+    "area": "- Steel Forge"
+  },
+  "5334": {
+    "name": "City of Eternal Fire",
+    "asset": "YJ_TaiYangWangTing200",
+    "area": "- Steel Forge"
+  },
+  "5335": {
+    "name": "Shrine of Punishment",
+    "asset": "JH_TongKuMiDian000",
+    "area": "- Steel Forge"
+  },
+  "5336": {
+    "name": "Grove of Calamity",
+    "asset": "GeBuLinCunLuo01",
+    "area": "- Thunder Wastes"
+  },
+  "5337": {
+    "name": "Desolate Village",
+    "asset": "SQ_EWuHuangCun100",
+    "area": "- Thunder Wastes"
+  },
+  "5338": {
+    "name": "Defiled Oasis",
+    "asset": "SQ_NvShenQunBai100",
+    "area": "- Thunder Wastes"
+  },
+  "5339": {
+    "name": "King's Hub",
+    "asset": "SQ_XiongShiZhiXin200",
+    "area": "- Thunder Wastes"
+  },
+  "5340": {
+    "name": "Rainmist Jungle",
+    "asset": "SD_ShengHuoLing0203",
+    "area": "- Thunder Wastes"
+  },
+  "5341": {
+    "name": "Sacred Courtyard",
+    "asset": "DD_DiDuTingYuan000",
+    "area": "- Thunder Wastes"
+  },
+  "5342": {
+    "name": "Prayer Sanctuary",
+    "asset": "JH_JiaoTangDaTing000",
+    "area": "- Thunder Wastes"
+  },
+  "5343": {
+    "name": "Wall of Sorrows",
+    "asset": "DD_TanXiZhiQiang000",
+    "area": "- Thunder Wastes"
+  },
+  "5344": {
+    "name": "Hall in the Mirror",
+    "asset": "YJ_ShuXiDaTing200",
+    "area": "- Thunder Wastes"
+  },
+  "5345": {
+    "name": "Thirsty Mines",
+    "asset": "KD_CangBaoDongKu000",
+    "area": "- Thunder Wastes"
+  },
+  "5346": {
+    "name": "Alleys of Pilgrims",
+    "asset": "DD_XinTuJieXiang000",
+    "area": "- Thunder Wastes"
+  },
+  "5347": {
+    "name": "Gallery of Moon",
+    "asset": "YJ_LiuJinJieQu200",
+    "area": "- Thunder Wastes"
+  },
+  "5348": {
+    "name": "Filthy Forest",
+    "asset": "YL_MaNeiLaYuLin100",
+    "area": "Voidlands"
+  },
+  "5349": {
+    "name": "Dreamless Thicket",
+    "asset": "YL_MiWuYuLin200",
+    "area": "Voidlands"
+  },
+  "5350": {
+    "name": "Shrine of Agony",
+    "asset": "JH_YiWangMiDian000",
+    "area": "Voidlands"
+  },
+  "5351": {
+    "name": "Shimmering Swamp",
+    "asset": "YL_KuangReYuLin100",
+    "area": "Voidlands"
+  },
+  "5352": {
+    "name": "Jungle of the Brood",
+    "asset": "YL_XiDiChongGu200",
+    "area": "Voidlands"
+  },
+  "5353": {
+    "name": "Gallery of Stars",
+    "asset": "YJ_YongZhouHuiLang200",
+    "area": "Voidlands"
+  },
+  "5354": {
+    "name": "Grimwind Woods",
+    "asset": "YL_BeiFengLinDi201",
+    "area": "Voidlands"
+  },
+  "5355": {
+    "name": "Elemental Mine",
+    "asset": "KD_YuanSuKuangDong000",
+    "area": "Voidlands"
+  },
+  "5356": {
+    "name": "Luminescent Mine",
+    "asset": "JH_ShenHeJuSuo000",
+    "area": "Voidlands"
+  },
+  "5357": {
+    "name": "Mundane Palace",
+    "asset": "DD_ShengTingZhuangYuan000",
+    "area": "Voidlands"
+  },
+  "5358": {
+    "name": "Grim Alleys",
+    "asset": "DD_QunLangJieXiang200",
+    "area": "Voidlands"
+  },
+  "5359": {
+    "name": "Yesterday Chamber",
+    "asset": "JH_YinNiShengTang000",
+    "area": "Voidlands"
+  },
+  "5400": {
+    "name": "Desert Pasture",
+    "asset": "SQ_ShaZhongMuYuan200",
+    "area": "Deep Space",
+    "difficulty": "DS"
+  },
+  "5401": {
+    "name": "Vast Wasteland",
+    "asset": "YL_WanQingHuangLin300",
+    "area": "Deep Space",
+    "difficulty": "DS"
+  },
+  "5402": {
+    "name": "Boundless Hunting Ground",
+    "asset": "SD_GuangMaoLieChang200",
+    "area": "Deep Space",
+    "difficulty": "DS"
+  },
+  "5403": {
+    "name": "Deep Core Mine",
+    "asset": "KD_DiXinKuangChang000",
+    "area": "Deep Space",
+    "difficulty": "DS"
+  },
+  "5404": {
+    "name": "Barren Wilderness",
+    "asset": "SD_DaHuangZhiYe200",
+    "area": "Deep Space",
+    "difficulty": "DS"
+  },
+  "110": {
+    "name": "Hideout - Ember's Rest",
+    "asset": "XZ_YuJinZhiXiBiNanSuo200",
+    "area": "Hideout"
+  },
+  "234033": {
+    "name": "Secret Realm - Unholy Pedestal",
+    "asset": "BZ_NaGouZhiXi100",
+    "area": "Secret Realm"
+  }
+}

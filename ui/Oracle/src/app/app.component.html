@@ -1,0 +1,26 @@
+@if (!isOverlayRoute) {
+  <p-toast position="top-right" [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>
+}
+
+@if (!isOverlayRoute) {
+  <p-drawer [(visible)]="sidebarVisible" [modal]="false"
+      styleClass="border-none bg-transparent"
+      [dismissible]="false" [showCloseIcon]="false"
+      position="left" [style]="{width: '16rem'}">
+    <app-sidebar></app-sidebar>
+  </p-drawer>
+
+  <button 
+    (click)="sidebarVisible = !sidebarVisible"
+    class="menu-toggle-btn fixed top-4 left-4 z-50 flex items-center justify-center w-12 h-12 rounded-lg bg-surface-900 border border-surface-700 hover:bg-surface-800 hover:border-primary transition-all duration-200 shadow-lg"
+  >
+    <i class="pi pi-bars text-xl text-gray-300"></i>
+  </button>
+}
+
+<div [ngClass]="isOverlayRoute ? 'h-screen' : 'h-screen bg-surface-950'" [style.marginLeft]="!isOverlayRoute && sidebarVisible ? '16rem' : '0'" style="transition: margin-left 0.3s"
+     (click)="closeSidebarIfOpen()">
+  <main class="h-full overflow-y-auto" [class.p-6]="!isOverlayRoute" [class.pl-20]="!isOverlayRoute">
+    <router-outlet></router-outlet>
+  </main>
+</div>

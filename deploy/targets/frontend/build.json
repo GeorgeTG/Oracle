@@ -1,0 +1,22 @@
+{
+  "name": "frontend",
+  "version": "0.1",
+  "build": "",
+  "script": "build.ts",
+  "requires": [],
+  "targets": [
+    {
+      "glob_source": "../ui/Oracle/src-tauri/target/release/Oracle.exe",
+      "output": "Oracle.exe",
+      "release_only": true
+    },
+    {
+      "glob_source": "../README.md",
+      "output": "README.md"
+    },
+    {
+      "glob_source": "../LICENSE",
+      "output": "LICENSE"
+    }
+  ]
+}

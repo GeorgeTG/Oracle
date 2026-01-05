@@ -1,0 +1,40 @@
+{
+  "_type": "export",
+  "__export_format": 4,
+  "__export_date": "2025-11-14T00:00:00.000Z",
+  "__export_source": "chatgpt",
+  "resources": [
+    {
+      "_id": "ws_workspace",
+      "_type": "workspace",
+      "name": "TLI Log Tracker",
+      "scope": "design"
+    },
+    {
+      "_id": "env_base",
+      "_type": "environment",
+      "parentId": "ws_workspace",
+      "name": "Base Environment",
+      "data": {
+        "ws_host": "127.0.0.1",
+        "ws_port": "8765"
+      }
+    },
+    {
+      "_id": "req_websocket",
+      "_type": "request",
+      "parentId": "ws_workspace",
+      "name": "Live Log WebSocket",
+      "url": "ws://{{ ws_host }}:{{ ws_port }}",
+      "body": {},
+      "parameters": [],
+      "headers": [],
+      "authentication": {},
+      "metaSortKey": -1,
+      "method": "GET",
+      "settingStoreCookies": true,
+      "settingSendCookies": true,
+      "settingDisableRenderRequestBody": false
+    }
+  ]
+}

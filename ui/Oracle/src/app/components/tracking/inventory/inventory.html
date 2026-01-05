@@ -1,0 +1,98 @@
+<div class="p-4">
+  <!-- Header with Player Selection -->
+  <div class="flex justify-between items-center mb-4">
+    <h1 class="text-3xl font-bold">Inventory</h1>
+    
+    <div class="flex items-center gap-4">
+      <!-- Search -->
+      <input 
+        pInputText 
+        type="text" 
+        [(ngModel)]="searchTerm"
+        placeholder="Search items..."
+        class="w-64"
+      />
+      
+      <!-- Player Selection -->
+      @if (availablePlayers.length > 0) {
+        <p-select
+          [(ngModel)]="selectedPlayer"
+          [options]="availablePlayers"
+          (onChange)="onPlayerChange()"
+          placeholder="Select Player"
+          [style]="{'min-width': '200px'}"
+        />
+      }
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="flex justify-center items-center p-8">
+      <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+    </div>
+  } @else {
+    @if (pages.length === 0) {
+      <div class="text-center text-gray-400 p-8">
+        <i class="pi pi-inbox text-6xl mb-4"></i>
+        <p class="text-xl">No inventory data available</p>
+      </div>
+    } @else {
+      <!-- Tabs for Pages -->
+      <p-tabs [value]="'0'" styleClass="inventory-tabs">
+        <p-tablist>
+          @for (page of pages; track page.pageNumber; let i = $index) {
+            <p-tab [value]="i.toString()">
+              <span class="flex items-center gap-2">
+                <span>{{ page.pageEmoji }}</span>
+                <span>{{ page.pageName }}</span>
+                <span class="text-xs text-gray-400">({{ getFilteredSlots(page.slots).length }})</span>
+              </span>
+            </p-tab>
+          }
+        </p-tablist>
+        
+        <p-tabpanels>
+          @for (page of pages; track page.pageNumber; let i = $index) {
+            <p-tabpanel [value]="i.toString()">
+              <!-- Items Grid -->
+              <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-4">
+                @for (slot of getFilteredSlots(page.slots); track slot.slot) {
+                  <p-card 
+                    styleClass="item-card"
+                    (click)="openItemDetail(slot.item_id)"
+                    [style]="{'cursor': slot.item_id ? 'pointer' : 'default'}"
+                  >
+                    <ng-template #header>
+                      <div class="flex items-center justify-between p-3 bg-surface-800">
+                        <span class="text-sm text-gray-400">Slot {{ slot.slot }}</span>
+                        <span class="text-xl font-bold text-blue-400">x{{ slot.quantity }}</span>
+                      </div>
+                    </ng-template>
+                    
+                    <div class="text-center py-2">
+                      <div class="text-base font-semibold text-white">
+                        {{ slot.item_name }}
+                      </div>
+                    </div>
+                  </p-card>
+                } @empty {
+                  <div class="col-span-full text-center text-gray-400 p-8">
+                    <i class="pi pi-search text-4xl mb-2"></i>
+                    <p>No items found matching "{{ searchTerm }}"</p>
+                  </div>
+                }
+              </div>
+            </p-tabpanel>
+          }
+        </p-tabpanels>
+      </p-tabs>
+    }
+  }
+</div>
+
+<!-- Item Detail Dialog -->
+<app-item-detail
+  [(visible)]="showItemDetail"
+  [itemId]="selectedItemId"
+  (onSave)="onItemSaved($event)"
+/>

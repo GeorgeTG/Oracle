@@ -1,0 +1,40 @@
+/* Session component styles */
+
+@keyframes chevronPulseRight {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(90deg);
+  }
+}
+
+@keyframes chevronPulseUp {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes pencilPulse {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-15deg);
+  }
+}
+
+.collapse-header:hover .chevron-icon.pi-chevron-right {
+  animation: chevronPulseRight 0.6s ease-in-out infinite;
+}
+
+.collapse-header:hover .chevron-icon.pi-chevron-up {
+  animation: chevronPulseUp 0.6s ease-in-out infinite;
+}
+
+.collapse-header:hover .chevron-icon.pi-pencil {
+  animation: pencilPulse 0.6s ease-in-out infinite;
+}

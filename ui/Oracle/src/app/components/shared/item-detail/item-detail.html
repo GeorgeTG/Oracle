@@ -1,0 +1,94 @@
+<p-dialog 
+  [(visible)]="visible"
+  [header]="'Item Details - ' + (itemDetail?.name || 'Unknown Item')"
+  [modal]="true"
+  [style]="{ width: '500px' }"
+  [closable]="true"
+  styleClass="dark-dialog"
+  [baseZIndex]="10000"
+  (onHide)="closeDialog()">
+  
+  <ng-template pTemplate="header">
+    <div class="text-lg font-semibold text-primary">{{ itemDetail?.name || 'Item Details' }}</div>
+  </ng-template>
+
+  @if (loading) {
+    <div class="flex justify-center items-center p-8">
+      <i class="pi pi-spin pi-spinner text-4xl text-primary"></i>
+    </div>
+  } @else if (itemDetail) {
+    <div class="space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Item ID</p>
+          <p class="font-mono text-gray-100">{{ itemDetail.item_id }}</p>
+        </div>
+        <div class="border-b border-surface-700 pb-3">
+          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Database ID</p>
+          <p class="font-mono text-gray-100">{{ itemDetail.id }}</p>
+        </div>
+        <div class="col-span-2 border-b border-surface-700 pb-3">
+          <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Name</label>
+          <input 
+            pInputText 
+            type="text" 
+            [(ngModel)]="itemDetail.name" 
+            class="w-full"
+            placeholder="Item name"
+          />
+        </div>
+        <div class="col-span-2 border-b border-surface-700 pb-3">
+          <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Category</label>
+          <input 
+            pInputText 
+            type="text" 
+            [(ngModel)]="itemDetail.category" 
+            class="w-full"
+            placeholder="Category"
+          />
+        </div>
+        <div class="col-span-2 border-b border-surface-700 pb-3">
+          <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Rarity</label>
+          <input 
+            pInputText 
+            type="text" 
+            [(ngModel)]="itemDetail.rarity" 
+            class="w-full"
+            placeholder="Rarity"
+          />
+        </div>
+        <div class="col-span-2 border-b border-surface-700 pb-3">
+          <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Price</label>
+          <input 
+            pInputText 
+            type="number" 
+            [(ngModel)]="itemDetail.price" 
+            class="w-full"
+            placeholder="Price"
+            step="0.01"
+          />
+        </div>
+      </div>
+    </div>
+  }
+
+  <ng-template pTemplate="footer">
+    <div class="flex gap-2 justify-end">
+      <button 
+        pButton 
+        type="button" 
+        label="Cancel" 
+        class="p-button-text p-button-secondary"
+        (click)="closeDialog()"
+      ></button>
+      <button 
+        pButton 
+        type="button" 
+        label="Save Changes" 
+        class="p-button-primary"
+        (click)="saveItem()"
+        [disabled]="!itemDetail"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

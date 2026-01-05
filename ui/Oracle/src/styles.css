@@ -1,0 +1,516 @@
+@import 'primeicons/primeicons.css';
+@import "tailwindcss";
+@import "tailwindcss-primeui";
+
+/* You can add global styles to this file, and also import other style files */
+:root {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+/* Toast Styling - Dark Theme */
+.p-toast {
+  opacity: 1;
+}
+
+.p-toast .p-toast-message {
+  backdrop-filter: blur(10px);
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+}
+
+.p-toast .p-toast-message.p-toast-message-success {
+  background: rgba(16, 185, 129, 0.15);
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.p-toast .p-toast-message.p-toast-message-success .p-toast-message-content .p-toast-summary {
+  color: rgb(110, 231, 183);
+  font-weight: 600;
+}
+
+.p-toast .p-toast-message.p-toast-message-success .p-toast-message-content .p-toast-detail {
+  color: rgb(167, 243, 208);
+}
+
+.p-toast .p-toast-message.p-toast-message-info {
+  background: rgba(59, 130, 246, 0.15);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.p-toast .p-toast-message.p-toast-message-info .p-toast-message-content .p-toast-summary {
+  color: rgb(147, 197, 253);
+  font-weight: 600;
+}
+
+.p-toast .p-toast-message.p-toast-message-info .p-toast-message-content .p-toast-detail {
+  color: rgb(191, 219, 254);
+}
+
+.p-toast .p-toast-message.p-toast-message-warn {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.p-toast .p-toast-message.p-toast-message-warn .p-toast-message-content .p-toast-summary {
+  color: rgb(252, 211, 77);
+  font-weight: 600;
+}
+
+.p-toast .p-toast-message.p-toast-message-warn .p-toast-message-content .p-toast-detail {
+  color: rgb(253, 230, 138);
+}
+
+.p-toast .p-toast-message.p-toast-message-error {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.p-toast .p-toast-message.p-toast-message-error .p-toast-message-content .p-toast-summary {
+  color: rgb(252, 165, 165);
+  font-weight: 600;
+}
+
+.p-toast .p-toast-message.p-toast-message-error .p-toast-message-content .p-toast-detail {
+  color: rgb(254, 202, 202);
+}
+
+.p-toast .p-toast-message.p-toast-message-secondary {
+  background: rgba(107, 114, 128, 0.15);
+  border-color: rgba(107, 114, 128, 0.3);
+}
+
+.p-toast .p-toast-message.p-toast-message-secondary .p-toast-message-content .p-toast-summary {
+  color: rgb(209, 213, 219);
+  font-weight: 600;
+}
+
+.p-toast .p-toast-message.p-toast-message-secondary .p-toast-message-content .p-toast-detail {
+  color: rgb(229, 231, 235);
+}
+
+.p-toast .p-toast-message .p-toast-message-content {
+  padding: 1rem;
+}
+
+.p-toast .p-toast-message .p-toast-icon-close {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+}
+
+.p-toast .p-toast-message .p-toast-icon-close:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Select/Dropdown Styling - Dark Theme */
+.p-select {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 0.375rem !important;
+  transition: all 0.2s;
+}
+
+.p-select:not(.p-disabled):hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+}
+
+.p-select:not(.p-disabled).p-focus {
+  border-color: rgb(59, 130, 246);
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+.p-select .p-select-label {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+.p-select .p-select-label.p-placeholder {
+  color: rgb(100, 116, 139);
+}
+
+.p-select .p-select-dropdown-icon {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.p-select-overlay,
+.p-dropdown-overlay {
+  background: rgba(15, 23, 42, 0.98) !important;
+  border: 1px solid rgba(71, 85, 105, 0.6) !important;
+  border-radius: 0.5rem !important;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5) !important;
+  --p-select-option-color: white !important;
+  --p-select-option-focus-background: rgba(99, 102, 241, 0.15) !important;
+  --p-select-option-focus-color: white !important;
+  --p-select-option-selected-background: rgba(99, 102, 241, 0.3) !important;
+  --p-select-option-selected-color: white !important;
+}
+
+.p-select-overlay .p-select-list-container,
+.p-dropdown-overlay .p-dropdown-items {
+  padding: 0.5rem !important;
+}
+
+.p-select-overlay .p-select-option,
+.p-dropdown-overlay .p-dropdown-option,
+.p-dropdown-overlay .p-dropdown-item {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+  border-radius: 0.375rem !important;
+  margin-bottom: 0.25rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-select-option:not(.p-disabled):hover,
+.p-dropdown-option:not(.p-disabled):hover,
+.p-dropdown-item:not(.p-disabled):hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+.p-select-option.p-select-option-selected,
+.p-dropdown-option.p-dropdown-option-selected,
+.p-dropdown-item.p-dropdown-item-selected {
+  background: rgba(59, 130, 246, 0.3) !important;
+  color: rgba(147, 197, 253, 1) !important;
+  font-weight: 500 !important;
+}
+
+.p-select-option.p-focus,
+.p-dropdown-option.p-focus,
+.p-dropdown-item.p-focus {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+/* Sessions Component Specific Styles */
+.p-dataview {
+  background: transparent;
+}
+
+.p-dataview .p-dataview-header {
+  background: transparent;
+  border: none;
+  padding: 0 0 1rem 0;
+}
+
+.p-dataview .p-dataview-content {
+  background: transparent;
+}
+
+.p-card .p-card-body {
+  background: var(--surface-600) !important;
+  border: 1px solid var(--surface-500) !important;
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+}
+
+.p-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  transform: translateY(-2px);
+}
+
+.p-card .p-card-content {
+  padding: 0;
+}
+
+.p-accordion .p-accordion-panel {
+  border: 1px solid var(--surface-500);
+  border-radius: 6px;
+  overflow: hidden;
+  background: var(--surface-700) !important;
+  margin-bottom: 0.5rem;
+}
+
+.p-accordion .p-accordion-header-link {
+  background: var(--surface-700) !important;
+  border: none !important;
+  color: var(--text-color) !important;
+  padding: 0.875rem 1rem;
+  transition: all 0.2s;
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.p-accordion .p-accordion-header-link:hover {
+  background: var(--surface-600) !important;
+}
+
+.p-accordion .p-accordion-header-link:focus {
+  box-shadow: none !important;
+}
+
+.p-accordion .p-accordion-toggle-icon {
+  color: var(--primary-color);
+}
+
+.p-accordion .p-accordion-content {
+  background: var(--surface-700) !important;
+  border: none !important;
+  border-top: 1px solid var(--surface-500) !important;
+  color: var(--text-color) !important;
+  padding: 1rem;
+}
+
+/* Dialog Styling */
+.p-dialog {
+  background: var(--surface-800) !important;
+  border: 1px solid var(--surface-600);
+  border-radius: 8px;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.4);
+}
+
+.p-dialog .p-dialog-header {
+  background: var(--surface-700) !important;
+  border-bottom: 1px solid var(--surface-600);
+  color: var(--text-color);
+  padding: 1.25rem;
+  border-radius: 8px 8px 0 0;
+}
+
+.p-dialog .p-dialog-content {
+  background: var(--surface-800) !important;
+  color: var(--text-color);
+  padding: 1rem;
+}
+
+.p-dialog .p-dialog-header-icons {
+  color: var(--text-color);
+}
+
+.p-dialog .p-dialog-header-icon:hover {
+  background: var(--surface-600);
+  color: var(--text-color);
+}
+
+.p-dialog-mask {
+  background: rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Dark Dialog Variant */
+.p-dialog.dark-dialog {
+  background: rgb(15, 23, 42) !important;
+}
+
+.p-dialog.dark-dialog .p-dialog-header {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1.5rem !important;
+}
+
+.p-dialog.dark-dialog .p-dialog-title {
+  color: rgba(99, 102, 241, 1) !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+}
+
+.p-dialog.dark-dialog .p-dialog-content {
+  background: rgb(15, 23, 42) !important;
+  color: rgb(226, 232, 240) !important;
+  padding: 1.5rem !important;
+}
+
+.p-dialog.dark-dialog .p-dialog-footer {
+  background: rgba(30, 41, 59, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1.5rem !important;
+}
+
+.p-dialog.dark-dialog .p-dialog-close-icon {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.p-dialog.dark-dialog .p-dialog-close-icon:hover {
+  color: rgba(255, 255, 255, 1) !important;
+}
+
+/* Dialog Header Actions */
+.p-dialog-header-actions {
+  gap: var(--p-dialog-header-gap);
+}
+
+/* Dialog Action Buttons */
+.p-dialog-close-button {
+  color: #f87171 !important;
+  background-color: rgba(239, 68, 68, 0.15) !important;
+}
+
+.p-dialog-close-button:hover {
+  background-color: rgba(239, 68, 68, 0.3) !important;
+  color: #fca5a5 !important;
+}
+
+.p-dialog-maximize-button {
+  color: #e2e8f0 !important;
+  background-color: rgba(148, 163, 184, 0.15) !important;
+}
+
+.p-dialog-maximize-button:hover {
+  background-color: rgba(148, 163, 184, 0.3) !important;
+  color: #f1f5f9 !important;
+}
+
+/* TabView Styling */
+.p-tabs .p-tablist {
+  background: var(--surface-700);
+  border-bottom: 1px solid var(--surface-600);
+  display: flex;
+  gap: 0.25rem;
+  padding: 0.5rem;
+}
+
+.p-tabs .p-tab {
+  background: transparent;
+  border: none;
+  color: var(--text-color);
+  padding: 0.75rem 1.25rem;
+  transition: all 0.2s;
+  border-radius: 6px 6px 0 0;
+}
+
+.p-tabs .p-tab:hover {
+  background: var(--surface-600);
+}
+
+.p-tabs .p-tab[aria-selected="true"] {
+  background: var(--surface-800);
+  color: var(--primary-color);
+  border-bottom: 2px solid var(--primary-color);
+}
+
+.p-tabs .p-tabpanels {
+  background: var(--surface-800);
+  color: var(--text-color);
+}
+
+/* Dark Dialog Tab Overrides */
+.dark-dialog .p-tabs .p-tablist {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border-bottom: 2px solid rgba(71, 85, 105, 0.8) !important;
+}
+
+.dark-dialog .p-tabs .p-tab {
+  color: rgba(203, 213, 225, 0.9) !important;
+}
+
+.dark-dialog .p-tabs .p-tab:hover {
+  background: rgba(51, 65, 85, 0.6) !important;
+  color: rgba(241, 245, 249, 1) !important;
+}
+
+.dark-dialog .p-tabs .p-tab[aria-selected="true"] {
+  background: rgba(51, 65, 85, 0.8) !important;
+  color: var(--primary-color) !important;
+  border-bottom: 3px solid var(--primary-color) !important;
+}
+
+.dark-dialog .p-tabs .p-tabpanels {
+  background: transparent !important;
+}
+
+/* ToggleSwitch Styling */
+.p-toggleswitch {
+  --p-toggleswitch-width: 3rem;
+  --p-toggleswitch-height: 1.75rem;
+  --p-toggleswitch-border-radius: 1rem;
+  --p-toggleswitch-background: rgb(71, 85, 105);
+  --p-toggleswitch-checked-background: rgb(34, 197, 94);
+  --p-toggleswitch-handle-size: 1.25rem;
+  --p-toggleswitch-handle-background: white;
+}
+
+.p-toggleswitch-handle {
+  top: 10% !important;
+}
+
+/* Paginator Styling */
+.p-paginator {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1rem !important;
+  border-radius: 0.5rem !important;
+  margin-top: 1rem !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+  color: rgba(255, 255, 255, 0.7) !important;
+  min-width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.375rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page:hover {
+  background: rgba(99, 102, 241, 0.2) !important;
+  color: white !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: rgba(99, 102, 241, 0.8) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+  color: rgba(255, 255, 255, 0.7) !important;
+  min-width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.375rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.p-paginator .p-paginator-first:hover:not(.p-disabled),
+.p-paginator .p-paginator-prev:hover:not(.p-disabled),
+.p-paginator .p-paginator-next:hover:not(.p-disabled),
+.p-paginator .p-paginator-last:hover:not(.p-disabled) {
+  background: rgba(99, 102, 241, 0.2) !important;
+  color: white !important;
+}
+
+.p-paginator .p-dropdown,
+.p-paginator .p-select {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: white !important;
+  border-radius: 0.375rem !important;
+}
+
+.p-paginator .p-dropdown:hover,
+.p-paginator .p-select:hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+}
+
+.p-paginator .p-dropdown .p-dropdown-label,
+.p-paginator .p-select .p-select-label {
+  color: white !important;
+  padding: 0.25rem 0.5rem !important;
+}

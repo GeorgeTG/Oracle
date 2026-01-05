@@ -1,0 +1,47 @@
+{
+  "version": "0.1",
+  "build": "2026-01-02_13-03-52-152Z",
+  "script": "build.ts",
+  "name": "server",
+  "requires": [],
+  "targets": [
+    {
+      "glob_source": "../server/config.toml.example",
+      "output": "config.toml"
+    },
+    {
+      "glob_source": "../server/en_id_map_table.json",
+      "output": "en_id_map_table.json"
+    },
+    {
+      "glob_source": "../server/Experience.json",
+      "output": "Experience.json"
+    },
+    {
+      "glob_source": "../server/price_table.json",
+      "output": "price_table.json"
+    },
+    {
+      "glob_source": "../server/README.md",
+      "output": "README.md"
+    },
+    {
+      "glob_source": "../server/favicon.ico",
+      "output": "favicon.ico"
+    },
+    {
+      "glob_source": "../../output/server/modules/**/*",
+      "output": "modules"
+    },
+    {
+      "glob_source": "dist/Oracle-Server.exe",
+      "output": "Oracle-Server.exe",
+      "release_only": true
+    },
+    {
+      "glob_source": "dist/Oracle-Server-Tray.exe",
+      "output": "Oracle-Server-Tray.exe",
+      "release_only": true
+    }
+  ]
+}

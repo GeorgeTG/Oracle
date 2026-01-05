@@ -1,0 +1,11 @@
+# Oracle Launcher Requirements
+# Python 3.10+
+
+# TOML parsing (for reading config.toml)
+tomli>=2.0.0
+tomli-w>=1.0.0
+
+# Sun Valley ttk theme (modern Windows 11 style)
+sv-ttk>=2.0.0
+
+# No other dependencies needed - using built-in tkinter

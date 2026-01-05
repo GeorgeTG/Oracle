@@ -1,0 +1,12 @@
+# Build output directories
+build/
+dist/
+output/
+node_modules/
+
+# Virtual environment
+.venv
+
+# Temporary files
+*.tmp
+*.log

@@ -1,0 +1,81 @@
+/* Dialog styling is handled globally in styles.css */
+
+.bg-surface-900 {
+  padding: 1.25rem;
+  border-radius: 6px;
+  border: 1px solid var(--surface-600);
+  background: var(--surface-900);
+  transition: all 0.2s;
+}
+
+.bg-surface-900:hover {
+  border-color: var(--surface-500);
+  background: var(--surface-800);
+}
+
+.text-xs.bg-surface-800 {
+  background: var(--surface-800) !important;
+  border: 1px solid var(--surface-500);
+  color: var(--text-color) !important;
+  transition: all 0.2s;
+}
+
+.text-xs.bg-surface-800:hover {
+  background: var(--surface-600) !important;
+  border-color: var(--primary-color);
+}
+
+/* Map Card Hover Effects */
+.map-card-wrapper {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.map-card-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 8px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.map-card-wrapper:hover::before {
+  opacity: 1;
+}
+
+.map-card-wrapper:hover .magnifying-glass-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.magnifying-glass-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: rgba(59, 130, 246, 0.3);
+  border: 3px solid rgba(59, 130, 246, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.magnifying-glass-overlay::after {
+  content: '🔍';
+  font-size: 28px;
+}
