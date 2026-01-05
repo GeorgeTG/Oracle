@@ -3,24 +3,22 @@
 import json
 import aiohttp
 from datetime import datetime
-from pathlib import Path
 from typing import Optional, Dict
 
 from Oracle.database.models import PriceDataBaseRevision, PriceSource, Item
 from Oracle.parsing.utils.item_db import item_lookup
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events import ServiceEventType, ItemDataChangedEvent
 from Oracle.tooling.config import Config
 from Oracle.tooling.logger import Logger
 from Oracle.tooling.paths import get_base_path
-from Oracle.tooling.singleton import Singleton
+from Oracle.tooling.singleton import SingletonMixin
 
 
 logger = Logger("PriceDB")
 
 
-@Singleton
-class PriceDB:
+class PriceDB(SingletonMixin):
     """Async singleton class for item price lookups with caching."""
     
     def __init__(self):
@@ -264,7 +262,7 @@ class PriceDB:
         Args:
             event: ItemDataChangedEvent containing updated item data
         """
-        if event.price is not None and event.price >= 0:
+        if event.price >= 0:
             self._cache[event.item_id] = event.price
             logger.info(f"💰 Updated cache for item {event.item_id}: {event.name} -> {event.price}")
         else:

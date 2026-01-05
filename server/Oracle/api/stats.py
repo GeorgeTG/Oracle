@@ -2,7 +2,7 @@
 from datetime import datetime
 from fastapi import APIRouter, Depends, status
 
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events.stats_events import StatsControlEvent, StatsControlAction
 from Oracle.api.dependencies import get_event_bus
 from Oracle.tooling.logger import Logger

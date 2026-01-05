@@ -11,8 +11,8 @@ from typing import AsyncGenerator, List, Optional
 from Oracle.parsing.parsers.parser_base import ParserBase
 from Oracle.parsing.parsers.events import ParserEvent
 from Oracle.parsing.loaders import get_loader
-from Oracle.services.event_bus import EventBus
-from Oracle.tooling.singleton import Singleton
+from Oracle.events import EventBus
+from Oracle.tooling.singleton import SingletonMixin
 from Oracle.tooling.logger import Logger
 from Oracle.tooling.config import Config
 from Oracle.tooling.paths import get_base_path
@@ -20,8 +20,7 @@ from Oracle.parsing.parsers.events.loading_progress import LoadingProgressEvent
 
 logger = Logger("Router")
 
-@Singleton
-class Router:
+class Router(SingletonMixin):
     """
     Main log event router.
     - Feeds log lines into all parsers

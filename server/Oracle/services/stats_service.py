@@ -1,19 +1,18 @@
-import asyncio
 from collections import defaultdict
 from datetime import datetime
 from typing import Dict, Optional
 
-from Oracle.parsing.parsers.events import ParserEvent, ParserEventType
+from Oracle.parsing.parsers.events import ParserEventType
 from Oracle.parsing.parsers.events.exp_update import ExpUpdateEvent
 from Oracle.parsing.parsers.events.game_view import GameViewEvent
 from Oracle.parsing.parsers.events.item_change import ItemChangeEvent
 
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events.inventory import InventoryUpdateEvent, RequestInventoryEvent, InventorySnapshotEvent
 from Oracle.services.events.map_events import MapStartedEvent, MapFinishedEvent, MapStatsEvent
 from Oracle.services.events.notification_events import NotificationEvent, NotificationSeverity
 from Oracle.services.events.service_event import ServiceEventType
-from Oracle.services.events.session_events import SessionControlEvent, SessionControlAction, PlayerChangedEvent, SessionRestoreEvent
+from Oracle.services.events.session_events import PlayerChangedEvent, SessionRestoreEvent, SessionStartedEvent
 from Oracle.services.events.stats_events import StatsUpdateEvent, StatsControlEvent, StatsControlAction
 from Oracle.services.model import InventorySnapshot
 from Oracle.services.service_base import ServiceBase
@@ -44,7 +43,7 @@ class StatsService(ServiceBase):
         super().__init__(event_bus)
         
         # PriceDB instance (lazy loaded)
-        self._price_db = None
+        self._price_db: Optional[PriceDB] = None
         
         # Track items per hour based on snapshots
         self._last_snapshot: Optional[InventorySnapshot] = None  # Last inventory snapshot
@@ -106,6 +105,9 @@ class StatsService(ServiceBase):
         
         # Calculate entry cost from consumed items
         total = 0.0
+
+        assert self._price_db is not None # should be initialized already
+
         for item in event.consumed_items:
             price = self._price_db.get_price(item.item_id)
             total += (price * item.quantity)
@@ -149,6 +151,8 @@ class StatsService(ServiceBase):
         
         logger.debug(f"📊 Total maps: {self._total_maps}, Total time: {self._total_time:.2f}s, Exp gained: {self._map_exp_gained:.0f}")
 
+        assert self._price_db is not None # should be initialized already
+        
         # calculate currency gained during the map using the inventory changes
         currency_drops = sum( self._price_db.get_price(item_id) * delta for item_id, delta in event.inventory_changes.items())
         
@@ -206,9 +210,11 @@ class StatsService(ServiceBase):
             logger.debug(f"📊 Item changed, requesting snapshot (last: {self._last_snapshot_time})")
             self._last_snapshot_time = now
             await self._request_snapshot()
-        else:
+        elif self._last_snapshot_time is not None:
             elapsed = (now - self._last_snapshot_time).total_seconds()
             logger.debug(f"📊 Item changed but throttled ({elapsed:.1f}s < {self._snapshot_interval}s)")
+        else:
+            logger.warning("📊 Item changed but last_snapshot_time is None unexpectedly")
 
     @event_handler(ServiceEventType.INVENTORY_SNAPSHOT)
     async def on_inventory_snapshot(self, event: InventorySnapshotEvent):
@@ -285,7 +291,7 @@ class StatsService(ServiceBase):
             await self._restart_tracking()
 
     @event_handler(ServiceEventType.SESSION_STARTED)
-    async def on_session_started(self, event):
+    async def on_session_started(self, event: SessionStartedEvent):
         """Handle session started - reset stats for new session."""
         logger.info(f"📊 Session started for {event.player_name} - Resetting stats")
         await self._restart_tracking()
@@ -393,6 +399,8 @@ class StatsService(ServiceBase):
             logger.debug("📊 Not in fighting view - skipping snapshot processing")
             self._last_snapshot = current_snapshot
             return
+        
+        assert self._price_db is not None # should be initialized already
 
         # Normal operation - calculate differences
         item_changes = current_snapshot.compare_with(self._last_snapshot)

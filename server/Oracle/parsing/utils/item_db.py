@@ -1,8 +1,8 @@
 import json
-from pathlib import Path
+from typing import Dict, Mapping
 from Oracle.tooling.paths import get_config_path
 
-ITEM_DB = {}
+ITEM_DB : Dict[str, Dict[str, str]] = {}
 
 def load_items():
     """Load item names from price_table.json instead of en_id_table.json"""
@@ -24,7 +24,7 @@ def load_items():
         ITEM_DB = {}
 
 
-def item_lookup(base_id: int) -> dict:
+def item_lookup(base_id: int) -> Mapping[str, str | None]:
     if not ITEM_DB:
         load_items()
     return ITEM_DB.get(str(base_id), {"name": None, "type": None})

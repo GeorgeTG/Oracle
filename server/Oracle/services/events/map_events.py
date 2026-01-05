@@ -1,5 +1,4 @@
 from dataclasses import dataclass, field
-from datetime import datetime
 from typing import Optional, Dict, List
 
 from Oracle.parsing.parsers.maps import MapData
@@ -28,7 +27,7 @@ class MapFinishedEvent(ServiceEvent):
     duration: float  # Duration in seconds
     inventory_changes: Dict[int, int]  # Dict[item_id, quantity_change]
     map: Optional[MapData] = None
-    affixes: Optional[List[Dict]] = None  # List of {affix_id, description}
+    affixes: Optional[List[Dict[str, str]]] = None  # List of {affix_id, description}
     type: ServiceEventType = ServiceEventType.MAP_FINISHED
     
     def __repr__(self) -> str:
@@ -44,7 +43,7 @@ class MapStatsEvent(ServiceEvent):
     item_changes: Dict[int, int]  # Dict[item_id, quantity_change]
     currency_gained: float  # Total currency value of items gained
     exp_gained: float = 0.0  # Experience gained during the map
-    affixes: Optional[List[Dict]] = None  # List of {affix_id, description}
+    affixes: Optional[List[Dict[str, str]]] = None  # List of {affix_id, description}
     type: ServiceEventType = ServiceEventType.MAP_STATS
     
     def __repr__(self) -> str:
@@ -54,7 +53,7 @@ class MapStatsEvent(ServiceEvent):
 @dataclass(kw_only=True)
 class MapRecordEvent(ServiceEvent):
     """Event fired when a map completion is recorded in the database."""
-    map_record: dict  # Serialized MapCompletion model (as returned by GET /maps/{id})
+    map_record: Dict[str, str]  # Serialized MapCompletion model (as returned by GET /maps/{id})
     type: ServiceEventType = ServiceEventType.MAP_RECORD
 
     def __repr__(self) -> str:

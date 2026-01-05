@@ -5,7 +5,7 @@ from typing import Optional
 from tortoise import Tortoise
 
 from Oracle.tooling.logger import Logger
-from Oracle.tooling.singleton import Singleton
+from Oracle.tooling.singleton import SingletonMixin
 from Oracle.tooling.config import Config
 from Oracle.tooling.paths import get_base_path
 
@@ -13,8 +13,7 @@ from Oracle.tooling.paths import get_base_path
 logger = Logger("DatabaseManager")
 
 
-@Singleton
-class DatabaseManager:
+class DatabaseManager(SingletonMixin):
     """Async singleton manager for database connections."""
     
     def __init__(self):

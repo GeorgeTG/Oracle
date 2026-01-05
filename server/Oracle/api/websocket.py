@@ -2,7 +2,7 @@
 from datetime import datetime
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events.websocket_events import WebSocketEvent, WebSocketStatus
 from Oracle.api.dependencies import get_event_bus
 from Oracle.tooling.logger import Logger

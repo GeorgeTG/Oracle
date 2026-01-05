@@ -8,7 +8,7 @@ from Oracle.parsing.parsers.events.item_change import ItemChangeEvent
 from Oracle.parsing.parsers.events.player_join import PlayerJoinEvent
 from Oracle.parsing.parsers.events.game_view import GameViewEvent
 
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events.inventory import RequestInventoryEvent, InventorySnapshotEvent, InventoryUpdateEvent
 from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.events.session_events import PlayerChangedEvent, SessionRestoreEvent

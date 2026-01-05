@@ -3,20 +3,14 @@
 import asyncio
 from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import Optional, Union, TYPE_CHECKING
+from typing import Optional, Any
+from enum import Enum
 
-from Oracle.parsing.parsers.events import ParserEvent
-from Oracle.parsing.parsers.events.parser_event_type import ParserEventType
 from Oracle.parsing.parsers.events.player_join import PlayerJoinEvent
-from Oracle.services.event_bus import EventBus, Event, EventType
-from Oracle.services.events.service_event import ServiceEvent, ServiceEventType
+from Oracle.events import EventBus, Event
+from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.events.session_events import SessionRestoreEvent, SessionStartedEvent, SessionFinishedEvent, PlayerChangedEvent
-
-if TYPE_CHECKING:
-    from Oracle.database.models import Player, Session
-else:
-    from Oracle.database.models import Player, Session
-
+from Oracle.database.models import Player, Session
 
 class ServiceBase(ABC):
     """
@@ -134,11 +128,11 @@ class ServiceBase(ABC):
         
         return await Session.get_or_none(id=self._current_session_id)
 
-    async def publish(self, event: Event):
+    async def publish(self, event: Event[Any]) -> None:
         """Publish an event (ServiceEvent or ParserEvent) to the event bus."""
         await self._event_bus.publish(event)
 
-    async def wait_for_event(self, event_type: EventType, timeout: Optional[float] = None) -> Optional[Event]:
+    async def wait_for_event(self, event_type: Enum, timeout: Optional[float] = None) -> Optional[Event[Any]]:
         """
         Wait for a specific event type to be published.
         
@@ -149,9 +143,9 @@ class ServiceBase(ABC):
         Returns:
             The event if received within timeout, None if timeout occurred
         """
-        event_future = asyncio.Future()
+        event_future: asyncio.Future[Event[Any]] = asyncio.Future()
         
-        async def event_handler(event: Event):
+        async def event_handler(event: Event[Any]) -> None:
             if not event_future.done():
                 event_future.set_result(event)
         
@@ -170,7 +164,7 @@ class ServiceBase(ABC):
             # Unsubscribe after receiving the event or timeout
             await self._event_bus.unsubscribe(event_handler, event_type)
 
-    async def request_and_wait(self, publish_event: Event, wait_event_type: EventType, timeout: Optional[float] = None) -> Optional[Event]:
+    async def request_and_wait(self, publish_event: Event[Any], wait_event_type: Enum, timeout: Optional[float] = None) -> Optional[Event[Any]]:
         """
         Publish an event and wait for a response of a specific type.
         

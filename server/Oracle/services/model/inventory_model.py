@@ -5,7 +5,7 @@ from datetime import datetime
 from typing import Dict, Optional, Tuple
 
 
-@dataclass
+@dataclass(kw_only=True)
 class InventoryItem:
     """Represents a single item in an inventory slot."""
     item_id: int

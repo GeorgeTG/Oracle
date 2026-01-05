@@ -2,7 +2,7 @@
 import asyncio
 import websockets
 from Oracle.parsing.router import Router
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 
 async def main():
     event_bus = EventBus()

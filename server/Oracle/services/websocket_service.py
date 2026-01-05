@@ -11,7 +11,7 @@ from Oracle.parsing.parsers.events import ParserEvent
 from Oracle.parsing.parsers.events.parser_event_type import ParserEventType
 from Oracle.parsing.parsers.events.player_join import PlayerJoinEvent
 
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events.map_events import MapStartedEvent, MapFinishedEvent, MapRecordEvent
 from Oracle.services.events.market_events import MarketActionEvent, MarketTransactionEvent
 from Oracle.services.events.notification_events import NotificationEvent

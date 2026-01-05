@@ -10,7 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from Oracle.parsing.router import Router
 from Oracle.parsing.utils.notify_reader import follow_file
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.service_manager import ServiceManager
 from Oracle.database import init_db, close_db
 from Oracle.tooling.logger import Logger

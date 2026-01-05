@@ -7,7 +7,7 @@ from Oracle.parsing.parsers.events import ParserEventType
 from Oracle.parsing.parsers.events.player_join import PlayerJoinEvent
 from Oracle.parsing.parsers.events.game_view import GameViewEvent
 
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.events.session_events import SessionControlEvent, SessionControlAction, SessionStartedEvent, SessionFinishedEvent, SessionSnapshotEvent, PlayerChangedEvent
 from Oracle.services.events.stats_events import StatsUpdateEvent

@@ -5,7 +5,7 @@ from fastapi import APIRouter, Query, Request, status
 from pydantic import BaseModel, Field
 
 from Oracle.services.events.session_events import SessionControlEvent, SessionControlAction
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 
 from Oracle.database.models import Session, MapCompletion, MarketTransaction, MapCompletionItem
 

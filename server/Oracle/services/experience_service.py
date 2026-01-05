@@ -7,7 +7,7 @@ from Oracle.database.models import Player
 from Oracle.parsing.parsers.events import ParserEventType
 from Oracle.parsing.parsers.events.exp_update import ExpUpdateEvent
 from Oracle.parsing.parsers.events.player_join import PlayerJoinEvent
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events.level_events import LevelProgressEvent
 from Oracle.services.events.session_events import PlayerChangedEvent
 from Oracle.services.events.service_event import ServiceEventType

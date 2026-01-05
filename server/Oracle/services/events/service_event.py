@@ -1,8 +1,7 @@
-# Oracle/services/events.py
 from dataclasses import dataclass
-from datetime import datetime
 from enum import Enum
-from typing import Dict, Any, Optional
+
+from Oracle.events.base_event import Event
 
 
 class ServiceEventType(str, Enum):
@@ -42,21 +41,6 @@ class ServiceEventType(str, Enum):
 
 
 @dataclass
-class ServiceEvent:
+class ServiceEvent(Event[ServiceEventType]):
     """Base class for all service events."""
-    timestamp: datetime
-    type: ServiceEventType
-
-    def to_dict(self) -> dict:
-        return {
-            k: str(v) if isinstance(v, ServiceEventType) else v
-            for k, v in self.__dict__.items()
-            if not k.startswith('_')
-        }
-
-    def __repr__(self) -> str:
-        fields = ", ".join(
-            f"{k}={repr(v)}"
-            for k, v in self.to_dict().items()
-        )
-        return f"{self.__class__.__name__}({fields})"
+    pass

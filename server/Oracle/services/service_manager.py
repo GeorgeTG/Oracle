@@ -10,17 +10,16 @@ import glob
 import sys
 
 from Oracle.parsing.parsers.events.parser_event import ParserEvent
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.service_base import ServiceBase
 from Oracle.services.loaders import get_loader
 from Oracle.tooling.logger import Logger
-from Oracle.tooling.singleton import Singleton
+from Oracle.tooling.singleton import SingletonMixin
 
 
 logger = Logger("ServiceManager")
 
-@Singleton
-class ServiceManager:
+class ServiceManager(SingletonMixin):
     """
     Manages the lifecycle and dispatching of services.
     Dynamically loads services from the Oracle.services package.

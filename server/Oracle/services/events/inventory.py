@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-from datetime import datetime
 from typing import Optional, Dict
 
 from Oracle.services.events.service_event import ServiceEvent, ServiceEventType
@@ -16,7 +15,7 @@ class RequestInventoryEvent(ServiceEvent):
     type: ServiceEventType = ServiceEventType.REQUEST_INVENTORY
     requester: Optional[str] = None  # Optional identifier of who requested
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, str | None]:
         return {
             "timestamp": self.timestamp.isoformat(),
             "type": str(self.type),
@@ -33,7 +32,7 @@ class InventorySnapshotEvent(ServiceEvent):
     type: ServiceEventType = ServiceEventType.INVENTORY_SNAPSHOT
     snapshot: InventorySnapshot
 
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, str | Dict[str, str | Inventory]]:
         return {
             "timestamp": self.timestamp.isoformat(),
             "type": str(self.type),
@@ -56,7 +55,7 @@ class InventoryUpdateEvent(ServiceEvent):
     inventory: Inventory
     type: ServiceEventType = ServiceEventType.INVENTORY_UPDATE
     
-    def to_dict(self) -> dict:
+    def to_dict(self) -> Dict[str, str | Dict[str, int]]:
         return {
             "timestamp": self.timestamp.isoformat(),
             "type": str(self.type),

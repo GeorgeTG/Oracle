@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse, Response
 from pydantic import BaseModel
 
 from Oracle.database.models import Item
-from Oracle.services.event_bus import EventBus
+from Oracle.events import EventBus
 from Oracle.services.events import ItemDataChangedEvent
 from Oracle.tooling.logger import Logger
 

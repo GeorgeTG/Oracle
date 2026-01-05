@@ -1,23 +1,37 @@
 import asyncio
+from typing import TypeVar, Type, Any, Protocol, runtime_checkable, ClassVar
 
 
-def Singleton(cls):
+@runtime_checkable
+class HasInitialize(Protocol):
+    """Protocol for classes with an async initialize method."""
+    async def initialize(self) -> None: ...
+
+
+T = TypeVar('T', bound='SingletonMixin')
+
+
+class SingletonMixin:
     """
-    An async-safe singleton decorator for classes.
-    Ensures that only one instance of the class is created.
+    Mixin class for creating async-safe singletons.
+    Usage: class MyClass(SingletonMixin): ...
+    Access instance: await MyClass.instance()
     """
-    instances = {}
-    lock = asyncio.Lock()
-
-    async def get_instance(*args, **kwargs):
-        async with lock:
-            if cls not in instances:
-                instance = cls(*args, **kwargs)
+    _instances: ClassVar[dict[type, Any]] = {}
+    _locks: ClassVar[dict[type, asyncio.Lock]] = {}
+    
+    @classmethod
+    async def instance(cls: Type[T], *args: Any, **kwargs: Any) -> T:
+        """Get or create the singleton instance of this class."""
+        if cls not in cls._locks:
+            cls._locks[cls] = asyncio.Lock()
+        
+        async with cls._locks[cls]:
+            if cls not in cls._instances:
+                instance: T = cls(*args, **kwargs)  # type: ignore[assignment]
                 # Call async initialize if it exists
-                if hasattr(instance, 'initialize') and asyncio.iscoroutinefunction(instance.initialize):
+                if isinstance(instance, HasInitialize):
                     await instance.initialize()
-                instances[cls] = instance
-            return instances[cls]
+                cls._instances[cls] = instance
+            return cls._instances[cls]  # type: ignore[return-value]
 
-    cls.instance = staticmethod(get_instance)
-    return cls
