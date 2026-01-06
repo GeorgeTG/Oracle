@@ -1,9 +1,13 @@
 {
   "version": "0.2",
   "build": "2026-01-02_13-03-52-152Z",
-  "script": "build.ts",
   "name": "server",
+  "root": "server",
+  "dir": "deploy/build",
+  "output": "deploy/output/server",
+  "venv" : true,
   "requires": [],
+  "script": "build.ts",
   "targets": [
     {
       "glob_source": "../server/config.toml.example",
@@ -34,12 +38,12 @@
       "output": "modules"
     },
     {
-      "glob_source": "dist/Oracle-Server.exe",
+      "glob_source": "build/dist/Oracle-Server.exe",
       "output": "Oracle-Server.exe",
       "release_only": true
     },
     {
-      "glob_source": "dist/Oracle-Server-Tray.exe",
+      "glob_source": "build/dist/Oracle-Server-Tray.exe",
       "output": "Oracle-Server-Tray.exe",
       "release_only": true
     }

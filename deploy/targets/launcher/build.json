@@ -2,12 +2,18 @@
   "name": "launcher",
   "version": "0.1",
   "build": "",
-  "script": "build.ts",
-  "requires": ["frontend", "server"],
+
+  "root": "launcher",
+  "venv" : true,
+  "dir": "deploy/build",
+  "output": "deploy/output/launcher",
+  
   "output_to_root": true,
+  "requires": ["frontend", "server"],
+  "script": "build.ts",
   "targets": [
     {
-      "glob_source": "dist/Oracle-Launcher.exe",
+      "glob_source": "build/dist/Oracle-Launcher.exe",
       "output": "/Oracle-Launcher.exe",
       "release_only": true
     },

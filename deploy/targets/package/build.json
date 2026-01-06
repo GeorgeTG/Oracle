@@ -2,8 +2,14 @@
   "name": "package",
   "version": "0.1",
   "build": "",
-  "script": "build.ts",
+
+  "root": "deploy/output",
+  "dir": "deploy/output/package",
+  "output": "deploy/output/package",
+  "venv" : false,
+  
   "requires": ["frontend", "server", "launcher"],
+  "script": "build.ts",
   "targets": []
 }
  

@@ -2,7 +2,8 @@
 # Python 3.10+
 
 # TOML parsing (for reading config.toml)
-tomli>=2.0.0
+# Install from source to avoid mypyc compiled modules that cause issues with PyInstaller
+tomli>=2.0.0 --no-binary tomli
 tomli-w>=1.0.0
 
 # Sun Valley ttk theme (modern Windows 11 style)

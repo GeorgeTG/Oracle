@@ -104,21 +104,32 @@ export async function buildServer(options: ServerBuildOptions): Promise<boolean>
   const SERVER_DIR = join(options.rootDir, 'server');
   const DEPLOY_DIR = join(options.rootDir, 'deploy');
 
+  // Read build.json configuration
+  const buildConfigPath = join(import.meta.dir, 'build.json');
+  const buildConfig = JSON.parse(await Bun.file(buildConfigPath).text());
+  
+  const venvPath = join(options.rootDir, buildConfig.dir, `${buildConfig.name}-venv`);
+  const venvPython = join(venvPath, 'Scripts', 'python.exe');
+  const pipExe = join(venvPath, 'Scripts', 'pip.exe');
+  const pyinstallerExe = join(venvPath, 'Scripts', 'pyinstaller.exe');
+
   // Update version
   const versionInfo = await updateVersion();
   const buildDate = versionInfo.build;
   
   log.info(`Server Version: ${versionInfo.version} (${buildDate})`);
 
+  // Check venv exists
+  if (!existsSync(venvPath)) {
+    log.error(`Server venv not found at ${venvPath}. Run setup first.`);
+    return false;
+  }
+
   // Run pack_modules.py to create server.pyz (if needed)
   const packScript = join(import.meta.dir, 'pack_modules.py');
   if (existsSync(packScript)) {
-    // Use Python from venv to get all dependencies
-    const venvPython = join(DEPLOY_DIR, '.venv', 'Scripts', 'python.exe');
-    const pythonExe = existsSync(venvPython) ? venvPython : 'C:/Python314/python.exe';
-    
     const success = await execCommand(
-      [pythonExe, packScript],
+      [venvPython, packScript],
       SERVER_DIR,
       'Creating server.pyz archive',
       options.verbose
@@ -130,45 +141,47 @@ export async function buildServer(options: ServerBuildOptions): Promise<boolean>
 
   // Run PyInstaller if release build
   if (options.release) {
-    // Find PyInstaller
-    const localPyInstaller = join(DEPLOY_DIR, '.venv', 'Scripts', 'pyinstaller.exe');
-    const globalPyInstaller = join(options.rootDir, '.venv', 'Scripts', 'pyinstaller.exe');
-    
-    let pyinstallerPath = '';
-    if (existsSync(localPyInstaller)) {
-      pyinstallerPath = localPyInstaller;
-    } else if (existsSync(globalPyInstaller)) {
-      pyinstallerPath = globalPyInstaller;
+    // Install PyInstaller if needed
+    if (!existsSync(pyinstallerExe)) {
+      await execCommand(
+        [pipExe, 'install', 'pyinstaller'],
+        DEPLOY_DIR,
+        'Installing PyInstaller',
+        options.verbose
+      );
     }
     
-    if (pyinstallerPath) {
-      // Build both server and tray versions
-      const specs = [
-        { spec: join(DEPLOY_DIR, 'Oracle-Server.spec'), name: 'Oracle-Server' },
-        { spec: join(DEPLOY_DIR, 'Oracle-Server-Tray.spec'), name: 'Oracle-Server-Tray' }
-      ];
-      
-      for (const { spec, name } of specs) {
-        if (existsSync(spec)) {
-          const buildSuccess = await execCommand(
-            [pyinstallerPath, spec],
-            DEPLOY_DIR,
-            `Building ${name}.exe with PyInstaller`,
-            options.verbose
-          );
-          
-          if (!buildSuccess) {
-            log.error(`${name} build failed`);
-            return false;
-          }
-          
-          log.success(`${name}.exe built successfully`);
-        }
-      }
-    } else {
-      log.error('PyInstaller not installed - cannot create release build');
-      log.info('Run: bun run setup');
+    if (!existsSync(pyinstallerExe)) {
+      log.error('PyInstaller not installed in server venv');
       return false;
+    }
+    
+    // Build both server and tray versions
+    const specs = [
+      { spec: join(SERVER_DIR, 'Oracle-Server.spec'), name: 'Oracle-Server' },
+      { spec: join(SERVER_DIR, 'Oracle-Server-Tray.spec'), name: 'Oracle-Server-Tray' }
+    ];
+    
+    const distPath = join(DEPLOY_DIR, 'build', 'dist');
+    
+    for (const { spec, name } of specs) {
+      if (existsSync(spec)) {
+        const buildPath = join(DEPLOY_DIR, 'build', name);
+        
+        const buildSuccess = await execCommand(
+          [pyinstallerExe, '--distpath', distPath, '--workpath', buildPath, spec],
+          SERVER_DIR,
+          `Building ${name}.exe with PyInstaller`,
+          options.verbose
+        );
+        
+        if (!buildSuccess) {
+          log.error(`${name} build failed`);
+          return false;
+        }
+        
+        log.success(`${name}.exe built successfully`);
+      }
     }
   }
 

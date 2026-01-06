@@ -1,14 +1,16 @@
 #!/usr/bin/env bun
 import { spawn } from 'bun';
-import { existsSync, mkdirSync } from 'fs';
-import { join, resolve } from 'path';
+import { existsSync, mkdirSync, readdirSync, rmSync } from 'fs';
+import { join } from 'path';
 import chalk from 'chalk';
 import ora from 'ora';
 
 const DEPLOY_DIR = import.meta.dir;
-const VENV_DIR = join(DEPLOY_DIR, '.venv');
-const PYTHON_EXE = join(VENV_DIR, 'Scripts', 'python.exe');
-const PIP_EXE = join(VENV_DIR, 'Scripts', 'pip.exe');
+const ROOT_DIR = join(DEPLOY_DIR, '..');
+const TARGETS_DIR = join(DEPLOY_DIR, 'targets');
+
+// Check for --clean flag
+const isClean = process.argv.includes('--clean');
 
 const log = {
   title: (text: string) => console.log('\n' + chalk.magenta.bold('═'.repeat(60)) + '\n' + chalk.magenta.bold(`  ${text}`) + '\n' + chalk.magenta.bold('═'.repeat(60)) + '\n'),
@@ -43,83 +45,104 @@ async function execCommand(cmd: string[], description: string): Promise<boolean>
   }
 }
 
-async function setupBuildEnvironment() {
-  log.title('🔧 Build Environment Setup');
-
-  // Check if venv already exists
-  if (existsSync(PYTHON_EXE)) {
-    log.info('Virtual environment already exists');
+async function setupTargetVenvs() {
+  log.title('🔧 Target Virtual Environments Setup');
+  
+  if (isClean) {
+    log.info('Clean mode enabled - removing existing virtual environments');
+  }
+  
+  // Read all target build.json files
+  const targetDirs = readdirSync(TARGETS_DIR, { withFileTypes: true })
+    .filter(dirent => dirent.isDirectory())
+    .map(dirent => dirent.name);
+  
+  for (const targetName of targetDirs) {
+    const buildJsonPath = join(TARGETS_DIR, targetName, 'build.json');
     
-    // Update dependencies
-    const success = await execCommand(
-      [PIP_EXE, 'install', '-r', 'requirements.txt', '--upgrade'],
-      'Updating build dependencies'
-    );
-
-    // Install server dependencies for PyInstaller
-    const serverReqs = join(DEPLOY_DIR, '..', 'server', 'requirements.txt');
-    if (existsSync(serverReqs)) {
+    if (!existsSync(buildJsonPath)) {
+      continue;
+    }
+    
+    const buildConfig = JSON.parse(await Bun.file(buildJsonPath).text());
+    
+    // Skip if venv is not required
+    if (!buildConfig.venv) {
+      continue;
+    }
+    
+    const { name, root, dir } = buildConfig;
+    
+    if (!name || !root || !dir) {
+      log.error(`Missing required fields in ${targetName}/build.json`);
+      continue;
+    }
+    
+    // Paths
+    const requirementsPath = join(ROOT_DIR, root, 'requirements.txt');
+    const venvPath = join(ROOT_DIR, dir, `${name}-venv`);
+    const venvPython = join(venvPath, 'Scripts', 'python.exe');
+    const venvPip = join(venvPath, 'Scripts', 'pip.exe');
+    
+    if (!existsSync(requirementsPath)) {
+      log.error(`Requirements file not found: ${requirementsPath}`);
+      continue;
+    }
+    
+    // Remove venv if clean mode
+    if (isClean && existsSync(venvPath)) {
+      log.info(`Removing ${name} virtual environment...`);
+      rmSync(venvPath, { recursive: true, force: true });
+    }
+    
+    // Check if venv already exists
+    if (existsSync(venvPython)) {
+      log.info(`Virtual environment for ${name} already exists`);
+      
+      // Update dependencies - only build tomli from source to avoid mypyc issues
       await execCommand(
-        [PIP_EXE, 'install', '-r', serverReqs],
-        'Updating server dependencies'
+        [venvPip, 'install', '-r', requirementsPath, '--upgrade', '--no-binary', 'tomli'],
+        `Updating ${name} dependencies`
       );
+      
+      continue;
     }
     
-    if (success) {
-      log.success('Build environment is ready!');
-      console.log(chalk.cyan('\nYou can now run:'));
-      console.log(chalk.yellow('  bun run build'));
-      console.log(chalk.yellow('  bun run release'));
-    }
-    return;
-  }
-
-  // Create new venv
-  log.info('Creating new virtual environment...');
-  
-  const createVenv = await execCommand(
-    ['python', '-m', 'venv', '.venv'],
-    'Creating Python virtual environment'
-  );
-
-  if (!createVenv) {
-    log.error('Failed to create virtual environment');
-    process.exit(1);
-  }
-
-  // Install build dependencies
-  const installDeps = await execCommand(
-    [PIP_EXE, 'install', '-r', 'requirements.txt'],
-    'Installing build dependencies'
-  );
-
-  if (!installDeps) {
-    log.error('Failed to install build dependencies');
-    process.exit(1);
-  }
-
-  // Install server dependencies for PyInstaller
-  const serverReqs = join(DEPLOY_DIR, '..', 'server', 'requirements.txt');
-  if (existsSync(serverReqs)) {
-    const installServerDeps = await execCommand(
-      [PIP_EXE, 'install', '-r', serverReqs],
-      'Installing server dependencies'
+    // Create venv directory if needed
+    mkdirSync(join(ROOT_DIR, dir), { recursive: true });
+    
+    // Create new venv
+    log.info(`Creating virtual environment for ${name}...`);
+    
+    const createVenv = await execCommand(
+      ['py', '-3', '-m', 'venv', venvPath],
+      `Creating ${name} virtual environment`
     );
-
-    if (!installServerDeps) {
-      log.error('Failed to install server dependencies');
-      process.exit(1);
+    
+    if (!createVenv) {
+      log.error(`Failed to create virtual environment for ${name}`);
+      continue;
     }
+    
+    // Install dependencies - only build tomli from source to avoid mypyc issues
+    const installDeps = await execCommand(
+      [venvPip, 'install', '-r', requirementsPath, '--no-binary', 'tomli'],
+      `Installing ${name} dependencies`
+    );
+    
+    if (!installDeps) {
+      log.error(`Failed to install dependencies for ${name}`);
+      continue;
+    }
+    
+    log.success(`${name} environment created successfully!`);
   }
-
-  log.success('Build environment created successfully!');
-  console.log(chalk.cyan('\nInstalled tools:'));
-  console.log(chalk.yellow('  • PyInstaller - for creating executables'));
-  console.log(chalk.yellow('  • Server dependencies - for building executables'));
   
-  console.log(chalk.cyan('\nYou can now run:'));
+  console.log(chalk.cyan('\nSetup complete! You can now run:'));
   console.log(chalk.yellow('  bun run build'));
   console.log(chalk.yellow('  bun run release'));
+  console.log(chalk.cyan('\nTo clean and rebuild all venvs:'));
+  console.log(chalk.yellow('  bun run setup --clean'));
 }
 
-setupBuildEnvironment();
+setupTargetVenvs();

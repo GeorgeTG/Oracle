@@ -2,8 +2,14 @@
   "name": "frontend",
   "version": "0.1",
   "build": "",
-  "script": "build.ts",
+  
+  "root": "ui",
+  "dir": "deploy/build",
+  "output": "deploy/output/frontend",
+  "venv" : false,
+  
   "requires": [],
+  "script": "build.ts",
   "targets": [
     {
       "glob_source": "../ui/Oracle/src-tauri/target/release/Oracle.exe",

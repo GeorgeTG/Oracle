@@ -230,17 +230,36 @@ class OracleLauncher:
         title = ttk.Label(info_frame, text="Build Information", style='Title.TLabel')
         title.pack(pady=(0, 20))
         
-        # Create text widget with scrollbar
-        text_frame = ttk.Frame(info_frame)
-        text_frame.pack(fill='both', expand=True)
+        # Create canvas with scrollbar for scrollable content
+        canvas_frame = ttk.Frame(info_frame)
+        canvas_frame.pack(fill='both', expand=True)
         
-        scrollbar = ttk.Scrollbar(text_frame)
+        scrollbar = ttk.Scrollbar(canvas_frame, orient='vertical')
         scrollbar.pack(side='right', fill='y')
         
-        self.info_text = tk.Text(text_frame, wrap='word', yscrollcommand=scrollbar.set,
-                                font=('Consolas', 10), bg='#f5f5f5', relief='flat')
-        self.info_text.pack(fill='both', expand=True)
-        scrollbar.config(command=self.info_text.yview)
+        self.info_canvas = tk.Canvas(canvas_frame, yscrollcommand=scrollbar.set, 
+                                     bg='#2b2b2b', highlightthickness=0)
+        self.info_canvas.pack(side='left', fill='both', expand=True)
+        scrollbar.config(command=self.info_canvas.yview)
+        
+        # Create frame inside canvas
+        self.info_content_frame = ttk.Frame(self.info_canvas)
+        self.info_canvas_window = self.info_canvas.create_window((0, 0), window=self.info_content_frame, anchor='nw')
+        
+        # Bind canvas resize
+        def on_canvas_configure(event):
+            self.info_canvas.itemconfig(self.info_canvas_window, width=event.width)
+        self.info_canvas.bind('<Configure>', on_canvas_configure)
+        
+        # Update scrollregion when content changes
+        def on_frame_configure(event):
+            self.info_canvas.configure(scrollregion=self.info_canvas.bbox('all'))
+        self.info_content_frame.bind('<Configure>', on_frame_configure)
+        
+        # Enable mouse wheel scrolling
+        def on_mousewheel(event):
+            self.info_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        self.info_canvas.bind_all("<MouseWheel>", on_mousewheel)
         
         # Load build info
         self.load_build_info()
@@ -459,44 +478,127 @@ class OracleLauncher:
             
     def load_build_info(self):
         """Load and display build.json information"""
-        self.info_text.config(state='normal')
-        self.info_text.delete('1.0', 'end')
+        # Clear existing widgets
+        for widget in self.info_content_frame.winfo_children():
+            widget.destroy()
         
         # Server build info
         server_build_file = self.server_dir / "build.json"
-        self.info_text.insert('end', "=" * 80 + "\n")
-        self.info_text.insert('end', "SERVER BUILD INFORMATION\n", 'header')
-        self.info_text.insert('end', "=" * 80 + "\n\n")
+        
+        # Server section header
+        server_header_frame = ttk.Frame(self.info_content_frame)
+        server_header_frame.pack(fill='x', pady=(0, 10))
+        
+        ttk.Label(server_header_frame, text="╔" + "═" * 78 + "╗", 
+                 font=('Consolas', 10), foreground='#4A9EFF').pack()
+        ttk.Label(server_header_frame, text="║" + " " * 25 + "SERVER BUILD INFORMATION" + " " * 29 + "║",
+                 font=('Consolas', 11, 'bold'), foreground='#4A9EFF').pack()
+        ttk.Label(server_header_frame, text="╚" + "═" * 78 + "╝",
+                 font=('Consolas', 10), foreground='#4A9EFF').pack()
         
         if server_build_file.exists():
             try:
                 with open(server_build_file, 'r') as f:
                     server_build = json.load(f)
-                self.info_text.insert('end', json.dumps(server_build, indent=2) + "\n\n")
+                
+                # Display formatted build info with labels
+                self._display_build_data_labels(self.info_content_frame, server_build)
             except Exception as e:
-                self.info_text.insert('end', f"Error loading server build info: {e}\n\n")
+                error_label = ttk.Label(self.info_content_frame, 
+                                       text=f"❌ Error loading server build info: {e}",
+                                       font=('Consolas', 10), foreground='#E06C75')
+                error_label.pack(anchor='w', pady=5)
         else:
-            self.info_text.insert('end', "Server build.json not found\n\n")
-            
+            warning_label = ttk.Label(self.info_content_frame,
+                                     text="⚠ Server build.json not found",
+                                     font=('Consolas', 10), foreground='#E5C07B')
+            warning_label.pack(anchor='w', pady=5)
+        
+        # Spacer
+        ttk.Label(self.info_content_frame, text="").pack(pady=10)
+        
         # UI build info
         ui_build_file = self.frontend_dir / "build.json"
-        self.info_text.insert('end', "=" * 80 + "\n")
-        self.info_text.insert('end', "UI BUILD INFORMATION\n", 'header')
-        self.info_text.insert('end', "=" * 80 + "\n\n")
+        
+        # UI section header
+        ui_header_frame = ttk.Frame(self.info_content_frame)
+        ui_header_frame.pack(fill='x', pady=(0, 10))
+        
+        ttk.Label(ui_header_frame, text="╔" + "═" * 78 + "╗",
+                 font=('Consolas', 10), foreground='#4A9EFF').pack()
+        ttk.Label(ui_header_frame, text="║" + " " * 27 + "UI BUILD INFORMATION" + " " * 31 + "║",
+                 font=('Consolas', 11, 'bold'), foreground='#4A9EFF').pack()
+        ttk.Label(ui_header_frame, text="╚" + "═" * 78 + "╝",
+                 font=('Consolas', 10), foreground='#4A9EFF').pack()
         
         if ui_build_file.exists():
             try:
                 with open(ui_build_file, 'r') as f:
                     ui_build = json.load(f)
-                self.info_text.insert('end', json.dumps(ui_build, indent=2) + "\n")
+                
+                # Display formatted build info with labels
+                self._display_build_data_labels(self.info_content_frame, ui_build)
             except Exception as e:
-                self.info_text.insert('end', f"Error loading UI build info: {e}\n")
+                error_label = ttk.Label(self.info_content_frame,
+                                       text=f"❌ Error loading UI build info: {e}",
+                                       font=('Consolas', 10), foreground='#E06C75')
+                error_label.pack(anchor='w', pady=5)
         else:
-            self.info_text.insert('end', "UI build.json not found\n")
+            warning_label = ttk.Label(self.info_content_frame,
+                                     text="⚠ UI build.json not found",
+                                     font=('Consolas', 10), foreground='#E5C07B')
+            warning_label.pack(anchor='w', pady=5)
+    
+    def _display_build_data_labels(self, parent_frame: ttk.Frame, build_data: dict):
+        """Helper to display build data with separate label widgets"""
+        # Map of field names to display labels
+        label_map = {
+            'version': '📦 Version',
+            'build_date': '📅 Build Date',
+            'build_time': '🕒 Build Time',
+            'build_timestamp': '⏱️  Build Timestamp',
+            'commit': '🔖 Git Commit',
+            'branch': '🌿 Git Branch',
+            'builder': '👤 Built By',
+            'platform': '💻 Platform',
+            'python_version': '🐍 Python Version',
+            'node_version': '📗 Node Version',
+            'angular_version': '🅰️  Angular Version',
+            'tauri_version': '🦀 Tauri Version',
+        }
+        
+        # Display each field as a separate label
+        for key, value in build_data.items():
+            label_text = label_map.get(key, f'• {key.replace("_", " ").title()}')
             
-        # Configure tags
-        self.info_text.tag_config('header', font=('Consolas', 11, 'bold'))
-        self.info_text.config(state='disabled')
+            # Create a frame for each row
+            row_frame = ttk.Frame(parent_frame)
+            row_frame.pack(fill='x', pady=2, padx=10)
+            
+            if isinstance(value, dict):
+                # Header for nested dict
+                ttk.Label(row_frame, text=f"{label_text}:",
+                         font=('Consolas', 10, 'bold'), foreground='#61AFEF').pack(anchor='w')
+                for sub_key, sub_value in value.items():
+                    sub_row = ttk.Frame(parent_frame)
+                    sub_row.pack(fill='x', pady=1, padx=30)
+                    ttk.Label(sub_row, text=f"{sub_key}: {sub_value}",
+                             font=('Consolas', 9), foreground='#ABB2BF').pack(anchor='w')
+            elif isinstance(value, list):
+                # Header for list
+                ttk.Label(row_frame, text=f"{label_text}:",
+                         font=('Consolas', 10, 'bold'), foreground='#61AFEF').pack(anchor='w')
+                for item in value:
+                    item_row = ttk.Frame(parent_frame)
+                    item_row.pack(fill='x', pady=1, padx=30)
+                    ttk.Label(item_row, text=f"• {item}",
+                             font=('Consolas', 9), foreground='#ABB2BF').pack(anchor='w')
+            else:
+                # Single value - label and value side by side
+                ttk.Label(row_frame, text=f"{label_text:32s}",
+                         font=('Consolas', 10, 'bold'), foreground='#61AFEF').pack(side='left')
+                ttk.Label(row_frame, text=str(value),
+                         font=('Consolas', 10), foreground='#ABB2BF').pack(side='left')
         
     def load_license(self) -> str:
         """Load license and liability information"""

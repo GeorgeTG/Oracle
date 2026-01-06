@@ -91,81 +91,66 @@ export async function buildLauncher(options: LauncherBuildOptions): Promise<bool
   const LAUNCHER_DIR = join(options.rootDir, 'launcher');
   const DEPLOY_DIR = join(options.rootDir, 'deploy');
 
+  // Read build.json configuration
+  const buildConfigPath = join(import.meta.dir, 'build.json');
+  const buildConfig = JSON.parse(await Bun.file(buildConfigPath).text());
+  
+  const venvPath = join(options.rootDir, buildConfig.dir, `${buildConfig.name}-venv`);
+  const pipExe = join(venvPath, 'Scripts', 'pip.exe');
+  const pyinstallerExe = join(venvPath, 'Scripts', 'pyinstaller.exe');
+
   // Read version from server.json (launcher follows server version)
   const versionInfo = await getCurrentVersion();
   const buildDate = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0];
   
   log.info(`Launcher Version: ${versionInfo.version} (${buildDate})`);
 
-  // Create temporary build venv for PyInstaller
-  const buildVenv = join(DEPLOY_DIR, 'build', 'launcher-venv');
-  const pythonExe = 'C:/Python314/python.exe';
-  
-  if (!existsSync(buildVenv)) {
-    mkdirSync(join(DEPLOY_DIR, 'build'), { recursive: true });
-    const venvSuccess = await execCommand(
-      [pythonExe, '-m', 'venv', 'launcher-venv'],
-      join(DEPLOY_DIR, 'build'),
-      'Creating launcher build environment',
-      options.verbose
-    );
-    if (!venvSuccess) {
-      log.error('Failed to create build venv');
-      return false;
-    }
+  // Check venv exists
+  if (!existsSync(venvPath)) {
+    log.error(`Launcher venv not found at ${venvPath}. Run setup first.`);
+    return false;
   }
   
-  // Install launcher dependencies in build venv
-  const pipExe = join(buildVenv, 'Scripts', 'pip.exe');
-  if (existsSync(pipExe)) {
-    const requirementsFile = join(LAUNCHER_DIR, 'requirements.txt');
-    const installSuccess = await execCommand(
-      [pipExe, 'install', '--no-binary', ':all:', '-r', requirementsFile],
+  // Install PyInstaller if needed and this is a release build
+  if (options.release && !existsSync(pyinstallerExe)) {
+    await execCommand(
+      [pipExe, 'install', 'pyinstaller'],
       DEPLOY_DIR,
-      'Installing launcher dependencies (no binary)',
+      'Installing PyInstaller',
       options.verbose
     );
-    if (!installSuccess) {
-      log.warn('Failed to install dependencies - continuing anyway');
-    }
   }
 
   // Run PyInstaller if release build
   if (options.release) {
-    const spec = join(DEPLOY_DIR, 'Oracle-Launcher.spec');
+    const spec = join(LAUNCHER_DIR, 'Oracle-Launcher.spec');
     
-    if (existsSync(spec)) {
-      // Install PyInstaller in build venv if needed
-      const pyinstallerExe = join(buildVenv, 'Scripts', 'pyinstaller.exe');
-      
-      if (!existsSync(pyinstallerExe) && existsSync(pipExe)) {
-        await execCommand(
-          [pipExe, 'install', 'pyinstaller'],
-          DEPLOY_DIR,
-          'Installing PyInstaller',
-          options.verbose
-        );
-      }
-      
-      if (existsSync(pyinstallerExe)) {
-        const buildSuccess = await execCommand(
-          [pyinstallerExe, spec],
-          DEPLOY_DIR,
-          'Building Oracle-Launcher.exe with PyInstaller',
-          options.verbose
-        );
-        
-        if (!buildSuccess) {
-          log.error('PyInstaller build failed');
-          return false;
-        }
-        
-        log.success('Oracle-Launcher.exe built successfully');
-      } else {
-        log.error('PyInstaller not installed');
-        return false;
-      }
+    if (!existsSync(spec)) {
+      log.error(`Spec file not found: ${spec}`);
+      return false;
     }
+    
+    if (!existsSync(pyinstallerExe)) {
+      log.error('PyInstaller not installed in launcher venv');
+      return false;
+    }
+    
+    const distPath = join(DEPLOY_DIR, 'build', 'dist');
+    const buildPath = join(DEPLOY_DIR, 'build', 'Oracle-Launcher');
+    
+    const buildSuccess = await execCommand(
+      [pyinstallerExe, '--distpath', distPath, '--workpath', buildPath, spec],
+      LAUNCHER_DIR,
+      'Building Oracle-Launcher.exe with PyInstaller',
+      options.verbose
+    );
+    
+    if (!buildSuccess) {
+      log.error('PyInstaller build failed');
+      return false;
+    }
+    
+    log.success('Oracle-Launcher.exe built successfully');
   }
 
   log.success('Launcher build completed');
