@@ -37,7 +37,7 @@ export class InventoryComponent implements OnInit, OnDestroy {
   loading: boolean = false;
   playerName: string | null = null;
   searchTerm: string = '';
-  availablePlayers: string[] = [];
+  availablePlayers: { label: string; value: string }[] = [];
   selectedPlayer: string | null = null;
   showItemDetail: boolean = false;
   selectedItemId: number | null = null;
@@ -87,6 +87,9 @@ export class InventoryComponent implements OnInit, OnDestroy {
     this.playerName = this.playerService.getName();
     this.playerSubscription = this.playerService.getNameObservable().subscribe(name => {
       this.playerName = name;
+      // Update selected player to match the new active player
+      this.selectedPlayer = name;
+      // Reload inventory to get updated player list and data
       this.loadInventory();
     });
     this.loadInventory();
@@ -105,11 +108,12 @@ export class InventoryComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.rawInventory = response.inventory;
-          this.availablePlayers = Object.keys(response.inventory);
+          const playerNames = Object.keys(response.inventory);
+          this.availablePlayers = playerNames.map(name => ({ label: name, value: name }));
           
           // If no player selected, select the first one
-          if (!this.selectedPlayer && this.availablePlayers.length > 0) {
-            this.selectedPlayer = this.availablePlayers[0];
+          if (!this.selectedPlayer && playerNames.length > 0) {
+            this.selectedPlayer = playerNames[0];
           }
           
           this.buildPages();
