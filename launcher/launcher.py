@@ -24,6 +24,10 @@ try:
     import urllib.error
 except ImportError:
     pass
+try:
+    from github import Github
+except ImportError:
+    Github = None
 
 
 class OracleLauncher:
@@ -230,36 +234,9 @@ class OracleLauncher:
         title = ttk.Label(info_frame, text="Build Information", style='Title.TLabel')
         title.pack(pady=(0, 20))
         
-        # Create canvas with scrollbar for scrollable content
-        canvas_frame = ttk.Frame(info_frame)
-        canvas_frame.pack(fill='both', expand=True)
-        
-        scrollbar = ttk.Scrollbar(canvas_frame, orient='vertical')
-        scrollbar.pack(side='right', fill='y')
-        
-        self.info_canvas = tk.Canvas(canvas_frame, yscrollcommand=scrollbar.set, 
-                                     bg='#2b2b2b', highlightthickness=0)
-        self.info_canvas.pack(side='left', fill='both', expand=True)
-        scrollbar.config(command=self.info_canvas.yview)
-        
-        # Create frame inside canvas
-        self.info_content_frame = ttk.Frame(self.info_canvas)
-        self.info_canvas_window = self.info_canvas.create_window((0, 0), window=self.info_content_frame, anchor='nw')
-        
-        # Bind canvas resize
-        def on_canvas_configure(event):
-            self.info_canvas.itemconfig(self.info_canvas_window, width=event.width)
-        self.info_canvas.bind('<Configure>', on_canvas_configure)
-        
-        # Update scrollregion when content changes
-        def on_frame_configure(event):
-            self.info_canvas.configure(scrollregion=self.info_canvas.bbox('all'))
-        self.info_content_frame.bind('<Configure>', on_frame_configure)
-        
-        # Enable mouse wheel scrolling
-        def on_mousewheel(event):
-            self.info_canvas.yview_scroll(int(-1*(event.delta/120)), "units")
-        self.info_canvas.bind_all("<MouseWheel>", on_mousewheel)
+        # Create content frame directly (no scrolling)
+        self.info_content_frame = ttk.Frame(info_frame)
+        self.info_content_frame.pack(fill='both', expand=True)
         
         # Load build info
         self.load_build_info()
@@ -281,7 +258,7 @@ class OracleLauncher:
         scrollbar.pack(side='right', fill='y')
         
         about_text = tk.Text(text_frame, wrap='word', yscrollcommand=scrollbar.set,
-                            font=('Segoe UI', 10), bg='#f5f5f5', relief='flat')
+                            font=('Segoe UI', 10), bg='#2b2b2b', fg='#d4d4d4', relief='flat')
         about_text.pack(fill='both', expand=True)
         scrollbar.config(command=about_text.yview)
         
@@ -491,8 +468,8 @@ class OracleLauncher:
         
         ttk.Label(server_header_frame, text="╔" + "═" * 78 + "╗", 
                  font=('Consolas', 10), foreground='#4A9EFF').pack()
-        ttk.Label(server_header_frame, text="║" + " " * 25 + "SERVER BUILD INFORMATION" + " " * 29 + "║",
-                 font=('Consolas', 11, 'bold'), foreground='#4A9EFF').pack()
+        ttk.Label(server_header_frame, text="║" + " " * 26 + "SERVER BUILD INFORMATION" + " " * 28 + "║",
+                 font=('Consolas', 10, 'bold'), foreground='#4A9EFF').pack()
         ttk.Label(server_header_frame, text="╚" + "═" * 78 + "╝",
                  font=('Consolas', 10), foreground='#4A9EFF').pack()
         
@@ -526,8 +503,8 @@ class OracleLauncher:
         
         ttk.Label(ui_header_frame, text="╔" + "═" * 78 + "╗",
                  font=('Consolas', 10), foreground='#4A9EFF').pack()
-        ttk.Label(ui_header_frame, text="║" + " " * 27 + "UI BUILD INFORMATION" + " " * 31 + "║",
-                 font=('Consolas', 11, 'bold'), foreground='#4A9EFF').pack()
+        ttk.Label(ui_header_frame, text="║" + " " * 28 + "UI BUILD INFORMATION" + " " * 30 + "║",
+                 font=('Consolas', 10, 'bold'), foreground='#4A9EFF').pack()
         ttk.Label(ui_header_frame, text="╚" + "═" * 78 + "╝",
                  font=('Consolas', 10), foreground='#4A9EFF').pack()
         
@@ -548,15 +525,57 @@ class OracleLauncher:
                                      text="⚠ UI build.json not found",
                                      font=('Consolas', 10), foreground='#E5C07B')
             warning_label.pack(anchor='w', pady=5)
+        
+        # Spacer
+        ttk.Label(self.info_content_frame, text="").pack(pady=10)
+        
+        # Package/Release build info
+        package_build_file = self.launcher_dir / "build.json"
+        
+        # Package section header
+        package_header_frame = ttk.Frame(self.info_content_frame)
+        package_header_frame.pack(fill='x', pady=(0, 10))
+        
+        ttk.Label(package_header_frame, text="╔" + "═" * 78 + "╗",
+                 font=('Consolas', 10), foreground='#4A9EFF').pack()
+        ttk.Label(package_header_frame, text="║" + " " * 26 + "PACKAGE BUILD INFORMATION" + " " * 27 + "║",
+                 font=('Consolas', 10, 'bold'), foreground='#4A9EFF').pack()
+        ttk.Label(package_header_frame, text="╚" + "═" * 78 + "╝",
+                 font=('Consolas', 10), foreground='#4A9EFF').pack()
+        
+        current_version = None
+        if package_build_file.exists():
+            try:
+                with open(package_build_file, 'r') as f:
+                    package_build = json.load(f)
+                    current_version = package_build.get('version')
+                
+                # Display formatted build info with labels (will add update status)
+                self._display_build_data_labels(self.info_content_frame, package_build, 
+                                               show_update_status=True, current_version=current_version)
+            except Exception as e:
+                error_label = ttk.Label(self.info_content_frame,
+                                       text=f"❌ Error loading package build info: {e}",
+                                       font=('Consolas', 10), foreground='#E06C75')
+                error_label.pack(anchor='w', pady=5)
+        else:
+            warning_label = ttk.Label(self.info_content_frame,
+                                     text="⚠ Package build.json not found (not running from release)",
+                                     font=('Consolas', 10), foreground='#E5C07B')
+            warning_label.pack(anchor='w', pady=5)
     
-    def _display_build_data_labels(self, parent_frame: ttk.Frame, build_data: dict):
+    def _display_build_data_labels(self, parent_frame: ttk.Frame, build_data: dict, 
+                                   show_update_status: bool = False, current_version: str = None):
         """Helper to display build data with separate label widgets"""
         # Map of field names to display labels
         label_map = {
+            'name': '📛 Name',
             'version': '📦 Version',
+            'build': '🕒 Build',
             'build_date': '📅 Build Date',
             'build_time': '🕒 Build Time',
             'build_timestamp': '⏱️  Build Timestamp',
+            'release_name': '🎁 Release Name',
             'commit': '🔖 Git Commit',
             'branch': '🌿 Git Branch',
             'builder': '👤 Built By',
@@ -599,6 +618,100 @@ class OracleLauncher:
                          font=('Consolas', 10, 'bold'), foreground='#61AFEF').pack(side='left')
                 ttk.Label(row_frame, text=str(value),
                          font=('Consolas', 10), foreground='#ABB2BF').pack(side='left')
+                
+                # Add update status next to version if enabled
+                if show_update_status and key == 'version':
+                    # Create frame for update status (will be updated asynchronously)
+                    self.update_status_frame = ttk.Frame(row_frame)
+                    self.update_status_frame.pack(side='left', padx=(20, 0))
+                    
+                    checking_label = ttk.Label(self.update_status_frame, 
+                                              text="(🔄 checking...)",
+                                              font=('Consolas', 9), foreground='#61AFEF')
+                    checking_label.pack(side='left')
+                    
+                    # Start GitHub update check in background
+                    if current_version and Github:
+                        threading.Thread(target=self._check_github_updates, 
+                                       args=(current_version,), daemon=True).start()
+                    elif not Github:
+                        # Clear and show error
+                        for widget in self.update_status_frame.winfo_children():
+                            widget.destroy()
+                        ttk.Label(self.update_status_frame, 
+                                 text="(⚠ PyGithub not installed)",
+                                 font=('Consolas', 9), foreground='#E5C07B').pack(side='left')
+    
+    def _check_github_updates(self, current_version: str):
+        """Check GitHub for updates (runs in background thread)"""
+        try:
+            # Load config to get repo info
+            config_file = self.launcher_dir / "launcher.toml"
+            if not config_file.exists():
+                config_file = Path(__file__).parent / "launcher.example.toml"
+            
+            if not config_file.exists():
+                raise FileNotFoundError("launcher.toml not found")
+            
+            with open(config_file, 'rb') as f:
+                config = tomli.load(f)
+            
+            repo_name = config.get('repo', {}).get('main', 'GeorgeTG/Oracle')
+            
+            # Connect to GitHub (public access, no auth needed)
+            g = Github()
+            repo = g.get_repo(repo_name)
+            
+            # Get latest tag
+            tags = list(repo.get_tags())
+            
+            if not tags:
+                self._update_status_ui("⚠ No releases found on GitHub", '#E5C07B')
+                return
+            
+            latest_tag = tags[0].name
+            # Remove 'v' prefix if present
+            latest_version = latest_tag.lstrip('v')
+            
+            # Compare versions
+            if self._compare_versions(current_version, latest_version):
+                self._update_status_ui(f"✓ Up to date (v{current_version})", '#98C379')
+            else:
+                self._update_status_ui(f"⚠ Update available! Current: v{current_version}, Latest: v{latest_version}", '#E06C75')
+                
+        except Exception as e:
+            self._update_status_ui(f"❌ Error checking updates: {str(e)}", '#E06C75')
+    
+    def _compare_versions(self, current: str, latest: str) -> bool:
+        """Compare version strings (returns True if current >= latest)"""
+        try:
+            # Simple version comparison (assumes semantic versioning)
+            current_parts = [int(x) for x in current.split('.')]
+            latest_parts = [int(x) for x in latest.split('.')]
+            
+            # Pad to same length
+            max_len = max(len(current_parts), len(latest_parts))
+            current_parts += [0] * (max_len - len(current_parts))
+            latest_parts += [0] * (max_len - len(latest_parts))
+            
+            return current_parts >= latest_parts
+        except:
+            # If comparison fails, assume current
+            return current == latest
+    
+    def _update_status_ui(self, message: str, color: str):
+        """Update the status UI (thread-safe)"""
+        def update():
+            # Clear existing widgets
+            for widget in self.update_status_frame.winfo_children():
+                widget.destroy()
+            
+            # Add new status label inline
+            ttk.Label(self.update_status_frame, text=f"({message})",
+                     font=('Consolas', 9, 'bold'), foreground=color).pack(side='left')
+        
+        # Schedule UI update on main thread
+        self.root.after(0, update)
         
     def load_license(self) -> str:
         """Load license and liability information"""

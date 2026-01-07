@@ -176,10 +176,11 @@ function createBuildInfo(targetName: string, config: TargetConfig) {
   }
 
   const outputBase = join(OUTPUT_DIR, targetName);
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0];
   const buildInfo = {
     name: config.name,
     version: config.version,
-    build: config.build || new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0]
+    build: timestamp
   };
   
   writeFileSync(join(outputBase, 'build.json'), JSON.stringify(buildInfo, null, 2));

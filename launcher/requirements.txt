@@ -9,4 +9,7 @@ tomli-w>=1.0.0
 # Sun Valley ttk theme (modern Windows 11 style)
 sv-ttk>=2.0.0
 
+# GitHub API for checking updates
+PyGithub>=2.1.0
+
 # No other dependencies needed - using built-in tkinter

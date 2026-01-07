@@ -24,6 +24,10 @@
     {
       "glob_source": "../launcher/LICENSE",
       "output": "/Launcher-LICENSE.txt"
+    },
+    {
+      "glob_source": "../launcher/launcher.example.toml",
+      "output": "/launcher.toml"
     }
   ]
 }

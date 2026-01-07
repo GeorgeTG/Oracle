@@ -19,6 +19,67 @@ const log = {
   info: (text: string) => console.log(chalk.blue(`  ℹ ${text}`)),
 };
 
+async function findPython3Command(): Promise<string | null> {
+  // Check environment variables first
+  const envPython = process.env.PYTHON || process.env.PYTHON3;
+  if (envPython) {
+    try {
+      const proc = spawn([envPython, '--version'], {
+        stdout: 'pipe',
+        stderr: 'pipe',
+        env: process.env,
+      });
+      
+      await proc.exited;
+      
+      if (proc.exitCode === 0) {
+        const stdout = await new Response(proc.stdout).text();
+        const stderr = await new Response(proc.stderr).text();
+        const output = stdout + stderr;
+        
+        if (output.includes('Python 3.')) {
+          log.info(`Found via env var: ${envPython} -> ${output.trim()}`);
+          return envPython;
+        }
+      }
+    } catch {
+      // Env variable didn't work, continue to candidates
+    }
+  }
+  
+  const candidates = ['python3', 'python', 'py'];
+  
+  for (const cmd of candidates) {
+    try {
+      const proc = spawn([cmd, '--version'], {
+        stdout: 'pipe',
+        stderr: 'pipe',
+        env: process.env,
+      });
+      
+      await proc.exited;
+      
+      if (proc.exitCode === 0) {
+        // Python --version outputs to stderr in some versions
+        const stdout = await new Response(proc.stdout).text();
+        const stderr = await new Response(proc.stderr).text();
+        const output = stdout + stderr;
+        
+        // Check if it's Python 3.x
+        if (output.includes('Python 3.')) {
+          log.info(`Found: ${cmd} -> ${output.trim()}`);
+          return cmd;
+        }
+      }
+    } catch (error) {
+      // Command not found, try next
+      continue;
+    }
+  }
+  
+  return null;
+}
+
 async function execCommand(cmd: string[], description: string): Promise<boolean> {
   const spinner = ora(description).start();
   
@@ -27,6 +88,7 @@ async function execCommand(cmd: string[], description: string): Promise<boolean>
       cwd: DEPLOY_DIR,
       stdout: 'inherit',
       stderr: 'inherit',
+      env: process.env,
     });
 
     const exitCode = await proc.exited;
@@ -47,6 +109,16 @@ async function execCommand(cmd: string[], description: string): Promise<boolean>
 
 async function setupTargetVenvs() {
   log.title('🔧 Target Virtual Environments Setup');
+  
+  // Find Python 3 command
+  const pythonCmd = await findPython3Command();
+  
+  if (!pythonCmd) {
+    log.error('Python 3 not found! Please install Python 3.10 or higher');
+    process.exit(1);
+  }
+  
+  log.success(`Using Python command: ${pythonCmd}`);
   
   if (isClean) {
     log.info('Clean mode enabled - removing existing virtual environments');
@@ -115,7 +187,7 @@ async function setupTargetVenvs() {
     log.info(`Creating virtual environment for ${name}...`);
     
     const createVenv = await execCommand(
-      ['py', '-3', '-m', 'venv', venvPath],
+      [pythonCmd, '-m', 'venv', venvPath],
       `Creating ${name} virtual environment`
     );
     

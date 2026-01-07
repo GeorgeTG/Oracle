@@ -110,6 +110,16 @@ export async function buildPackage(options: PackageOptions): Promise<boolean> {
   
   spinner.succeed(`Packaged ${fileCount} targets`);
   
+  // Create build.json in the release directory
+  const buildInfo = {
+    name: 'Oracle Release',
+    version: version,
+    build: timestamp,
+    release_name: releaseName
+  };
+  await Bun.write(join(releaseDir, 'build.json'), JSON.stringify(buildInfo, null, 2));
+  log.success('Created build.json in release');
+  
   // Create ZIP archive
   const zipSpinner = ora('Creating ZIP archive...').start();
   const zipName = `${releaseName}.zip`;
