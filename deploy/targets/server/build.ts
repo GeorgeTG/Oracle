@@ -141,18 +141,8 @@ export async function buildServer(options: ServerBuildOptions): Promise<boolean>
 
   // Run PyInstaller if release build
   if (options.release) {
-    // Install PyInstaller if needed
     if (!existsSync(pyinstallerExe)) {
-      await execCommand(
-        [pipExe, 'install', 'pyinstaller'],
-        DEPLOY_DIR,
-        'Installing PyInstaller',
-        options.verbose
-      );
-    }
-    
-    if (!existsSync(pyinstallerExe)) {
-      log.error('PyInstaller not installed in server venv');
+      log.error('PyInstaller not installed in server venv. Run setup first.');
       return false;
     }
     

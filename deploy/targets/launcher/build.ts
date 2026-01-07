@@ -110,16 +110,6 @@ export async function buildLauncher(options: LauncherBuildOptions): Promise<bool
     log.error(`Launcher venv not found at ${venvPath}. Run setup first.`);
     return false;
   }
-  
-  // Install PyInstaller if needed and this is a release build
-  if (options.release && !existsSync(pyinstallerExe)) {
-    await execCommand(
-      [pipExe, 'install', 'pyinstaller'],
-      DEPLOY_DIR,
-      'Installing PyInstaller',
-      options.verbose
-    );
-  }
 
   // Run PyInstaller if release build
   if (options.release) {
@@ -131,7 +121,7 @@ export async function buildLauncher(options: LauncherBuildOptions): Promise<bool
     }
     
     if (!existsSync(pyinstallerExe)) {
-      log.error('PyInstaller not installed in launcher venv');
+      log.error('PyInstaller not installed in launcher venv. Run setup first.');
       return false;
     }
     

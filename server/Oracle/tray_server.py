@@ -80,8 +80,17 @@ class ServerTray:
     
     def toggle_console(self, icon=None, item=None):
         """Toggle console window visibility (Windows only)."""
-        if sys.platform != 'win32' or not self.hwnd:
+        if sys.platform != 'win32':
             logger.warning("Console toggle only supported on Windows")
+            return
+        
+        # Get console window handle if not already set
+        if not self.hwnd:
+            kernel32 = ctypes.windll.kernel32
+            self.hwnd = kernel32.GetConsoleWindow()
+        
+        if not self.hwnd:
+            logger.warning("Could not find console window handle")
             return
         
         user32 = ctypes.windll.user32

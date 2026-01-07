@@ -27,4 +27,4 @@ for _, module_name, _ in pkgutil.iter_modules([str(_package_dir)]):
             globals()[name] = obj
 
 # Add discovered models to __all__
-__all__.extend(_models.keys())
+__all__.extend(list(_models.keys()))

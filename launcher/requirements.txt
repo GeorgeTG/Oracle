@@ -12,4 +12,7 @@ sv-ttk>=2.0.0
 # GitHub API for checking updates
 PyGithub>=2.1.0
 
+# PyInstaller for building executable
+pyinstaller>=6.0.0
+
 # No other dependencies needed - using built-in tkinter

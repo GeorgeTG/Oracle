@@ -18,12 +18,16 @@
       "release_only": true
     },
     {
+      "glob_source": "../launcher/favicon.ico",
+      "output": "/favicon.ico"
+    },
+    {
       "glob_source": "../launcher/README.md",
-      "output": "/Launcher-README.md"
+      "output": "/README.md"
     },
     {
       "glob_source": "../launcher/LICENSE",
-      "output": "/Launcher-LICENSE.txt"
+      "output": "/LICENSE"
     },
     {
       "glob_source": "../launcher/launcher.example.toml",

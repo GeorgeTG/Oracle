@@ -1,71 +1,121 @@
 # Oracle Deployment
 
-Build scripts for creating standalone executables on Windows.
+Build system for creating standalone executables and release packages.
 
 ## Prerequisites
 
-### Server Build
-- Python 3.10+
-- Virtual environment (`.venv`) in `server/` directory
+- **Bun**: JavaScript/TypeScript runtime and package manager
+- **Python 3.10+**: For server builds
+- **Rust toolchain**: For Tauri frontend builds (install via [rustup](https://rustup.rs/))
 
-### Frontend Build
-- Node.js 18+
-- Bun package manager
-- Rust toolchain (for Tauri)
+## Quick Start
 
-## Build Scripts
-
-### Build Everything
-```powershell
-.\build_all.ps1
+### Initial Setup
+```bash
+# Install dependencies and create virtual environments
+bun setup
 ```
-Builds both server and frontend.
 
-### Build Server Only
-```powershell
-.\build_server.ps1
+This will:
+- Detect or prompt for Python 3 installation
+- Create virtual environments for launcher and server
+- Install all Python dependencies from requirements.txt
+- Verify PyInstaller installation
+
+### Build Commands
+
+#### Build Everything and Create Release
+```bash
+bun release
 ```
-Creates `Oracle-Server.exe` and `Oracle-Server-Tray.exe` using PyInstaller.
+Cleans, builds all targets, and creates release package.
 
-### Build Frontend Only
-```powershell
-.\build_frontend.ps1
+#### Build All Targets
+```bash
+bun build
 ```
-Creates portable Tauri executable.
+Builds launcher, server, and frontend with fresh timestamps.
 
-## Output Structure
+#### Build Specific Targets
+```bash
+# Build only server
+bun build:server
 
+# Build only frontend
+bun build:frontend
+
+# Build only launcher
+bun build:launcher
+
+# Create package only
+bun package
+```
+
+## Build System Architecture
+
+### TypeScript Build Scripts
+- **setup.ts**: Initializes Python virtual environments and dependencies
+- **build.ts**: Main build orchestrator for all targets
+- **release.ts**: Creates packaged releases
+
+### Build Targets
+Each target has its own configuration in `targets/`:
+- **launcher/**: Python launcher GUI with PyInstaller spec
+- **server/**: FastAPI server with PyInstaller specs for console and tray versions
+- **frontend/**: Angular + Tauri desktop application
+- **package/**: Release packaging and ZIP creation
+
+### Build Artifacts
 ```
 deploy/
-├── dist/
-│   └── oracle/                      # Angular build output
 ├── build/
-│   └── Oracle-Server/ 
-│   └── oracle-Server-Tray/          # PyInstaller build output
+│   ├── launcher-venv/              # Launcher Python environment
+│   ├── server-venv/                # Server Python environment
+│   ├── Oracle-Launcher/            # PyInstaller build files
+│   ├── Oracle-Server/              # PyInstaller build files
+│   └── Oracle-Server-Tray/         # PyInstaller build files
 │
-└── output/                          # Build output Directory
+└── output/
+    ├── launcher/
+    │   ├── Oracle-Launcher.exe
+    │   ├── launcher.toml
+    │   └── build.json
     ├── server/
-    │   ├── Oracle-Server.exe        # Standard console server
-    │   ├── Oracle-Server-Tray.exe   # System tray version
+    │   ├── Oracle-Server.exe
+    │   ├── Oracle-Server-Tray.exe
     │   ├── config.toml
-    │   ├── en_id_map_table.json
-    │   ├── en_id_table.json
-    │   ├── Experience.json
-    │   ├── price_table.json
-    │   └── favicon.ico
-    └── frontend/
-        └── oracle.exe               # Portable application
+    │   ├── build.json
+    │   └── [data files]
+    ├── frontend/
+    │   ├── oracle.exe
+    │   └── build.json
+    └── package/
+        └── Oracle-Release-v[version]-[timestamp].zip
 ```
 
-## Server Deployment
 
-### Standard Console Server
-1. Copy all files from `output/server/` to deployment directory
+## Deployment
+
+### Using the Launcher (Recommended)
+1. Extract release package
+2. Run `Oracle-Launcher.exe`
+3. Click "Start Server" and "Start UI"
+
+The launcher provides:
+- One-click server and UI startup
+- Build information display
+- GitHub update checking
+- Graceful shutdown management
+
+### Manual Server Deployment
+
+#### Standard Console Server
+1. Navigate to `server/` directory
 2. Edit `config.toml` if needed
 3. Run `Oracle-Server.exe`
 
-### System Tray Server
-1. Copy all files from `output/server/` to deployment directory
+#### System Tray Server
+1. Navigate to `server/` directory
 2. Edit `config.toml` if needed
 3. Run `Oracle-Server-Tray.exe`
 
@@ -76,14 +126,23 @@ deploy/
 - About dialog with license info
 - Graceful shutdown
 
-Server will run on `http://localhost:8000`
+Server runs on `http://localhost:8000` by default.
 
-## Frontend Deployment
+### Frontend Deployment
 
-1. Copy `oracle.exe` from `output/frontend/` to desired location
-2. Launch `oracle.exe` - no installation required (portable)
+1. Run `oracle.exe` from the `frontend/` directory
+2. No installation or browser required (native desktop app)
+3. Application is fully portable
 
 ## Configuration
+
+### Launcher Config (`launcher.toml`)
+```toml
+[repo]
+main= "GeorgeTG/Oracle"
+```
+
+Used for GitHub release update checking.
 
 ### Server Config (`config.toml`)
 ```toml
@@ -103,60 +162,73 @@ level = "INFO"
 
 ## Troubleshooting
 
-### PyInstaller Issues
-If server build fails:
-```powershell
-pip install --upgrade pyinstaller
+### Virtual Environment Issues
+If you see errors about missing Python or corrupted paths:
+```bash
+# Delete old virtual environments
+rm -rf deploy/build/launcher-venv
+rm -rf deploy/build/server-venv
+
+# Run setup again
+bun run setup.ts
 ```
 
-### Tauri Issues
-If frontend build fails:
-```powershell
+### PyInstaller Build Failures
+```bash
+# Rebuild from clean state
+bun run build.ts --clean
+
+# Or manually clean build artifacts
+rm -rf deploy/build/Oracle-*
+```
+
+### Frontend Build Issues
+```bash
+# Update Rust toolchain
 rustup update
-cargo clean
-```
 
-### Missing Dependencies
-Server build requires:
-```powershell
-pip install -r server/requirements.txt
-pip install pyinstaller
-```
-
-Frontend build requires:
-```powershell
+# Clean and rebuild
 cd ui/Oracle
-bun install
+bun run tauri build
 ```
+
+### Python Detection Issues
+Set environment variable to specify Python:
+```bash
+$env:PYTHON3 = "C:\Path\To\python.exe"
+bun run setup.ts
+```
+
+## Development
+
+### Adding New Build Targets
+1. Create target directory in `targets/`
+2. Add `build.ts` with default export function
+3. Create `build.json` configuration
+4. Import and call from main `build.ts`
+
+### Build Info System
+Each target generates a `build.json` with:
+- `name`: Component name
+- `version`: From package.json or config
+- `build`: ISO timestamp
+- Additional metadata (dependencies, platform, etc.)
+
+The launcher displays this information and uses it for update checking.
+
+
+
+## Notes
+
+- All executables include their respective runtimes (Python for server/launcher, native for frontend)
+- No external dependencies required for end users
+- Configuration files must be in the same directory as executables
+- Logs are stored in the directory where executables run
+- Build timestamps are automatically generated on each build
+- Release packages include SHA256 checksums for verification
 
 ## License
 
 MIT License - See LICENSE file for details.
 
 **NO WARRANTY** - THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND.
-
-### Missing Dependencies
-```powershell
-# Server
-cd ..\server
-pip install -r requirements.txt
-
-# Frontend
-cd ..\ui\Oracle
-bun install
-```
-
-## Notes
-
-- Server executable includes Python runtime (no Python installation required)
-- Frontend is a native desktop app (no browser required)
-- Config file must be in the same directory as the executable
-- Logs are stored in the directory where the executable runs
-
-## License
-
-MIT License - Copyright (c) 2025 Oracle Contributors
-includes Python runtime (no Python installation required)
-- Frontend is a native desktop app (no browser required)
-- Config file must be in the same directory as the executable
-- Logs are stored in the directory where the executable runs

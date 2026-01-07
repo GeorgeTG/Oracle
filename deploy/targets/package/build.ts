@@ -24,17 +24,11 @@ export async function buildPackage(options: PackageOptions): Promise<boolean> {
   
   log.section('Creating Release Package');
   
-  // Read package build.json to get requires
-  const packageConfig = JSON.parse(await Bun.file(join(TARGETS_DIR, 'package', 'build.json')).text());
+  // Read package build.json to get requires and version
+  const packageConfigPath = join(TARGETS_DIR, 'package', 'build.json');
+  const packageConfig = JSON.parse(await Bun.file(packageConfigPath).text());
   const requires = packageConfig.requires || [];
-  
-  // Read version from server.json
-  const versionFile = join(DEPLOY_DIR, 'server.json');
-  let version = '0.1';
-  if (existsSync(versionFile)) {
-    const versionData = JSON.parse(await Bun.file(versionFile).text());
-    version = versionData.version;
-  }
+  const version = packageConfig.version || '0.1';
   
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0];
   const releaseName = `Oracle-Release-v${version}-${timestamp}`;
