@@ -19,7 +19,6 @@ export class ConfigurationComponent implements OnInit {
   wsPort: string = '8000';
   transparentOverlay: boolean = false;
   showDataPerMinute: boolean = false;
-  showTax: boolean = false;
   aggregateNumbers: boolean = false;
 
   constructor(
@@ -34,7 +33,6 @@ export class ConfigurationComponent implements OnInit {
     this.wsPort = config.wsPort;
     this.transparentOverlay = config.transparentOverlay;
     this.showDataPerMinute = config.showDataPerMinute;
-    this.showTax = config.showTax;
     this.aggregateNumbers = config.aggregateNumbers;
   }
 
@@ -45,7 +43,6 @@ export class ConfigurationComponent implements OnInit {
       wsPort: this.wsPort,
       transparentOverlay: this.transparentOverlay,
       showDataPerMinute: this.showDataPerMinute,
-      showTax: this.showTax,
       aggregateNumbers: this.aggregateNumbers
     });
     

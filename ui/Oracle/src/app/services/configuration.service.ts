@@ -9,7 +9,6 @@ export interface ConfigurationState {
   wsPort: string;
   transparentOverlay: boolean;
   showDataPerMinute: boolean;
-  showTax: boolean;
   aggregateNumbers: boolean;
 }
 
@@ -51,7 +50,6 @@ export class ConfigurationService {
     wsPort: '8000',
     transparentOverlay: false,
     showDataPerMinute: false,
-    showTax: false,
     aggregateNumbers: false
   };
 
@@ -76,7 +74,6 @@ export class ConfigurationService {
       wsPort: localStorage.getItem('ws_port') || this.DEFAULT_CONFIG.wsPort,
       transparentOverlay: localStorage.getItem('transparent_overlay') === 'true',
       showDataPerMinute: localStorage.getItem('show_data_per_minute') === 'true',
-      showTax: localStorage.getItem('show_tax') === 'true',
       aggregateNumbers: localStorage.getItem('aggregate_numbers') === 'true'
     };
     this.configSubject.next(config);
@@ -94,7 +91,6 @@ export class ConfigurationService {
     localStorage.setItem('ws_port', newConfig.wsPort);
     localStorage.setItem('transparent_overlay', newConfig.transparentOverlay.toString());
     localStorage.setItem('show_data_per_minute', newConfig.showDataPerMinute.toString());
-    localStorage.setItem('show_tax', newConfig.showTax.toString());
     localStorage.setItem('aggregate_numbers', newConfig.aggregateNumbers.toString());
 
     // Emit new state
@@ -153,13 +149,6 @@ export class ConfigurationService {
   }
 
   /**
-   * Check if tax should be shown (deducted from currency)
-   */
-  public isShowTax(): boolean {
-    return this.configSubject.value.showTax;
-  }
-
-  /**
    * Get periodic unit ("Hour" or "Minute")
    */
   public getPeriodicUnit(): PeriodicUnit {
@@ -209,12 +198,7 @@ export class ConfigurationService {
    * @returns Formatted string like "+10.50 fe" or "+1234 exp" or "+22.32K fe"
    */
   public formatValue(value: number, unit: string = 'fe', decimals: number = 2): string {
-    let displayValue = value;
-    
-    // Apply tax (1/8 deduction) for currency only
-    if (unit === 'fe' && this.configSubject.value.showTax) {
-      displayValue = value - (value / 8);
-    }
+    const displayValue = value;
     
     const sign = displayValue >= 0 ? '+' : '';
     const formattedNumber = this.configSubject.value.aggregateNumbers 
@@ -233,12 +217,7 @@ export class ConfigurationService {
    * @returns Formatted string like "+10.50 fe/h" or "+0.18 fe/m" or "+22.32K exp/h"
    */
   public formatPeriodicValue(value: number, unit: string = 'fe', decimals: number = 2, prefix: string = ''): string {
-    let displayValue = value;
-    
-    // Apply tax (1/8 deduction) for currency only
-    if (unit === 'fe' && this.configSubject.value.showTax) {
-      displayValue = value - (value / 8);
-    }
+    const displayValue = value;
     
     const converted = this.convertPeriodicValue(displayValue);
     const periodicUnit = this.getPeriodicUnit();

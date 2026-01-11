@@ -1,6 +1,6 @@
 from collections import defaultdict
 from datetime import datetime
-from typing import Dict, Optional
+from typing import Dict, Optional, Any
 
 from Oracle.parsing.parsers.events import ParserEventType
 from Oracle.parsing.parsers.events.exp_update import ExpUpdateEvent
@@ -8,13 +8,14 @@ from Oracle.parsing.parsers.events.game_view import GameViewEvent
 from Oracle.parsing.parsers.events.item_change import ItemChangeEvent
 
 from Oracle.events import EventBus
-from Oracle.services.events.inventory import InventoryUpdateEvent, RequestInventoryEvent, InventorySnapshotEvent
+from Oracle.services.events.inventory import InventoryUpdateEvent
 from Oracle.services.events.map_events import MapStartedEvent, MapFinishedEvent, MapStatsEvent
+from Oracle.services.events.market_events import MarketTransactionEvent
 from Oracle.services.events.notification_events import NotificationEvent, NotificationSeverity
 from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.events.session_events import PlayerChangedEvent, SessionRestoreEvent, SessionStartedEvent
 from Oracle.services.events.stats_events import StatsUpdateEvent, StatsControlEvent, StatsControlAction
-from Oracle.services.model import InventorySnapshot
+from Oracle.services.model import Inventory
 from Oracle.services.service_base import ServiceBase
 from Oracle.services.tooling.decorators import event_handler
 
@@ -30,11 +31,11 @@ class StatsService(ServiceBase):
     
     __SERVICE__ = {
         "name": "StatsService",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "description": "Tracks farming statistics including items per map and per hour",
         "requires": {
             "InventoryService": ">=0.0.1",
-            "MapService": ">=0.0.1",
+            "MapService": ">=0.0.2",
             "SessionService": ">=0.0.1",
 		}
     }
@@ -45,8 +46,8 @@ class StatsService(ServiceBase):
         # PriceDB instance (lazy loaded)
         self._price_db: Optional[PriceDB] = None
         
-        # Track items per hour based on snapshots
-        self._last_snapshot: Optional[InventorySnapshot] = None  # Last inventory snapshot
+        # Local inventory tracking (similar to MapService)
+        self._inventory: Optional[Inventory] = None  # Current inventory state
         self._baseline_set: bool = False  # Whether initial baseline has been set
         self._items_total: Dict[int, float] = defaultdict(float)
         self.items_per_hour: Dict[int, float] = defaultdict(float)
@@ -77,10 +78,7 @@ class StatsService(ServiceBase):
         self._total_maps: int = 0
         self._total_time: float = 0.0  # Total farming time in seconds
         
-        # Timestamp of last snapshot request (for throttling)
-        self._last_snapshot_time: Optional[datetime] = None
-        self._snapshot_interval: float = 1.0  # Seconds between snapshots
-        
+
         # Flag to track if we've started farming after player join
         self._first_map_after_join: bool = True
 
@@ -126,13 +124,6 @@ class StatsService(ServiceBase):
 
         self._total_maps += 1
         self._total_time += event.duration
-
-        # Request final snapshot to capture any last changes
-        await self.request_and_wait(
-            RequestInventoryEvent(timestamp=datetime.now()),
-            ServiceEventType.INVENTORY_SNAPSHOT,
-            timeout=1.0
-        )
 
         # Calculate exp gained during this map
         current_exp = self._last_exp_percent or 0
@@ -193,33 +184,98 @@ class StatsService(ServiceBase):
         """Track game view changes."""
         self._current_view = event.view
 
+    @event_handler(ServiceEventType.MARKET_TRANSACTION)
+    async def on_market_transaction(self, event: MarketTransactionEvent):
+        """Track market transactions and update total currency."""
+        assert self._price_db is not None
+        
+        # Calculate transaction value
+        item_price = self._price_db.get_price(event.item_id)
+        transaction_value = item_price * event.quantity
+        
+        # For bought items, it's negative (spent currency)
+        # For sold/gained items, it's positive (gained currency)
+        if event.action == "bought":
+            transaction_value = -transaction_value
+        
+        # Update total currency
+        self.currency_total += transaction_value
+        
+        # Recalculate per hour rate
+        hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
+        if hours_elapsed > 0:
+            self.currency_per_hour = self.currency_total / hours_elapsed
+        
+        logger.info(f"📊 Market transaction: {event.action} {event.quantity}x item {event.item_id} = {transaction_value:.2f}fe (total: {self.currency_total:.2f}fe)")
+        
+        # Publish updated stats
+        await self._publish_stats()
+
     @event_handler(ParserEventType.ITEM_CHANGE)
     async def on_item_change(self, event: ItemChangeEvent):
-        """Check if enough time has passed and request snapshot if needed."""
-        now = datetime.now()
+        """Update local inventory and track price changes if in FightCtrl."""
+        if self._inventory is None:
+            logger.debug("📊 Item changed but inventory not initialized yet")
+            return
         
-        # Check if we should take a snapshot (throttle to every 5 seconds)
-        if self._last_snapshot_time is None:
-            # First time, take snapshot immediately
-            should_snapshot = True
-        else:
-            elapsed = (now - self._last_snapshot_time).total_seconds()
-            should_snapshot = elapsed >= self._snapshot_interval
+        assert self._price_db is not None
         
-        if should_snapshot:
-            logger.debug(f"📊 Item changed, requesting snapshot (last: {self._last_snapshot_time})")
-            self._last_snapshot_time = now
-            await self._request_snapshot()
-        elif self._last_snapshot_time is not None:
-            elapsed = (now - self._last_snapshot_time).total_seconds()
-            logger.debug(f"📊 Item changed but throttled ({elapsed:.1f}s < {self._snapshot_interval}s)")
+        # Calculate total quantity for this item_id BEFORE the change
+        old_total = sum(
+            item.quantity for item in self._inventory.slots.values()
+            if item.item_id == event.item_id
+        )
+        old_value = self._price_db.get_price(event.item_id) * old_total
+        
+        # Update local inventory using change_item (always update)
+        # change_item returns the delta in total quantity
+        delta = self._inventory.change_item(
+            page=event.page,
+            slot=event.slot,
+            item_id=event.item_id,
+            quantity=event.amount,
+            name=event.name,
+            category=event.category
+        )
+        
+        # Calculate new total value
+        new_total = sum(
+            item.quantity for item in self._inventory.slots.values()
+            if item.item_id == event.item_id
+        )
+        new_value = self._price_db.get_price(event.item_id) * new_total
+        
+        # Calculate value change
+        value_change = new_value - old_value
+        
+        # Only update stats if in FightCtrl view
+        is_fighting = "FightCtrl" in self._current_view
+        if is_fighting:
+            # Update totals
+            self._items_total[event.item_id] += delta
+            
+            # Update currency
+            self.currency_total += value_change
+            self.currency_current_raw += value_change
+            
+            # Recalculate rates
+            hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
+            if hours_elapsed > 0:
+                for item_id, total in self._items_total.items():
+                    self.items_per_hour[item_id] = total / hours_elapsed
+                self.currency_per_hour = self.currency_total / hours_elapsed
+            
+            if self._total_maps > 0:
+                self.currency_per_map = self.currency_total / self._total_maps
+            
+            logger.debug(f"📊 Item change: {event.name or event.item_id} {event.action} delta={delta} (value: {value_change:.2f})")
+            
+            # Publish stats update
+            await self._publish_stats()
         else:
-            logger.warning("📊 Item changed but last_snapshot_time is None unexpectedly")
+            logger.debug(f"📊 Item change outside FightCtrl: {event.name or event.item_id} {event.action} delta={delta} (view: {self._current_view})")
 
-    @event_handler(ServiceEventType.INVENTORY_SNAPSHOT)
-    async def on_inventory_snapshot(self, event: InventorySnapshotEvent):
-        """Process inventory snapshot and calculate differences."""
-        await self._process_snapshot(event)
+
 
     @event_handler(ParserEventType.EXP_UPDATE)
     async def on_exp_update(self, event: ExpUpdateEvent):
@@ -273,8 +329,8 @@ class StatsService(ServiceBase):
         """Handle full inventory update (e.g., loaded from DB)"""
         logger.info("📊 [StatsService] Inventory loaded from DB")
         
-        # Set the loaded inventory as the new baseline
-        self._last_snapshot = InventorySnapshot.from_inventory(event.inventory)
+        # Set the loaded inventory as the new baseline (copy it)
+        self._inventory = event.inventory.copy()
         self._baseline_set = True  # Mark baseline as already set
         
         # Set flag to reset currency on first map
@@ -343,18 +399,13 @@ class StatsService(ServiceBase):
         # Publish initial stats to UI
         await self._publish_stats()
 
-    async def _request_snapshot(self):
-        """Request inventory snapshot."""
-        request = RequestInventoryEvent(timestamp=datetime.now())
-        await self.publish(request)
-        logger.debug("📊 [StatsService] Published inventory snapshot request")
+
 
     async def _restart_tracking(self):
         """Restart stats tracking - reset all statistics."""
         
-        self._last_snapshot = None
+        self._inventory = None
         self._baseline_set = False
-        self._last_snapshot_time = None
         self._items_total.clear()
         self.items_per_hour.clear()
         self.currency_total = 0.0
@@ -382,71 +433,7 @@ class StatsService(ServiceBase):
         
         await self._publish_stats()
 
-    async def _process_snapshot(self, event: InventorySnapshotEvent):
-        """Process inventory snapshot and calculate differences."""
-        current_snapshot = event.snapshot  # InventorySnapshot object
-        total_items = sum(item.quantity for item in current_snapshot.data.slots.values())
-        
-        logger.debug(f"📊 Processing snapshot with {len(current_snapshot.data.slots)} slots, {total_items} total items")
-        logger.debug(f"📊 _last_snapshot is None: {self._last_snapshot is None}, _baseline_set: {self._baseline_set}")
 
-        if self._last_snapshot is None:
-            # Very first snapshot - set as baseline
-            logger.debug("📊 [StatsService] First snapshot received - setting as baseline")
-            self._last_snapshot = current_snapshot
-            return
-        
-        if not self._baseline_set:
-            # Second snapshot after baseline - skip this one (would count all DB items)
-            logger.debug("📊 [StatsService] Skipping first comparison after baseline (loaded from DB)")
-            self._baseline_set = True
-            self._last_snapshot = current_snapshot
-            return
-
-        is_fighting = "FightCtrl" in self._current_view
-        if not is_fighting:
-            logger.debug("📊 Not in fighting view - skipping snapshot processing")
-            self._last_snapshot = current_snapshot
-            return
-        
-        assert self._price_db is not None # should be initialized already
-
-        # Normal operation - calculate differences
-        item_changes = current_snapshot.compare_with(self._last_snapshot)
-        if item_changes:
-            currency_gained = 0.0
-            
-            # Process each item change
-            for item_id, delta in item_changes.items():
-                # Update running totals
-                self._items_total[item_id] += delta
-                
-                # Calculate currency value
-                price = self._price_db.get_price(item_id)
-                currency_gained += price * delta
-            
-            # Update currency total
-            self.currency_total += currency_gained
-            self.currency_current_raw += currency_gained
-            
-            # Recalculate rates
-            hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
-            if hours_elapsed > 0:
-                for item_id, total in self._items_total.items():
-                    self.items_per_hour[item_id] = total / hours_elapsed
-                self.currency_per_hour = self.currency_total / hours_elapsed
-            
-            if self._total_maps > 0:
-                self.currency_per_map = self.currency_total / self._total_maps
-            
-            logger.debug(f"📊 Snapshot diff: currency={currency_gained:.2f}, items={len(item_changes)}")
-            logger.debug(f"📊 Item changes: {[(item_id, delta, self._price_db.get_price(item_id)) for item_id, delta in item_changes.items()]}")
-            
-            # Publish stats update after processing snapshot
-            await self._publish_stats()
-        
-        # Store current snapshot for next comparison
-        self._last_snapshot = current_snapshot
 
     async def _publish_stats(self):
         """Publish current statistics."""
@@ -499,7 +486,7 @@ class StatsService(ServiceBase):
         logger.info("📊 StatsService shutdown")
         logger.info(f"📊 Session stats - Maps: {self._total_maps}, Time: {self._total_time:.2f}s")
 
-    def get_stats(self) -> dict:
+    def get_stats(self) -> Dict[str, Any]:
         """Get current statistics summary."""
         return {
             "total_maps": self._total_maps,

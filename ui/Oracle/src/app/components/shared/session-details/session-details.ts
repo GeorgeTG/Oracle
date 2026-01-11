@@ -44,9 +44,8 @@ export class SessionDetailsComponent {
 
   get marketCurrency(): number {
     if (!this.sessionDetails?.market_transactions) return 0;
-    return this.sessionDetails.market_transactions.reduce((sum, tx) => {
-      return sum + (tx.action === 'gained' ? tx.total_value : -tx.total_value);
-    }, 0);
+    // Total value already has correct sign from backend (positive for gained, negative for lost)
+    return this.sessionDetails.market_transactions.reduce((sum, tx) => sum + tx.total_value, 0);
   }
 
   get totalCurrency(): number {

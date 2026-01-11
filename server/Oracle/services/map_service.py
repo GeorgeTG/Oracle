@@ -40,7 +40,7 @@ class MapService(ServiceBase):
     
     __SERVICE__ = {
         "name": "MapService",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "description": "Manages map state, transitions, and farming sessions",
         "requires": {
             "InventoryService": ">=0.0.1"
