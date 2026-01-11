@@ -100,6 +100,17 @@ export class CurrencyComponent implements OnInit, OnDestroy {
     this.configSubscription?.unsubscribe();
   }
   
+  newSession() {
+    this.statsService.newSession().subscribe({
+      next: (response) => {
+        console.log('[Currency] New session started:', response);
+      },
+      error: (error) => {
+        console.error('[Currency] New session failed:', error);
+      }
+    });
+  }
+
   resetStats() {
     this.statsService.resetStats().subscribe({
       next: (response) => {

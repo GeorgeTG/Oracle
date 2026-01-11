@@ -95,6 +95,8 @@ class SessionRestoreEvent(ServiceEvent):
     currency_per_map: float
     exp_total: float
     exp_per_hour: float
+    exp_gained_total: float = 0.0
+    exp_lost_total: float = 0.0
     type: ServiceEventType = ServiceEventType.SESSION_RESTORE
 
     def __repr__(self) -> str:

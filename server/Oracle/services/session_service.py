@@ -64,7 +64,9 @@ class SessionService(ServiceBase):
                 currency_per_hour=existing_session.currency_per_hour,
                 currency_per_map=existing_session.currency_per_map,
                 exp_total=existing_session.exp_total,
-                exp_per_hour=existing_session.exp_per_hour
+                exp_per_hour=existing_session.exp_per_hour,
+                exp_gained_total=existing_session.exp_gained_total,
+                exp_lost_total=existing_session.exp_lost_total
             )
             await self.publish(restore_event)
             logger.info(f"📋 Published session restore event for session {existing_session.id}")
@@ -171,6 +173,8 @@ class SessionService(ServiceBase):
         self._current_session.total_time = event.total_time
         self._current_session.exp_total = event.exp_per_hour  # Store current exp/hour as proxy for total
         self._current_session.exp_per_hour = event.exp_per_hour
+        self._current_session.exp_gained_total = event.exp_gained_total
+        self._current_session.exp_lost_total = event.exp_lost_total
         self._current_session.currency_total = event.currency_total
         
         await self._current_session.save()
@@ -240,7 +244,9 @@ class SessionService(ServiceBase):
                 currency_per_hour=active_session.currency_per_hour,
                 currency_per_map=active_session.currency_per_map,
                 exp_total=active_session.exp_total,
-                exp_per_hour=active_session.exp_per_hour
+                exp_per_hour=active_session.exp_per_hour,
+                exp_gained_total=active_session.exp_gained_total,
+                exp_lost_total=active_session.exp_lost_total
             )
             await self.publish(restore_event)
             logger.info(f"📋 Published session restore event on player join for session {active_session.id}")

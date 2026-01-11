@@ -306,6 +306,13 @@ class StatsService(ServiceBase):
     async def on_session_restore(self, event: SessionRestoreEvent):
         """Handle session restore - restore stats from database."""
         logger.info(f"📊 Restoring stats from session {event.session_id}...")
+        logger.debug(
+            f"📊 Restore values - "
+            f"exp_per_hour={event.exp_per_hour}, "
+            f"exp_gained_total={event.exp_gained_total}, "
+            f"exp_lost_total={event.exp_lost_total}, "
+            f"started_at={event.started_at}"
+        )
         
         # Restore stats from event
         self._total_maps = event.total_maps
@@ -315,6 +322,8 @@ class StatsService(ServiceBase):
         self.currency_per_map = event.currency_per_map
         self.exp_per_hour = event.exp_per_hour
         self._exp_total = event.exp_total
+        self._exp_gained_total = event.exp_gained_total
+        self._exp_lost_total = event.exp_lost_total
         
         # Restore session start time (convert to naive datetime if needed)
         started_at = event.started_at
@@ -459,6 +468,8 @@ class StatsService(ServiceBase):
             items_per_map={},  # Deprecated, no longer tracking
             items_per_hour=dict(self.items_per_hour),
             exp_per_hour=self.exp_per_hour,
+            exp_gained_total=self._exp_gained_total,
+            exp_lost_total=self._exp_lost_total,
             currency_per_map=self.currency_per_map,
             currency_per_hour=self.currency_per_hour,
             currency_total=self.currency_total,

@@ -35,6 +35,8 @@ class StatsUpdateEvent(ServiceEvent):
     items_per_map: Dict[int, float]  # Dict[item_id, avg_quantity_per_map] (deprecated)
     items_per_hour: Dict[int, float]  # Dict[item_id, quantity_per_hour]
     exp_per_hour: float = 0.0  # Experience gained per hour in percent
+    exp_gained_total: float = 0.0  # Total XP gained
+    exp_lost_total: float = 0.0  # Total XP lost
     currency_per_map: float = 0.0  # Average currency per map
     currency_per_hour: float = 0.0  # Currency gained per hour
     currency_total: float = 0.0  # Total net currency (maps + market)

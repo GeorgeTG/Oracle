@@ -113,6 +113,14 @@ export class StatsService {
   /**
    * Reset stats via HTTP API
    */
+  newSession(): Observable<any> {
+    const ip = localStorage.getItem('ws_ip') || '127.0.0.1';
+    const port = localStorage.getItem('ws_port') || '8000';
+    const url = `http://${ip}:${port}/sessions`;
+    this.clearHistory(); // Clear history when starting new session
+    return this.http.post(url, {});
+  }
+
   resetStats(): Observable<any> {
     const ip = localStorage.getItem('ws_ip') || '127.0.0.1';
     const port = localStorage.getItem('ws_port') || '8000';

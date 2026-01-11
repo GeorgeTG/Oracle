@@ -3,6 +3,12 @@
     <h1 class="text-3xl font-bold">Currency Stats</h1>
     <div class="flex gap-2">
       <button 
+        (click)="newSession()"
+        class="bg-green-600 hover:bg-green-700 hover:shadow-lg hover:shadow-green-500/50 hover:scale-105 text-white font-bold py-2 px-4 rounded transition-all duration-200 cursor-pointer"
+      >
+        New Session
+      </button>
+      <button 
         (click)="toggleStatsOverlay()"
         [class]="overlayOpen ? 'bg-orange-600 hover:bg-orange-700 hover:shadow-lg hover:shadow-orange-500/50' : 'bg-blue-600 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-500/50'"
         class="hover:scale-105 text-white font-bold py-2 px-4 rounded transition-all duration-200 cursor-pointer"

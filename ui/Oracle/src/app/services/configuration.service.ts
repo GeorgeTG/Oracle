@@ -186,7 +186,10 @@ export class ConfigurationService {
     // When aggregating, use at least 1 decimal for clarity
     const effectiveDecimals = Math.max(1, decimals);
     
-    if (absValue >= 1000000) {
+    if (absValue >= 1000000000) {
+      // Billions
+      return (value / 1000000000).toFixed(effectiveDecimals) + 'B';
+    } else if (absValue >= 1000000) {
       // Millions
       return (value / 1000000).toFixed(effectiveDecimals) + 'M';
     } else if (absValue >= 1000) {

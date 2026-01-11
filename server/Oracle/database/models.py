@@ -105,6 +105,8 @@ class Session(Model):
     total_time = fields.FloatField(default=0.0)  # Total farming time in seconds
     exp_total = fields.FloatField(default=0.0)  # Total exp gained
     exp_per_hour = fields.FloatField(default=0.0)  # Exp per hour rate
+    exp_gained_total = fields.FloatField(default=0.0)  # Total XP gained (for rate calculation)
+    exp_lost_total = fields.FloatField(default=0.0)  # Total XP lost (for rate calculation)
     currency_total = fields.FloatField(default=0.0)  # Total currency gained
     
     # Optional title and description

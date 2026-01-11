@@ -162,8 +162,8 @@ class Router(SingletonMixin):
         """
         try:
             async for event in parser.results():
+                await self.queue.put(event)  # Put without holding the lock
                 async with self._condition:
-                    await self.queue.put(event)
                     self._condition.notify()
         except Exception as e:
             logger.error(f"❌ _drain_parser error for {parser.__class__.__name__}: {e}")
