@@ -52,7 +52,8 @@ class MarketService(ServiceBase):
             ServiceEventType.INVENTORY_SNAPSHOT,
             timeout=1.0
         )
-        self._inventory = event.snapshot
+        # Extract the Inventory from the snapshot and make a copy
+        self._inventory = event.snapshot.data.copy()
 
     async def _handle_close(self):
         """Handle market close event."""
@@ -165,7 +166,7 @@ class MarketService(ServiceBase):
         logger.debug(f"🏪 Detected item change during market open: {event.item_id} ({event.action}) {event.page}:{event.slot} Qty:{event.amount}")
         
         # Update the specific slot and get the total delta for this item_id
-        quantity_delta = self._inventory.data.change_item(
+        quantity_delta = self._inventory.change_item(
             page=event.page,
             slot=event.slot,
             item_id=event.item_id,

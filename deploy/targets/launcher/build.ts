@@ -80,9 +80,13 @@ async function execCommand(cmd: string[], cwd: string, description: string, verb
 }
 
 async function getCurrentVersion(): Promise<VersionInfo> {
-  const versionFile = join(import.meta.dir, '..', '..', 'server.json');
-  if (existsSync(versionFile)) {
-    return JSON.parse(await Bun.file(versionFile).text());
+  const buildJsonFile = join(import.meta.dir, 'build.json');
+  if (existsSync(buildJsonFile)) {
+    const buildConfig = JSON.parse(await Bun.file(buildJsonFile).text());
+    return { 
+      version: buildConfig.version || '0.1', 
+      build: buildConfig.build || new Date().toISOString().split('T')[0] 
+    };
   }
   return { version: '0.1', build: new Date().toISOString().split('T')[0] };
 }
@@ -99,9 +103,13 @@ export async function buildLauncher(options: LauncherBuildOptions): Promise<bool
   const pipExe = join(venvPath, 'Scripts', 'pip.exe');
   const pyinstallerExe = join(venvPath, 'Scripts', 'pyinstaller.exe');
 
-  // Read version from server.json (launcher follows server version)
+  // Read and update version from build.json
   const versionInfo = await getCurrentVersion();
   const buildDate = new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0];
+  
+  // Update build.json with new timestamp
+  buildConfig.build = buildDate;
+  writeFileSync(buildConfigPath, JSON.stringify(buildConfig, null, 2));
   
   log.info(`Launcher Version: ${versionInfo.version} (${buildDate})`);
 

@@ -1,11 +1,11 @@
 {
-  "version": "0.2",
-  "build": "2026-01-02_13-03-52-152Z",
+  "version": "1.0.0",
+  "build": "2026-01-13_14-39-53-304Z",
   "name": "server",
   "root": "server",
   "dir": "deploy/build",
   "output": "deploy/output/server",
-  "venv" : true,
+  "venv": true,
   "requires": [],
   "script": "build.ts",
   "targets": [

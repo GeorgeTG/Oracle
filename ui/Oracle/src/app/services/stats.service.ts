@@ -18,6 +18,7 @@ export class StatsService {
   private currencyPerHourHistory: number[] = [];
   private currencyCurrentPerHourHistory: number[] = [];
   private currencyCurrentRawHistory: number[] = [];
+  private expPerHourHistory: number[] = [];
   private maxDataPoints = 50;
 
   constructor(
@@ -49,6 +50,7 @@ export class StatsService {
     this.currencyPerHourHistory.push(event.currency_per_hour || 0);
     this.currencyCurrentPerHourHistory.push(event.currency_current_per_hour || 0);
     this.currencyCurrentRawHistory.push(event.currency_current_raw || 0);
+    this.expPerHourHistory.push(event.exp_per_hour || 0);
 
     // Keep only last N data points
     if (this.currencyPerMapHistory.length > this.maxDataPoints) {
@@ -56,6 +58,7 @@ export class StatsService {
       this.currencyPerHourHistory.shift();
       this.currencyCurrentPerHourHistory.shift();
       this.currencyCurrentRawHistory.shift();
+      this.expPerHourHistory.shift();
     }
   }
 
@@ -65,6 +68,7 @@ export class StatsService {
       currencyPerHour: [...this.currencyPerHourHistory],
       currencyCurrentPerHour: [...this.currencyCurrentPerHourHistory],
       currencyCurrentRaw: [...this.currencyCurrentRawHistory],
+      expPerHour: [...this.expPerHourHistory],
       labels: Array.from({ length: this.currencyPerMapHistory.length }, (_, i) => `${i + 1}`)
     };
   }
@@ -74,6 +78,7 @@ export class StatsService {
     this.currencyPerHourHistory = [];
     this.currencyCurrentPerHourHistory = [];
     this.currencyCurrentRawHistory = [];
+    this.expPerHourHistory = [];
   }
 
   /**

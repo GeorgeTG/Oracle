@@ -1,15 +1,16 @@
 {
   "name": "launcher",
-  "version": "0.1",
-  "build": "",
-
+  "version": "1.0.0",
+  "build": "2026-01-13_14-39-56-374Z",
   "root": "launcher",
-  "venv" : true,
+  "venv": true,
   "dir": "deploy/build",
   "output": "deploy/output/launcher",
-  
   "output_to_root": true,
-  "requires": ["frontend", "server"],
+  "requires": [
+    "frontend",
+    "server"
+  ],
   "script": "build.ts",
   "targets": [
     {

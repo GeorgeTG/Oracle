@@ -1,6 +1,6 @@
 {
   "name": "package",
-  "version": "0.11",
+  "version": "1.0.0",
   "build": "",
 
   "root": "deploy/output",

@@ -1,13 +1,11 @@
 {
   "name": "frontend",
-  "version": "0.11",
-  "build": "",
-  
+  "version": "1.0.0",
+  "build": "2026-01-13_14-38-49-097Z",
   "root": "ui",
   "dir": "deploy/build",
   "output": "deploy/output/frontend",
-  "venv" : false,
-  
+  "venv": false,
   "requires": [],
   "script": "build.ts",
   "targets": [

@@ -37,11 +37,13 @@ export class CurrencyComponent implements OnInit, OnDestroy {
   chartData: any;
   chartOptions: any;
   
-  // Chart visibility toggles
-  showCurrencyPerMap = true;
-  showCurrencyPerHour = true;
-  showCurrentPerHour = true;
-  showCurrentCurrency = false;
+  // Sparkline charts for tiles
+  currencyPerHourSparkline: any;
+  currencyPerMapSparkline: any;
+  currentPerHourSparkline: any;
+  currentCurrencySparkline: any;
+  expPerHourSparkline: any;
+  sparklineOptions: any;
   
   constructor(
     private websocketService: WebSocketService,
@@ -134,11 +136,58 @@ export class CurrencyComponent implements OnInit, OnDestroy {
     }
   }
   
+  getValueColorClass(value: number | undefined | null): string {
+    if (value === undefined || value === null) return '';
+    
+    if (value < 0) {
+      return 'text-red-400';
+    } else if (value === 0) {
+      return 'text-yellow-400';
+    } else {
+      return 'text-green-400';
+    }
+  }
+  
   private initChart() {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color') || '#ffffff';
     const textColorSecondary = documentStyle.getPropertyValue('--text-color-secondary') || '#94a3b8';
     const surfaceBorder = documentStyle.getPropertyValue('--surface-border') || '#334155';
+    
+    // Initialize sparkline options (minimal chart for tiles)
+    this.sparklineOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+      animation: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: { enabled: false }
+      },
+      scales: {
+        x: { 
+          display: false,
+          grid: { display: false }
+        },
+        y: { 
+          display: false,
+          grid: { display: false }
+        }
+      },
+      elements: {
+        point: { radius: 0 },
+        line: { borderWidth: 1.5 }
+      },
+      layout: {
+        padding: 0
+      }
+    };
+    
+    // Initialize sparkline data
+    this.currencyPerHourSparkline = { labels: [], datasets: [] };
+    this.currencyPerMapSparkline = { labels: [], datasets: [] };
+    this.currentPerHourSparkline = { labels: [], datasets: [] };
+    this.currentCurrencySparkline = { labels: [], datasets: [] };
+    this.expPerHourSparkline = { labels: [], datasets: [] };
     
     this.chartData = {
       labels: [],
@@ -172,29 +221,11 @@ export class CurrencyComponent implements OnInit, OnDestroy {
           type: 'linear',
           display: true,
           position: 'left',
-          beginAtZero: true,
           ticks: {
             color: textColorSecondary
           },
           grid: {
             color: surfaceBorder
-          },
-          title: {
-            display: true,
-            text: 'Currency/Map',
-            color: textColor
-          }
-        },
-        y1: {
-          type: 'linear',
-          display: true,
-          position: 'right',
-          beginAtZero: true,
-          ticks: {
-            color: textColorSecondary
-          },
-          grid: {
-            drawOnChartArea: false
           },
           title: {
             display: true,
@@ -214,63 +245,77 @@ export class CurrencyComponent implements OnInit, OnDestroy {
   updateChart(): void {
     const history = this.statsService.getHistory();
     
-    // Update labels in-place
-    this.chartData.labels = history.labels;
+    // Update sparkline charts for tiles
+    const sparklineCount = 30; // Show last 30 points in sparklines
+    const sparklineStartIdx = Math.max(0, history.labels.length - sparklineCount);
+    const sparklineLabels = history.labels.slice(sparklineStartIdx);
     
-    // Clear existing datasets
-    this.chartData.datasets = [];
-
-    // Add datasets based on visibility flags
-    if (this.showCurrencyPerMap) {
-      this.chartData.datasets.push({
-        label: 'Currency / Map',
-        data: history.currencyPerMap,
-        borderColor: '#3b82f6', // blue
-        backgroundColor: 'rgba(59, 130, 246, 0.1)',
-        tension: 0.4,
-        fill: true
-      });
-    }
-
-    if (this.showCurrencyPerHour) {
-      this.chartData.datasets.push({
-        label: this.currencyLabel,
-        data: history.currencyPerHour,
-        borderColor: '#10b981', // green
-        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-        tension: 0.4,
-        fill: true
-      });
-    }
-
-    if (this.showCurrentPerHour) {
-      this.chartData.datasets.push({
-        label: `Current / ${this.configService.isShowDataPerMinute() ? 'Minute' : 'Hour'}`,
-        data: history.currencyCurrentPerHour,
-        borderColor: '#f97316', // orange
-        backgroundColor: 'rgba(249, 115, 22, 0.1)',
-        tension: 0.4,
-        fill: true
-      });
-    }
-
-    if (this.showCurrentCurrency) {
-      this.chartData.datasets.push({
-        label: 'Current Currency',
-        data: history.currencyCurrentRaw,
-        borderColor: '#ef4444', // red
-        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-        tension: 0.4,
-        fill: true
-      });
-    }
+    // Currency/Hour sparkline (green)
+    this.currencyPerHourSparkline = {
+      labels: sparklineLabels,
+      datasets: [{
+        data: history.currencyPerHour.slice(sparklineStartIdx),
+        borderColor: '#10b981',
+        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+        fill: true,
+        tension: 0.4
+      }]
+    };
     
-    // Trigger chart update by reassigning the reference
-    this.chartData = { ...this.chartData };
-  }
-
-  onChartToggle(): void {
-    this.updateChart();
+    // Currency/Map sparkline (blue)
+    this.currencyPerMapSparkline = {
+      labels: sparklineLabels,
+      datasets: [{
+        data: history.currencyPerMap.slice(sparklineStartIdx),
+        borderColor: '#3b82f6',
+        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+        fill: true,
+        tension: 0.4
+      }]
+    };
+    
+    // Current/Hour sparkline (orange)
+    this.currentPerHourSparkline = {
+      labels: sparklineLabels,
+      datasets: [{
+        data: history.currencyCurrentPerHour.slice(sparklineStartIdx),
+        borderColor: '#f97316',
+        backgroundColor: 'rgba(249, 115, 22, 0.2)',
+        fill: true,
+        tension: 0.4
+      }]
+    };
+    
+    // Current Currency sparkline (red)
+    this.currentCurrencySparkline = {
+      labels: sparklineLabels,
+      datasets: [{
+        data: history.currencyCurrentRaw.slice(sparklineStartIdx),
+        borderColor: '#ef4444',
+        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+        fill: true,
+        tension: 0.4
+      }]
+    };
+    
+    // EXP/Hour sparkline (purple)
+    this.expPerHourSparkline = {
+      labels: sparklineLabels,
+      datasets: [{
+        data: history.expPerHour.slice(sparklineStartIdx),
+        borderColor: '#a855f7',
+        backgroundColor: 'rgba(168, 85, 247, 0.2)',
+        fill: true,
+        tension: 0.4
+      }]
+    };
+    
+    // Trigger updates
+    this.currencyPerHourSparkline = { ...this.currencyPerHourSparkline };
+    this.currencyPerMapSparkline = { ...this.currencyPerMapSparkline };
+    this.currentPerHourSparkline = { ...this.currentPerHourSparkline };
+    this.currentCurrencySparkline = { ...this.currentCurrencySparkline };
+    this.expPerHourSparkline = { ...this.expPerHourSparkline };
   }
 
   async toggleStatsOverlay(): Promise<void> {

@@ -80,9 +80,13 @@ async function execCommand(cmd: string[], cwd: string, description: string, verb
 }
 
 async function getCurrentVersion(): Promise<VersionInfo> {
-  const versionFile = join(import.meta.dir, '..', '..', 'server.json');
-  if (existsSync(versionFile)) {
-    return JSON.parse(await Bun.file(versionFile).text());
+  const buildJsonFile = join(import.meta.dir, 'build.json');
+  if (existsSync(buildJsonFile)) {
+    const buildConfig = JSON.parse(await Bun.file(buildJsonFile).text());
+    return { 
+      version: buildConfig.version || '0.1', 
+      build: buildConfig.build || new Date().toISOString().split('T')[0] 
+    };
   }
   return { version: '0.1', build: new Date().toISOString().split('T')[0] };
 }
@@ -94,8 +98,13 @@ async function updateVersion(version?: string): Promise<VersionInfo> {
     build: new Date().toISOString().replace(/[:.]/g, '-').replace('T', '_').split('.')[0],
   };
   
-  const versionFile = join(import.meta.dir, '..', '..', 'server.json');
-  writeFileSync(versionFile, JSON.stringify(newVersion, null, 2));
+  // Update build.json with new timestamp
+  const buildJsonFile = join(import.meta.dir, 'build.json');
+  if (existsSync(buildJsonFile)) {
+    const buildConfig = JSON.parse(await Bun.file(buildJsonFile).text());
+    buildConfig.build = newVersion.build;
+    writeFileSync(buildJsonFile, JSON.stringify(buildConfig, null, 2));
+  }
   
   return newVersion;
 }

@@ -162,6 +162,9 @@ async def get_active_session():
                 "title": session.title or f"Session #{session.id}",
                 "description": session.description,
                 "is_active": session.is_active,
+                "duration_seconds": (session.ended_at - session.started_at).total_seconds() if session.ended_at else (datetime.now(timezone.utc) if session.started_at.tzinfo else datetime.now() - session.started_at).total_seconds(),
+                "maps_currency": currency_calc["maps_currency"],
+                "market_currency": currency_calc["market_currency"],
                 "maps": maps_data
             }
         }
@@ -212,7 +215,8 @@ async def get_sessions(
                 "currency_per_hour": session.currency_per_hour,
                 "currency_per_map": session.currency_per_map,
                 "title": session.title or f"Session #{session.id}",
-                "description": session.description
+                "description": session.description,
+                "is_active": session.ended_at is None
             })
         
         return {

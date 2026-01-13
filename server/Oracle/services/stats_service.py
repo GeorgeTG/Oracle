@@ -116,6 +116,13 @@ class StatsService(ServiceBase):
         self.currency_total -= total
         self.currency_current_raw = -total  # Start current raw at negative entry cost
         logger.debug(f"📊 Currency after entry cost: {self.currency_total:.2f}")
+        
+        # Recalculate per hour rate
+        hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
+        if hours_elapsed > 0:
+            self.currency_per_hour = self.currency_total / hours_elapsed
+        
+        await self._publish_stats()
 
     @event_handler(ServiceEventType.MAP_FINISHED)
     async def on_map_finished(self, event: MapFinishedEvent):
@@ -160,6 +167,14 @@ class StatsService(ServiceBase):
             affixes=event.affixes
         )
         await self.publish(map_stats_event)
+
+        # Recalculate rates
+        hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
+        if hours_elapsed > 0:
+            self.currency_per_hour = self.currency_total / hours_elapsed
+        
+        if self._total_maps > 0:
+            self.currency_per_map = self.currency_total / self._total_maps
 
         # Publish updated stats after map completion
         await self._publish_stats()
@@ -220,13 +235,6 @@ class StatsService(ServiceBase):
         
         assert self._price_db is not None
         
-        # Calculate total quantity for this item_id BEFORE the change
-        old_total = sum(
-            item.quantity for item in self._inventory.slots.values()
-            if item.item_id == event.item_id
-        )
-        old_value = self._price_db.get_price(event.item_id) * old_total
-        
         # Update local inventory using change_item (always update)
         # change_item returns the delta in total quantity
         delta = self._inventory.change_item(
@@ -238,15 +246,9 @@ class StatsService(ServiceBase):
             category=event.category
         )
         
-        # Calculate new total value
-        new_total = sum(
-            item.quantity for item in self._inventory.slots.values()
-            if item.item_id == event.item_id
-        )
-        new_value = self._price_db.get_price(event.item_id) * new_total
-        
-        # Calculate value change
-        value_change = new_value - old_value
+        # Calculate value change: delta * price
+        price = self._price_db.get_price(event.item_id)
+        value_change = delta * price
         
         # Only update stats if in FightCtrl view
         is_fighting = "FightCtrl" in self._current_view
@@ -319,6 +321,8 @@ class StatsService(ServiceBase):
                     f"(+{self._exp_gained_total:.0f} / -{self._exp_lost_total:.0f}), "
                     f"Rate: {self.exp_per_hour:.1f}/h"
                 )
+                # Publish stats update when exp changes
+                await self._publish_stats()
         
         # Update last known values
         self._last_exp_percent = event.experience

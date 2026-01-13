@@ -53,6 +53,7 @@ export class SessionDetailsComponent {
   }
 
   get currencyPerHour(): number {
+    // Calculate efficiency: total currency (maps + market) / session duration
     if (!this.sessionDetails?.duration_seconds || this.sessionDetails.duration_seconds === 0) return 0;
     const hours = this.sessionDetails.duration_seconds / 3600;
     return this.totalCurrency / hours;

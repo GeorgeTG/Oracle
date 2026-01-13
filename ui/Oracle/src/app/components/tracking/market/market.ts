@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MarketService, MarketTransaction, MarketResponse } from '../../../services/market.service';
@@ -52,7 +52,8 @@ export class MarketComponent implements OnInit, OnDestroy {
     private playerService: PlayerService,
     private websocketService: WebSocketService,
     private toastService: ToastService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private zone: NgZone
   ) {}
 
   ngOnInit() {
@@ -63,27 +64,39 @@ export class MarketComponent implements OnInit, OnDestroy {
     });
     this.loadSessions();
     
+    // Initial load of transactions
+    const initialEvent: TableLazyLoadEvent = {
+      first: 0,
+      rows: 20,
+      sortField: 'timestamp',
+      sortOrder: -1
+    };
+    this.loadTransactions(initialEvent);
+    
     // Subscribe to market transaction events
     this.marketSubscription = this.websocketService.subscribe<MarketTransactionEvent>(
       ServiceEventType.MARKET_TRANSACTION
     ).subscribe(event => {
       console.log('[MarketComponent] Market transaction event received:', event);
       
-      // Reload the current page to show the new transaction
-      if (this.lastLazyEvent) {
-        console.log('[MarketComponent] Reloading transactions after WebSocket event');
-        this.loadTransactions(this.lastLazyEvent);
-      } else {
-        console.log('[MarketComponent] No lastLazyEvent, creating default lazy event');
-        // Create a default lazy event if none exists yet
-        const defaultEvent: TableLazyLoadEvent = {
-          first: 0,
-          rows: 20,
-          sortField: 'timestamp',
-          sortOrder: -1
-        };
-        this.loadTransactions(defaultEvent);
-      }
+      // Run in Angular zone to ensure change detection
+      this.zone.run(() => {
+        // Reload the current page to show the new transaction
+        if (this.lastLazyEvent) {
+          console.log('[MarketComponent] Reloading transactions after WebSocket event');
+          this.loadTransactions(this.lastLazyEvent);
+        } else {
+          console.log('[MarketComponent] No lastLazyEvent, creating default lazy event');
+          // Create a default lazy event if none exists yet
+          const defaultEvent: TableLazyLoadEvent = {
+            first: 0,
+            rows: 20,
+            sortField: 'timestamp',
+            sortOrder: -1
+          };
+          this.loadTransactions(defaultEvent);
+        }
+      });
     });
   }
 
@@ -138,12 +151,12 @@ export class MarketComponent implements OnInit, OnDestroy {
           this.transactions = response.results;
           this.totalRecords = response.total;
           this.loading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         },
         error: (error) => {
           console.error('[MarketComponent] Error loading transactions:', error);
           this.loading = false;
-          this.cdr.markForCheck();
+          this.cdr.detectChanges();
         }
       });
   }
