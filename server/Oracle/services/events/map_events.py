@@ -4,6 +4,7 @@ from typing import Optional, Dict, List
 from Oracle.parsing.parsers.maps import MapData
 from Oracle.services.events.service_event import ServiceEvent, ServiceEventType
 from Oracle.services.model import InventoryItem
+from Oracle.services.model.inventory_model import Inventory
 
 
 @dataclass(kw_only=True)
@@ -14,11 +15,13 @@ class MapStartedEvent(ServiceEvent):
     level_type: int
     map: Optional[MapData] = None
     consumed_items: List[InventoryItem] = field(default_factory=list)
+    inventory: Optional[Inventory] = None
     type: ServiceEventType = ServiceEventType.MAP_STARTED
-    
+
     def __repr__(self) -> str:
         map_info = f"{self.map.name} [{self.map.difficulty}]" if self.map else f"ID:{self.level_id}"
-        return f"<MapStartedEvent {map_info} uid={self.level_uid} type={self.level_type} @ {self.timestamp.isoformat()}>"
+        inv_count = len(self.inventory) if self.inventory else 0
+        return f"<MapStartedEvent {map_info} uid={self.level_uid} type={self.level_type} inventory={inv_count} items @ {self.timestamp.isoformat()}>"
 
 
 @dataclass(kw_only=True)

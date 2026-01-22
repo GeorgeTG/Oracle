@@ -2,7 +2,7 @@
 from datetime import datetime
 from enum import Enum
 from collections import deque
-from typing import Optional
+from typing import Optional, cast
 import re
 
 from Oracle.database.models import Player, Item, MapCompletion, MapCompletionItem, Session, Affix, MapAffix
@@ -13,7 +13,7 @@ from Oracle.parsing.parsers.maps import get_map_by_id
 from Oracle.parsing.utils.item_db import item_lookup
 
 from Oracle.events import EventBus
-from Oracle.services.events.inventory import InventoryUpdateEvent, RequestInventoryEvent
+from Oracle.services.events.inventory import InventoryUpdateEvent, RequestInventoryEvent, InventorySnapshotEvent
 from Oracle.services.events.map_events import MapFinishedEvent, MapStartedEvent, MapStatsEvent, MapRecordEvent
 from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.service_base import ServiceBase
@@ -85,15 +85,18 @@ class MapService(ServiceBase):
         # Get MapData if available
         self.current_map = get_map_by_id(level_id)
 
-        inventory_event = await self.request_and_wait(
+        inventory_event = cast(InventorySnapshotEvent | None, await self.request_and_wait(
             RequestInventoryEvent(timestamp=datetime.now()),
             ServiceEventType.INVENTORY_SNAPSHOT,
             timeout=1.0
-        )
+        ))
         self.inventory = inventory_event.snapshot if inventory_event else None
 
         # Calculate consumed items (difference between pre_enter and current inventory)
         self.consumed_items = self._calculate_consumed_items()
+
+        # Get inventory copy for the event
+        inventory_copy = self.inventory.data.copy() if self.inventory and self.inventory.data else None
 
         await self.publish(MapStartedEvent(
             timestamp=self.map_start_time,
@@ -101,9 +104,10 @@ class MapService(ServiceBase):
             level_uid=level_uid,
             level_type=level_type,
             map=self.current_map,
-            consumed_items=self.consumed_items
+            consumed_items=self.consumed_items,
+            inventory=inventory_copy
         ))
-        logger.debug(f"🗺️ Published MapStartedEvent for map: {level_id}")
+        logger.debug(f"🗺️ Published MapStartedEvent for map: {level_id} with {len(inventory_copy) if inventory_copy else 0} inventory items")
 
     async def end_map(self):
         """Handle end of current map."""

@@ -1,7 +1,7 @@
 {
   "name": "launcher",
   "version": "1.0.0",
-  "build": "2026-01-13_14-39-56-374Z",
+  "build": "2026-01-20_02-15-39-481Z",
   "root": "launcher",
   "venv": true,
   "dir": "deploy/build",

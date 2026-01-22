@@ -227,8 +227,18 @@ async def create_item(item_data: ItemCreate):
             rarity=item_data.rarity,
             price=item_data.price
         )
-        
+
         logger.info(f"Created item: {item.item_id} - {item.name}")
+
+        # Publish event to update PriceDB cache
+        event_bus = await EventBus.instance()
+        await event_bus.publish(ItemDataChangedEvent(
+            item_id=item.item_id,
+            name=item.name,
+            category=item.category,
+            price=item.price
+        ))
+
         return ItemResponse.model_validate(item)
     
     except HTTPException:

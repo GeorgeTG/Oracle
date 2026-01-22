@@ -1,0 +1,12 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python launcher.py:*)",
+      "Bash(timeout /t 3)",
+      "Bash(python -c:*)",
+      "Bash(python -m py_compile:*)",
+      "Bash(where:*)",
+      "Bash(bun build:launcher:*)"
+    ]
+  }
+}

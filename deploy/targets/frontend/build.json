@@ -1,7 +1,7 @@
 {
   "name": "frontend",
   "version": "1.0.0",
-  "build": "2026-01-13_14-38-49-097Z",
+  "build": "2026-01-20_02-13-26-783Z",
   "root": "ui",
   "dir": "deploy/build",
   "output": "deploy/output/frontend",

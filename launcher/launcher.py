@@ -80,6 +80,8 @@ class OracleLauncher:
         self.log_path_var = tk.StringVar()
         self.steamlibrary_path = tk.StringVar()
         self.auto_detect_status = tk.StringVar(value="")
+        self.server_process = None  # Track server subprocess
+        self.ui_process = None  # Track UI subprocess
         self.server_running = False  # Track if server is running
         
         # Setup UI
@@ -87,9 +89,6 @@ class OracleLauncher:
         self.create_widgets()
         self.load_config()
         self.auto_detect_steamlibrary()
-        
-        # Start monitoring server requests if server is accessible
-        self.monitor_server()
         
     def setup_styles(self):
         """Setup modern ttk styles"""
@@ -131,96 +130,80 @@ class OracleLauncher:
         """Create the main launcher tab"""
         main_frame = ttk.Frame(self.notebook, padding=20)
         self.notebook.add(main_frame, text='Launcher')
-        
+
         # Title
         title = ttk.Label(main_frame, text="Oracle Launcher", style='Title.TLabel')
         title.pack(pady=(0, 20))
-        
+
         # Configuration section
         config_frame = ttk.LabelFrame(main_frame, text="Configuration", padding=15)
         config_frame.pack(fill='x', pady=(0, 20))
-        
+
         # Log path configuration
         log_frame = ttk.Frame(config_frame)
         log_frame.pack(fill='x', pady=5)
-        
+
         ttk.Label(log_frame, text="Game Log Path:", style='Subtitle.TLabel').pack(anchor='w')
-        
+
         path_entry_frame = ttk.Frame(log_frame)
         path_entry_frame.pack(fill='x', pady=(5, 0))
-        
+
         log_entry = ttk.Entry(path_entry_frame, textvariable=self.log_path_var, width=60)
         log_entry.pack(side='left', fill='x', expand=True, padx=(0, 5))
-        
-        browse_btn = ttk.Button(path_entry_frame, text="Browse...", 
+
+        browse_btn = ttk.Button(path_entry_frame, text="Browse...",
                                command=self.browse_log_file, width=12)
         browse_btn.pack(side='left')
-        
+
         # Auto-detect button and status
         auto_detect_frame = ttk.Frame(log_frame)
         auto_detect_frame.pack(fill='x', pady=(5, 0))
-        
-        auto_detect_btn = ttk.Button(auto_detect_frame, text="Auto-Detect", 
+
+        auto_detect_btn = ttk.Button(auto_detect_frame, text="Auto-Detect",
                                      command=self.auto_detect_steamlibrary, width=15)
         auto_detect_btn.pack(side='left')
-        
+
         self.status_label_detect = ttk.Label(auto_detect_frame, textvariable=self.auto_detect_status, style='Info.TLabel')
         self.status_label_detect.pack(side='left', padx=(10, 0))
-        
+
         # Save config button
-        save_config_btn = ttk.Button(config_frame, text="Save Configuration", 
+        save_config_btn = ttk.Button(config_frame, text="Save Configuration",
                                      command=self.save_config, style='Action.TButton')
         save_config_btn.pack(pady=(10, 0))
-        
-        # Buttons section
-        buttons_frame = ttk.LabelFrame(main_frame, text="Launch Options", padding=15)
-        buttons_frame.pack(fill='both', expand=True)
-        
-        # Create 2-column layout: buttons on left, requests on right
-        content_frame = ttk.Frame(buttons_frame)
-        content_frame.pack(fill='both', expand=True)
-        
-        # Left: Buttons
-        btn_container = ttk.Frame(content_frame)
-        btn_container.pack(side='left', fill='y', padx=(0, 10))
-        
-        # Tray button (3/4 width) with console button (1/4 width) next to it
-        tray_frame = ttk.Frame(btn_container)
-        tray_frame.pack(pady=5, fill='x')
-        
-        self.tray_btn = ttk.Button(tray_frame, text="📌 Server (Tray)", 
-                                   command=self.start_server_tray, style='Big.TButton')
-        self.tray_btn.pack(side='left', fill='x', expand=True, padx=(0, 5))
-        
-        self.server_btn = ttk.Button(tray_frame, text="🖥️", 
-                                     command=self.start_server, style='Big.TButton', width=3)
-        self.server_btn.pack(side='left')
-        
-        # Start UI button (full width)
-        self.ui_btn = ttk.Button(btn_container, text="🎨 Start User Interface", 
-                                command=self.start_ui, style='Big.TButton')
-        self.ui_btn.pack(pady=5, fill='x')
-        
-        # Right: Server requests log
-        log_container = ttk.Frame(content_frame)
-        log_container.pack(side='left', fill='both', expand=True)
-        
-        ttk.Label(log_container, text="Server Requests:", style='Subtitle.TLabel').pack(anchor='w')
-        
-        log_text_frame = ttk.Frame(log_container)
-        log_text_frame.pack(fill='both', expand=True, pady=(5, 0))
-        
-        scrollbar = ttk.Scrollbar(log_text_frame)
+
+        # Control buttons (before launch section so they appear above terminal)
+        control_frame = ttk.Frame(main_frame)
+        control_frame.pack(fill='x', pady=(0, 10))
+
+        # Start Oracle button (launches server + UI automatically)
+        self.start_btn = ttk.Button(control_frame, text="▶ Start Oracle",
+                                    command=self.start_oracle, style='Big.TButton')
+        self.start_btn.pack(side='left', fill='x', expand=True, padx=(0, 5))
+
+        # Stop button
+        self.stop_btn = ttk.Button(control_frame, text="■ Stop Server",
+                                   command=self.stop_server, style='Big.TButton', state='disabled')
+        self.stop_btn.pack(side='left', fill='x', expand=True)
+
+        # Launch section
+        launch_frame = ttk.LabelFrame(main_frame, text="Server Output", padding=15)
+        launch_frame.pack(fill='both', expand=True, pady=(0, 10))
+
+        # Embedded terminal for server output
+        terminal_frame = ttk.Frame(launch_frame)
+        terminal_frame.pack(fill='both', expand=True)
+
+        scrollbar = ttk.Scrollbar(terminal_frame)
         scrollbar.pack(side='right', fill='y')
-        
-        self.requests_text = tk.Text(log_text_frame, wrap='word', yscrollcommand=scrollbar.set,
-                                    font=('Consolas', 9), bg='#1e1e1e', fg='#d4d4d4', 
-                                    relief='flat', height=10)
-        self.requests_text.pack(fill='both', expand=True)
-        scrollbar.config(command=self.requests_text.yview)
-        self.requests_text.insert('1.0', 'Waiting for server requests...\n')
-        self.requests_text.config(state='disabled')
-        
+
+        self.terminal_text = tk.Text(terminal_frame, wrap='word', yscrollcommand=scrollbar.set,
+                                    font=('Consolas', 9), bg='#1e1e1e', fg='#d4d4d4',
+                                    relief='flat')
+        self.terminal_text.pack(fill='both', expand=True)
+        scrollbar.config(command=self.terminal_text.yview)
+        self.terminal_text.insert('1.0', 'Ready to start Oracle server...\n')
+        self.terminal_text.config(state='disabled')
+
         # Status label
         self.status_label = ttk.Label(main_frame, text="Ready", style='Info.TLabel')
         self.status_label.pack(pady=(10, 0))
@@ -365,93 +348,186 @@ class OracleLauncher:
         self.auto_detect_status.set("✗ Not Found - Enable Log in game settings first, or try to manually browse.")
         self.status_label_detect.config(foreground='red')
         
-    def start_server(self):
-        """Start the Oracle server"""
+    def start_oracle(self):
+        """Start Oracle server and automatically launch UI when ready"""
         try:
             # Check if server is already running
             if self.server_running:
-                messagebox.showwarning("Server Running", 
-                                     "Server is already running!\n\n"
+                messagebox.showwarning("Server Running",
+                                     "Oracle is already running!\n\n"
                                      "Please stop the existing server before starting a new one.")
                 return
-            
-            self.update_status("Starting server...")
-            
+
+            self.update_status("Starting Oracle server...")
+            self.add_terminal_log("=" * 80)
+            self.add_terminal_log("Starting Oracle Server...")
+            self.add_terminal_log("=" * 80)
+
+            # Disable start button, enable stop button
+            self.start_btn.config(state='disabled')
+            self.stop_btn.config(state='normal')
+
             # Check for deployed executable first
             server_exe = self.server_dir / "Oracle-Server.exe"
             if server_exe.exists():
-                subprocess.Popen([str(server_exe)], cwd=str(server_exe.parent))
-                self.update_status("✓ Server started (deployed)")
+                self.add_terminal_log(f"Using deployed server: {server_exe}")
+                # Start server with output redirection and UTF-8 encoding
+                self.server_process = subprocess.Popen(
+                    [str(server_exe)],
+                    cwd=str(server_exe.parent),
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    text=True,
+                    encoding='utf-8',
+                    errors='replace',
+                    bufsize=1
+                )
             else:
                 # Fall back to Python script
                 server_script = self.dev_server_path / "Oracle" / "server.py"
                 if server_script.exists():
-                    subprocess.Popen([sys.executable, str(server_script)], 
-                                   cwd=str(self.dev_server_path))
-                    self.update_status("✓ Server started (development)")
+                    self.add_terminal_log(f"Using development server: {server_script}")
+                    self.server_process = subprocess.Popen(
+                        [sys.executable, "-u", str(server_script)],
+                        cwd=str(self.dev_server_path),
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.STDOUT,
+                        text=True,
+                        encoding='utf-8',
+                        errors='replace',
+                        bufsize=1
+                    )
                 else:
                     raise FileNotFoundError("Server executable or script not found")
-                    
+
+            # Start thread to read server output
+            threading.Thread(target=self._read_server_output, daemon=True).start()
+
+            # Start thread to monitor server health and launch UI
+            threading.Thread(target=self._monitor_and_launch_ui, daemon=True).start()
+
+            self.server_running = True
+            self.update_status("Server starting...")
+
         except Exception as e:
             self.update_status(f"Error starting server: {e}", error=True)
+            self.add_terminal_log(f"ERROR: {e}")
             messagebox.showerror("Error", f"Failed to start server:\n{e}")
-            
-    def start_server_tray(self):
-        """Start the Oracle server in tray mode"""
+            self.start_btn.config(state='normal')
+            self.stop_btn.config(state='disabled')
+
+    def stop_server(self):
+        """Stop the Oracle server"""
         try:
-            # Check if server is already running
-            if self.server_running:
-                messagebox.showwarning("Server Running", 
-                                     "Server is already running!\n\n"
-                                     "Please stop the existing server before starting a new one.")
-                return
-            
-            self.update_status("Starting server (tray mode)...")
-            
-            # Check for deployed executable first
-            server_exe = self.server_dir / "Oracle-Server-Tray.exe"
-            if server_exe.exists():
-                subprocess.Popen([str(server_exe)], cwd=str(server_exe.parent))
-                self.update_status("✓ Server (tray) started (deployed)")
-            else:
-                # Fall back to Python script
-                tray_script = self.dev_server_path / "run_tray.py"
-                if tray_script.exists():
-                    subprocess.Popen([sys.executable, str(tray_script)], 
-                                   cwd=str(self.dev_server_path))
-                    self.update_status("✓ Server (tray) started (development)")
-                else:
-                    raise FileNotFoundError("Server tray executable or script not found")
-                    
+            self.update_status("Stopping server...")
+            self.add_terminal_log("\n" + "=" * 80)
+            self.add_terminal_log("Stopping Oracle Server...")
+            self.add_terminal_log("=" * 80)
+
+            if self.server_process:
+                self.server_process.terminate()
+                try:
+                    self.server_process.wait(timeout=5)
+                except subprocess.TimeoutExpired:
+                    self.server_process.kill()
+                    self.add_terminal_log("Server forcefully killed (timeout)")
+
+                self.server_process = None
+
+            self.server_running = False
+            self.start_btn.config(state='normal')
+            self.stop_btn.config(state='disabled')
+            self.update_status("Server stopped")
+            self.add_terminal_log("Server stopped successfully")
+
         except Exception as e:
-            self.update_status(f"Error starting server (tray): {e}", error=True)
-            messagebox.showerror("Error", f"Failed to start server (tray):\n{e}")
-            
-    def start_ui(self):
-        """Start the Oracle UI"""
+            self.update_status(f"Error stopping server: {e}", error=True)
+            self.add_terminal_log(f"ERROR stopping server: {e}")
+
+    def _read_server_output(self):
+        """Read server output in background thread"""
+        if not self.server_process:
+            return
+
         try:
-            self.update_status("Starting UI...")
-            
+            for line in iter(self.server_process.stdout.readline, ''):
+                if not line:
+                    break
+                self.add_terminal_log(line.rstrip())
+        except Exception as e:
+            self.add_terminal_log(f"Error reading server output: {e}")
+
+        # Server process ended
+        if self.server_running:
+            self.add_terminal_log("\n" + "=" * 80)
+            self.add_terminal_log("Server process ended")
+            self.add_terminal_log("=" * 80)
+            self.root.after(0, lambda: self.stop_btn.config(state='disabled'))
+            self.root.after(0, lambda: self.start_btn.config(state='normal'))
+            self.server_running = False
+
+    def _monitor_and_launch_ui(self):
+        """Monitor server health and launch UI when ready"""
+        server_config = self.config_data.get('server', {})
+        host = server_config.get('host', '127.0.0.1')
+        port = server_config.get('port', 8000)
+        base_url = f"http://{host}:{port}"
+
+        self.add_terminal_log(f"Waiting for server to be ready at {base_url}...")
+
+        # Wait for server to be ready (max 30 seconds)
+        for i in range(60):
+            try:
+                req = urllib.request.Request(base_url + "/")
+                req.add_header('User-Agent', 'Oracle-Launcher/1.0')
+
+                with urllib.request.urlopen(req, timeout=2) as response:
+                    data = json.loads(response.read().decode())
+                    self.add_terminal_log(f"✓ Server is ready! Status: {data.get('status')}")
+                    self.root.after(0, lambda: self.update_status("Server ready, launching UI..."))
+
+                    # Server is ready, launch UI
+                    time.sleep(1)  # Small delay
+                    self.root.after(0, self._launch_ui)
+                    return
+
+            except (urllib.error.URLError, Exception):
+                # Server not ready yet
+                if i % 5 == 0:  # Log every 5 seconds
+                    self.add_terminal_log(f"Waiting for server... ({i//2}s)")
+                time.sleep(0.5)
+
+        # Timeout
+        self.add_terminal_log("⚠ Server startup timeout (30s) - UI not launched automatically")
+        self.add_terminal_log("Please check server logs above for errors")
+        self.root.after(0, lambda: self.update_status("Server timeout - check logs", error=True))
+
+    def _launch_ui(self):
+        """Launch the Oracle UI"""
+        try:
+            self.add_terminal_log("Launching Oracle UI...")
+
             # Check for deployed executable first
             ui_exe = self.frontend_dir / "Oracle.exe"
             if ui_exe.exists():
-                subprocess.Popen([str(ui_exe)], cwd=str(ui_exe.parent))
-                self.update_status("✓ UI started (deployed)")
+                self.ui_process = subprocess.Popen([str(ui_exe)], cwd=str(ui_exe.parent))
+                self.add_terminal_log(f"✓ UI launched: {ui_exe}")
+                self.update_status("✓ Oracle running")
             else:
                 # Fall back to npm/bun dev server
                 if self.dev_ui_path.exists():
-                    # Try to start dev server
-                    messagebox.showinfo("Development Mode", 
-                                      "Starting UI in development mode.\n\n"
+                    self.add_terminal_log("⚠ UI executable not found")
+                    self.add_terminal_log(f"Please run 'npm start' or 'bun run dev' in: {self.dev_ui_path}")
+                    messagebox.showinfo("Development Mode",
+                                      "UI executable not found.\n\n"
                                       "Please run 'npm start' or 'bun run dev' "
                                       f"in:\n{self.dev_ui_path}")
-                    self.update_status("Please start UI dev server manually")
                 else:
                     raise FileNotFoundError("UI executable or source not found")
-                    
+
         except Exception as e:
-            self.update_status(f"Error starting UI: {e}", error=True)
-            messagebox.showerror("Error", f"Failed to start UI:\n{e}")
+            self.add_terminal_log(f"ERROR launching UI: {e}")
+            messagebox.showerror("Error", f"Failed to launch UI:\n{e}")
             
     def load_build_info(self):
         """Load and display build.json information"""
@@ -772,88 +848,22 @@ and conditions.
             self.status_label.config(foreground='red')
         else:
             self.status_label.config(foreground='green')
-    
-    def monitor_server(self):
-        """Monitor server for incoming requests"""
-        def poll_server():
-            # Get server URL from config
-            server_config = self.config_data.get('server', {})
-            host = server_config.get('host', '127.0.0.1')
-            port = server_config.get('port', 8000)
-            base_url = f"http://{host}:{port}"
-            
-            self.add_request_log(f"Monitoring {base_url}")
-            
-            was_reachable = False
-            
-            while True:
-                try:
-                    # Check root endpoint
-                    req = urllib.request.Request(base_url + "/")
-                    req.add_header('User-Agent', 'Oracle-Launcher/1.0')
-                    
-                    with urllib.request.urlopen(req, timeout=2) as response:
-                        data = json.loads(response.read().decode())
-                        
-                        # Log reconnection if server was down
-                        if not was_reachable:
-                            self.add_request_log(f"✓ Server connected")
-                            was_reachable = True
-                            self.server_running = True
-                        
-                        self.add_request_log(f"GET / → {data.get('status')}: {data.get('message')}")
-                    
-                    # Wait a bit before status check
-                    time.sleep(1)
-                    
-                    # Check status endpoint
-                    req = urllib.request.Request(base_url + "/status")
-                    req.add_header('User-Agent', 'Oracle-Launcher/1.0')
-                    
-                    with urllib.request.urlopen(req, timeout=2) as response:
-                        data = json.loads(response.read().decode())
-                        parsers = len(data.get('loaded_parsers', []))
-                        services = len(data.get('loaded_services', []))
-                        reader = data.get('log_reader_status', 'Unknown')
-                        self.add_request_log(f"GET /status → Parsers: {parsers}, Services: {services}")
-                        self.add_request_log(f"  Log Reader: {reader}")
-                    
-                    # Poll every 10 seconds
-                    time.sleep(10)
-                    
-                except urllib.error.URLError as e:
-                    # Only log once when server becomes unreachable
-                    if was_reachable:
-                        self.add_request_log(f"⚠ Server not reachable")
-                        was_reachable = False
-                        self.server_running = False
-                    # Retry every 1 second when server is down
-                    time.sleep(1)
-                except Exception as e:
-                    if was_reachable:
-                        self.add_request_log(f"❌ Error: {e}")
-                        was_reachable = False
-                        self.server_running = False
-                    time.sleep(1)
-        
-        # Run polling in background thread
-        threading.Thread(target=poll_server, daemon=True).start()
-    
-    def add_request_log(self, message: str):
-        """Add a message to the requests log with automatic cleanup"""
+
+    def add_terminal_log(self, message: str):
+        """Add a message to the terminal output with automatic cleanup"""
         try:
-            self.requests_text.config(state='normal')
+            self.terminal_text.config(state='normal')
             timestamp = datetime.now().strftime('%H:%M:%S')
-            self.requests_text.insert('end', f"[{timestamp}] {message}\n")
-            
-            # Prevent memory buildup: keep only last 500 lines
-            line_count = int(self.requests_text.index('end-1c').split('.')[0])
-            if line_count > 500:
-                # Delete oldest lines (keep last 400)
-                self.requests_text.delete('1.0', f'{line_count - 400}.0')
-            
-            self.requests_text.see('end')
-            self.requests_text.config(state='disabled')
+            self.terminal_text.insert('end', f"[{timestamp}] {message}\n")
+
+            # Prevent memory buildup: keep only last 1000 lines
+            line_count = int(self.terminal_text.index('end-1c').split('.')[0])
+            if line_count > 1000:
+                # Delete oldest lines (keep last 800)
+                self.terminal_text.delete('1.0', f'{line_count - 800}.0')
+
+            self.terminal_text.see('end')
+            self.terminal_text.config(state='disabled')
         except Exception:
             pass
             

@@ -19,9 +19,11 @@ export class ItemsComponent implements OnInit {
   items: Item[] = [];
   loading: boolean = false;
   exporting: boolean = false;
+  saving: boolean = false;
   selectedItemDetail: Item | null = null;
   showDetailDialog: boolean = false;
-  
+  isCreateMode: boolean = false;
+
   // Filter values
   filterCategory: string = '';
   filterMinPrice: number | null = null;
@@ -70,6 +72,7 @@ export class ItemsComponent implements OnInit {
   }
 
   showItemDetails(item: Item) {
+    this.isCreateMode = false;
     this.itemService.getItem(item.id).subscribe({
       next: (details) => {
         this.selectedItemDetail = details;
@@ -80,6 +83,19 @@ export class ItemsComponent implements OnInit {
         this.toastService.error('Error', 'Failed to load item details');
       }
     });
+  }
+
+  openCreateDialog() {
+    this.isCreateMode = true;
+    this.selectedItemDetail = {
+      id: 0,
+      item_id: 0,
+      name: '',
+      category: '',
+      rarity: '',
+      price: 0
+    };
+    this.showDetailDialog = true;
   }
 
   confirmDeleteItem(item: Item) {
@@ -104,27 +120,55 @@ export class ItemsComponent implements OnInit {
 
   saveItem() {
     if (!this.selectedItemDetail) return;
-    
-    this.itemService.updateItem(this.selectedItemDetail.id, {
-      name: this.selectedItemDetail.name || undefined,
-      category: this.selectedItemDetail.category || undefined,
-      rarity: this.selectedItemDetail.rarity || undefined,
-      price: this.selectedItemDetail.price
-    }).subscribe({
-      next: (response) => {
-        this.toastService.success('Updated', 'Item updated successfully');
-        // Update the item in the list if it exists
-        const itemIndex = this.items.findIndex(i => i.id === this.selectedItemDetail!.id);
-        if (itemIndex !== -1) {
-          this.items[itemIndex] = { ...this.selectedItemDetail! };
+
+    this.saving = true;
+
+    if (this.isCreateMode) {
+      // Create new item
+      this.itemService.createItem({
+        item_id: this.selectedItemDetail.item_id,
+        name: this.selectedItemDetail.name || undefined,
+        category: this.selectedItemDetail.category || undefined,
+        rarity: this.selectedItemDetail.rarity || undefined,
+        price: this.selectedItemDetail.price
+      }).subscribe({
+        next: (response) => {
+          this.toastService.success('Created', 'Item created successfully');
+          this.items = [response, ...this.items];
+          this.showDetailDialog = false;
+          this.saving = false;
+        },
+        error: (error) => {
+          console.error('Error creating item:', error);
+          this.toastService.error('Create Failed', error.error?.detail || 'Failed to create item');
+          this.saving = false;
         }
-        this.showDetailDialog = false;
-      },
-      error: (error) => {
-        console.error('Error updating item:', error);
-        this.toastService.error('Update Failed', 'Failed to update item');
-      }
-    });
+      });
+    } else {
+      // Update existing item
+      this.itemService.updateItem(this.selectedItemDetail.id, {
+        name: this.selectedItemDetail.name || undefined,
+        category: this.selectedItemDetail.category || undefined,
+        rarity: this.selectedItemDetail.rarity || undefined,
+        price: this.selectedItemDetail.price
+      }).subscribe({
+        next: (response) => {
+          this.toastService.success('Updated', 'Item updated successfully');
+          // Update the item in the list if it exists
+          const itemIndex = this.items.findIndex(i => i.id === this.selectedItemDetail!.id);
+          if (itemIndex !== -1) {
+            this.items[itemIndex] = { ...this.selectedItemDetail! };
+          }
+          this.showDetailDialog = false;
+          this.saving = false;
+        },
+        error: (error) => {
+          console.error('Error updating item:', error);
+          this.toastService.error('Update Failed', 'Failed to update item');
+          this.saving = false;
+        }
+      });
+    }
   }
 
   exportItems() {

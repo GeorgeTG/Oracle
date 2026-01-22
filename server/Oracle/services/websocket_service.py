@@ -54,9 +54,19 @@ class WebSocketBroadcastService(ServiceBase):
         elif isinstance(value, datetime):
             return value.isoformat()
         elif isinstance(value, dict):
-            return {k: self._serialize_value(v) for k, v in value.items()}
+            # Convert tuple keys to strings for JSON compatibility
+            return {
+                (str(k) if isinstance(k, tuple) else k): self._serialize_value(v)
+                for k, v in value.items()
+            }
         elif isinstance(value, (list, tuple)):
             return [self._serialize_value(item) for item in value]
+        elif hasattr(value, 'slots') and hasattr(value, 'copy'):
+            # Handle Inventory objects - serialize slots with string keys
+            return {
+                f"{page},{slot}": self._serialize_value(item)
+                for (page, slot), item in value.slots.items()
+            }
         elif hasattr(value, '__dict__'):
             # Handle dataclasses and custom objects
             return self._serialize_value(value.__dict__)

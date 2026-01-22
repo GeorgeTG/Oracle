@@ -258,15 +258,17 @@ class PriceDB(SingletonMixin):
         """
         Handle item data changed event.
         Updates the price cache when an item is modified via API.
-        
+
         Args:
             event: ItemDataChangedEvent containing updated item data
         """
+        old_price = self._cache.get(event.item_id, 0.0)
+
         if event.price >= 0:
             self._cache[event.item_id] = event.price
-            logger.info(f"💰 Updated cache for item {event.item_id}: {event.name} -> {event.price}")
+            logger.info(f"💰 Item price changed: [{event.item_id}] {event.name} | {old_price} -> {event.price}")
         else:
             # If price is removed or invalid, remove from cache
             if event.item_id in self._cache:
                 del self._cache[event.item_id]
-                logger.info(f"💰 Removed item {event.item_id} from cache")
+                logger.info(f"💰 Item removed from cache: [{event.item_id}] {event.name}")

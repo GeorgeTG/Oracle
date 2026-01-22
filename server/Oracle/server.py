@@ -4,6 +4,13 @@ import signal
 import threading
 from contextlib import asynccontextmanager
 import uvicorn
+import io
+
+# Force UTF-8 encoding for stdout/stderr to handle emojis in logs
+if sys.stdout.encoding != 'utf-8':
+    sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8', errors='replace')
+if sys.stderr.encoding != 'utf-8':
+    sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8', errors='replace')
 
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware

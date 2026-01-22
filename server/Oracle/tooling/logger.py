@@ -200,7 +200,15 @@ class Logger:
 
         # Print to console (respect level)
         if level >= self.level:
-            print(log_line, file=sys.stdout)
+            try:
+                print(log_line, file=sys.stdout)
+            except UnicodeEncodeError:
+                # Fallback: strip emojis and ANSI codes for incompatible consoles
+                clean_line = self._strip_ansi(log_line)
+                # Replace common emojis with ASCII equivalents
+                clean_line = clean_line.replace('✓', '[OK]').replace('✗', '[X]').replace('⚠', '[!]')
+                clean_line = clean_line.replace('🔍', '[SEARCH]').replace('📝', '[LOG]').replace('🚀', '[START]')
+                print(clean_line, file=sys.stdout, errors='replace')
         
         # Write to file synchronously if no event loop, otherwise schedule async write
         log_file = self._get_log_file_path()

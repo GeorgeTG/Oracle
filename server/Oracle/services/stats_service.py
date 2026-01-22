@@ -95,6 +95,11 @@ class StatsService(ServiceBase):
             logger.info(f"📊 Map details: {event.map.name} [{event.map.difficulty}]")
 
         self._map_start = event.timestamp
+
+        # Take the current inventory as baseline
+        if not self._inventory and event.inventory:
+            self._inventory = event.inventory.copy()
+            logger.debug(f"📊 Inventory baseline set with {len(self._inventory.slots)} slots")
         
         # Capture exp state at map start
         self._map_start_exp = self._last_exp_percent or 0
@@ -230,7 +235,7 @@ class StatsService(ServiceBase):
     async def on_item_change(self, event: ItemChangeEvent):
         """Update local inventory and track price changes if in FightCtrl."""
         if self._inventory is None:
-            logger.debug("📊 Item changed but inventory not initialized yet")
+            logger.warning("📊 Item changed but inventory not initialized yet")
             return
         
         assert self._price_db is not None
@@ -252,6 +257,7 @@ class StatsService(ServiceBase):
         
         # Only update stats if in FightCtrl view
         is_fighting = "FightCtrl" in self._current_view
+        logger.debug(f"📊 Current view: {self._current_view}, is_fighting={is_fighting}")
         if is_fighting:
             # Update totals
             self._items_total[event.item_id] += delta

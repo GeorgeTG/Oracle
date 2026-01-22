@@ -2,10 +2,17 @@
   <div class="flex justify-between items-center mb-4">
     <h1 class="text-3xl font-bold">Items Management</h1>
     <div class="flex items-center gap-4">
-      <button 
-        pButton 
-        label="Export JSON" 
-        icon="pi pi-download" 
+      <button
+        pButton
+        label="Add Item"
+        icon="pi pi-plus"
+        class="p-button-success"
+        (click)="openCreateDialog()">
+      </button>
+      <button
+        pButton
+        label="Export JSON"
+        icon="pi pi-download"
         class="p-button-outlined"
         (click)="exportItems()"
         [loading]="exporting">
@@ -127,65 +134,79 @@
   </p-table>
 </div>
 
-<!-- Detail Modal Dialog -->
-<p-dialog 
+<!-- Item Modal Dialog (Create/Edit) -->
+<p-dialog
   [(visible)]="showDetailDialog"
-  [header]="'Item Details - ' + (selectedItemDetail?.name || 'Unknown Item')"
   [modal]="true"
   [style]="{ width: '500px' }"
   [closable]="true"
   styleClass="dark-dialog"
   [baseZIndex]="10000">
   <ng-template pTemplate="header">
-    <div class="text-lg font-semibold text-primary">{{ selectedItemDetail?.name || 'Item Details' }}</div>
+    <div class="text-lg font-semibold text-primary">
+      {{ isCreateMode ? 'Create New Item' : (selectedItemDetail?.name || 'Edit Item') }}
+    </div>
   </ng-template>
   @if (selectedItemDetail) {
     <div class="space-y-4">
       <div class="grid grid-cols-2 gap-4">
-        <div class="border-b border-surface-700 pb-3">
-          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Item ID</p>
-          <p class="font-mono text-gray-100">{{ selectedItemDetail.item_id }}</p>
-        </div>
-        <div class="border-b border-surface-700 pb-3">
-          <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Database ID</p>
-          <p class="font-mono text-gray-100">{{ selectedItemDetail.id }}</p>
-        </div>
+        @if (isCreateMode) {
+          <div class="col-span-2 border-b border-surface-700 pb-3">
+            <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Item ID <span class="text-red-500">*</span></label>
+            <input
+              pInputText
+              type="number"
+              [(ngModel)]="selectedItemDetail.item_id"
+              class="w-full"
+              placeholder="Enter game item ID"
+            />
+          </div>
+        } @else {
+          <div class="border-b border-surface-700 pb-3">
+            <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Item ID</p>
+            <p class="font-mono text-gray-100">{{ selectedItemDetail.item_id }}</p>
+          </div>
+          <div class="border-b border-surface-700 pb-3">
+            <p class="text-xs uppercase tracking-wider text-gray-400 mb-1">Database ID</p>
+            <p class="font-mono text-gray-100">{{ selectedItemDetail.id }}</p>
+          </div>
+        }
         <div class="col-span-2 border-b border-surface-700 pb-3">
           <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Name</label>
-          <input 
-            pInputText 
-            type="text" 
-            [(ngModel)]="selectedItemDetail.name" 
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="selectedItemDetail.name"
             class="w-full"
             placeholder="Item name"
           />
         </div>
         <div class="col-span-2 border-b border-surface-700 pb-3">
           <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Category</label>
-          <input 
-            pInputText 
-            type="text" 
-            [(ngModel)]="selectedItemDetail.category" 
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="selectedItemDetail.category"
             class="w-full"
             placeholder="Category"
           />
         </div>
         <div class="col-span-2 border-b border-surface-700 pb-3">
           <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Rarity</label>
-          <input 
-            pInputText 
-            type="text" 
-            [(ngModel)]="selectedItemDetail.rarity" 
+          <input
+            pInputText
+            type="text"
+            [(ngModel)]="selectedItemDetail.rarity"
             class="w-full"
             placeholder="Rarity"
           />
         </div>
         <div class="col-span-2 border-b border-surface-700 pb-3">
           <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Price</label>
-          <input 
-            pInputText 
-            type="number" 
-            [(ngModel)]="selectedItemDetail.price" 
+          <input
+            pInputText
+            type="number"
+            [(ngModel)]="selectedItemDetail.price"
             class="w-full"
             placeholder="Price"
             step="0.01"
@@ -196,19 +217,21 @@
   }
   <ng-template pTemplate="footer">
     <div class="flex gap-2 justify-end">
-      <button 
-        pButton 
-        type="button" 
-        label="Cancel" 
+      <button
+        pButton
+        type="button"
+        label="Cancel"
         class="p-button-text p-button-secondary"
         (click)="showDetailDialog = false"
+        [disabled]="saving"
       ></button>
-      <button 
-        pButton 
-        type="button" 
-        label="Save Changes" 
-        class="p-button-primary"
+      <button
+        pButton
+        type="button"
+        [label]="isCreateMode ? 'Create Item' : 'Save Changes'"
+        [class]="isCreateMode ? 'p-button-success' : 'p-button-primary'"
         (click)="saveItem()"
+        [loading]="saving"
       ></button>
     </div>
   </ng-template>
