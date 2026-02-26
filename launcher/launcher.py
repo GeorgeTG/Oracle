@@ -3,6 +3,7 @@ Oracle Launcher - Modern GUI launcher for Oracle server and UI
 """
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
+import ctypes
 import json
 import os
 import sys
@@ -28,6 +29,12 @@ try:
     from github import Github
 except ImportError:
     Github = None
+try:
+    import pystray
+    from PIL import Image, ImageDraw
+except ImportError:
+    pystray = None
+    Image = None
 
 
 class OracleLauncher:
@@ -83,12 +90,23 @@ class OracleLauncher:
         self.server_process = None  # Track server subprocess
         self.ui_process = None  # Track UI subprocess
         self.server_running = False  # Track if server is running
-        
+
+        # Tray icon
+        self.tray_icon = None
+        self.minimized_to_tray = False
+
         # Setup UI
         self.setup_styles()
         self.create_widgets()
         self.load_config()
         self.auto_detect_steamlibrary()
+
+        # Setup tray icon if available
+        if pystray and Image:
+            self.setup_tray()
+
+        # Handle window close - minimize to tray instead of closing
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
         
     def setup_styles(self):
         """Setup modern ttk styles"""
@@ -183,7 +201,12 @@ class OracleLauncher:
         # Stop button
         self.stop_btn = ttk.Button(control_frame, text="■ Stop Server",
                                    command=self.stop_server, style='Big.TButton', state='disabled')
-        self.stop_btn.pack(side='left', fill='x', expand=True)
+        self.stop_btn.pack(side='left', fill='x', expand=True, padx=(0, 5))
+
+        # Start Hotkey Handler button
+        self.hotkey_btn = ttk.Button(control_frame, text="⌨ Start Hotkey",
+                                     command=self.start_hotkey_handler, style='Big.TButton')
+        self.hotkey_btn.pack(side='left', fill='x', expand=True)
 
         # Launch section
         launch_frame = ttk.LabelFrame(main_frame, text="Server Output", padding=15)
@@ -369,6 +392,10 @@ class OracleLauncher:
 
             # Check for deployed executable first
             server_exe = self.server_dir / "Oracle-Server.exe"
+
+            # Hide console window on Windows
+            creationflags = subprocess.CREATE_NO_WINDOW if platform.system() == "Windows" else 0
+
             if server_exe.exists():
                 self.add_terminal_log(f"Using deployed server: {server_exe}")
                 # Start server with output redirection and UTF-8 encoding
@@ -380,7 +407,8 @@ class OracleLauncher:
                     text=True,
                     encoding='utf-8',
                     errors='replace',
-                    bufsize=1
+                    bufsize=1,
+                    creationflags=creationflags
                 )
             else:
                 # Fall back to Python script
@@ -395,7 +423,8 @@ class OracleLauncher:
                         text=True,
                         encoding='utf-8',
                         errors='replace',
-                        bufsize=1
+                        bufsize=1,
+                        creationflags=creationflags
                     )
                 else:
                     raise FileNotFoundError("Server executable or script not found")
@@ -443,6 +472,56 @@ class OracleLauncher:
         except Exception as e:
             self.update_status(f"Error stopping server: {e}", error=True)
             self.add_terminal_log(f"ERROR stopping server: {e}")
+
+    def start_hotkey_handler(self):
+        """Start the Oracle Hotkey Handler (requires admin privileges)"""
+        result = messagebox.askokcancel(
+            "Start Hotkey Handler",
+            "Start Oracle Hotkey Handler?\n\n"
+            "This will request administrator privileges (UAC prompt).\n\n"
+            "Administrator rights are required so that keyboard shortcuts "
+            "can be captured while the game is in focus. The game runs as "
+            "admin, and Windows blocks non-elevated programs from reading "
+            "keyboard input directed at elevated windows.",
+            icon='info'
+        )
+        if not result:
+            return
+
+        try:
+            # Look for hotkey executable
+            hotkey_exe = self.launcher_dir / "hotkey" / "Oracle-Hotkey.exe"
+            if not hotkey_exe.exists():
+                hotkey_exe = self.base_path / "hotkey" / "Oracle-Hotkey.exe"
+            if not hotkey_exe.exists():
+                # Try running as Python script in development
+                hotkey_script = self.base_path / "hotkey" / "oracle_hotkey.py"
+                if hotkey_script.exists():
+                    self.add_terminal_log(f"Running hotkey handler as script: {hotkey_script}")
+                    # Use runas to request admin
+                    ctypes.windll.shell32.ShellExecuteW(
+                        None, "runas", sys.executable, str(hotkey_script), str(hotkey_script.parent), 1
+                    )
+                    self.add_terminal_log("✓ Hotkey handler launch requested (check UAC prompt)")
+                    return
+                else:
+                    raise FileNotFoundError(
+                        "Oracle-Hotkey.exe not found.\n"
+                        "Expected locations:\n"
+                        f"  {self.launcher_dir / 'hotkey' / 'Oracle-Hotkey.exe'}\n"
+                        f"  {self.base_path / 'hotkey' / 'Oracle-Hotkey.exe'}"
+                    )
+
+            self.add_terminal_log(f"Starting hotkey handler: {hotkey_exe}")
+            # Use ShellExecuteW with "runas" to trigger UAC elevation
+            ctypes.windll.shell32.ShellExecuteW(
+                None, "runas", str(hotkey_exe), None, str(hotkey_exe.parent), 1
+            )
+            self.add_terminal_log("✓ Hotkey handler launch requested (check UAC prompt)")
+
+        except Exception as e:
+            self.add_terminal_log(f"ERROR starting hotkey handler: {e}")
+            messagebox.showerror("Error", f"Failed to start hotkey handler:\n{e}")
 
     def _read_server_output(self):
         """Read server output in background thread"""
@@ -866,7 +945,203 @@ and conditions.
             self.terminal_text.config(state='disabled')
         except Exception:
             pass
-            
+
+    # ============== TRAY ICON METHODS ==============
+
+    def create_tray_icon_image(self):
+        """Load icon from .ico file or create a simple one."""
+        icon_path = self.server_dir / "favicon.ico"
+        if not icon_path.exists():
+            icon_path = self.dev_server_path / "favicon.ico"
+
+        if icon_path.exists():
+            try:
+                img = Image.open(icon_path)
+                if img.size != (64, 64):
+                    img = img.resize((64, 64), Image.Resampling.LANCZOS)
+                return img
+            except Exception:
+                pass
+
+        # Fallback: Create a 64x64 image with a circle
+        width = 64
+        height = 64
+        color1 = (52, 152, 219)  # Blue
+        color2 = (255, 255, 255)  # White
+
+        image = Image.new('RGB', (width, height), color1)
+        dc = ImageDraw.Draw(image)
+        dc.ellipse([8, 8, 56, 56], fill=color2, outline=color1, width=2)
+        dc.ellipse([20, 20, 44, 44], fill=color1, outline=color2, width=3)
+
+        return image
+
+    def setup_tray(self):
+        """Setup the system tray icon and menu."""
+        menu = pystray.Menu(
+            pystray.MenuItem(
+                "Show Launcher",
+                self.tray_show_window
+            ),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem(
+                "Open UI",
+                self.tray_open_ui
+            ),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem(
+                "About",
+                self.tray_show_about
+            ),
+            pystray.Menu.SEPARATOR,
+            pystray.MenuItem(
+                "Quit",
+                self.tray_quit
+            )
+        )
+
+        self.tray_icon = pystray.Icon(
+            "oracle_launcher",
+            self.create_tray_icon_image(),
+            "Oracle Launcher",
+            menu,
+            on_activate=self.tray_show_window  # Double-click shows window
+        )
+
+        # Run tray icon in background thread
+        threading.Thread(target=self.tray_icon.run, daemon=True).start()
+
+    def tray_show_window(self, icon=None, item=None):
+        """Show the launcher window."""
+        self.root.after(0, self._show_window)
+
+    def _show_window(self):
+        """Show window from main thread."""
+        self.root.deiconify()
+        self.root.lift()
+        self.root.focus_force()
+        self.minimized_to_tray = False
+
+    def tray_open_ui(self, icon=None, item=None):
+        """Open UI - focus if running, otherwise launch."""
+        self.root.after(0, self._open_ui_from_tray)
+
+    def _open_ui_from_tray(self):
+        """Open UI from main thread."""
+        # Check if UI process is running
+        if self.ui_process and self.ui_process.poll() is None:
+            # UI is running - try to focus it (Windows only)
+            if sys.platform == 'win32':
+                try:
+                    import win32gui
+                    import win32con
+
+                    def callback(hwnd, windows):
+                        if win32gui.IsWindowVisible(hwnd):
+                            title = win32gui.GetWindowText(hwnd)
+                            if 'Oracle' in title and 'Launcher' not in title:
+                                windows.append(hwnd)
+                        return True
+
+                    windows = []
+                    win32gui.EnumWindows(callback, windows)
+                    if windows:
+                        hwnd = windows[0]
+                        win32gui.ShowWindow(hwnd, win32con.SW_RESTORE)
+                        win32gui.SetForegroundWindow(hwnd)
+                        self.add_terminal_log("UI window focused")
+                        return
+                except ImportError:
+                    # win32gui not available, just log
+                    self.add_terminal_log("UI is running (cannot focus without pywin32)")
+                    return
+                except Exception as e:
+                    self.add_terminal_log(f"Could not focus UI: {e}")
+            else:
+                self.add_terminal_log("UI is already running")
+                return
+
+        # UI not running - launch it
+        if self.server_running:
+            self._launch_ui()
+        else:
+            self.add_terminal_log("Server not running - please start server first")
+            messagebox.showwarning("Server Not Running",
+                                   "Please start the server first before opening the UI.")
+
+    def tray_show_about(self, icon=None, item=None):
+        """Show About dialog."""
+        if sys.platform == 'win32':
+            def show_dialog():
+                user32 = ctypes.windll.user32
+                MB_OK = 0x0
+                MB_ICONINFORMATION = 0x40
+                MB_TOPMOST = 0x00040000
+
+                about_text = (
+                    "Oracle Launcher v1.0.0\n\n"
+                    "Launcher for Oracle Server and UI\n\n"
+                    "========================================\n\n"
+                    "MIT License - Copyright (c) 2025\n"
+                    "Oracle Contributors\n\n"
+                    "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT\n"
+                    "WARRANTY OF ANY KIND, EXPRESS OR IMPLIED."
+                )
+
+                user32.MessageBoxW(
+                    0,
+                    about_text,
+                    "About Oracle Launcher",
+                    MB_OK | MB_ICONINFORMATION | MB_TOPMOST
+                )
+
+            threading.Thread(target=show_dialog, daemon=True).start()
+
+    def tray_quit(self, icon=None, item=None):
+        """Quit the application and cleanup."""
+        self.root.after(0, self._quit_app)
+
+    def _quit_app(self):
+        """Quit from main thread."""
+        self.add_terminal_log("Shutting down...")
+
+        # Stop server process
+        if self.server_process and self.server_process.poll() is None:
+            self.add_terminal_log("Stopping server...")
+            try:
+                self.server_process.terminate()
+                self.server_process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self.server_process.kill()
+            except Exception as e:
+                self.add_terminal_log(f"Error stopping server: {e}")
+
+        # Stop UI process
+        if self.ui_process and self.ui_process.poll() is None:
+            self.add_terminal_log("Stopping UI...")
+            try:
+                self.ui_process.terminate()
+                self.ui_process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                self.ui_process.kill()
+            except Exception as e:
+                self.add_terminal_log(f"Error stopping UI: {e}")
+
+        # Stop tray icon
+        if self.tray_icon:
+            self.tray_icon.stop()
+
+        # Destroy window and exit
+        self.root.destroy()
+
+    def on_close(self):
+        """Handle window close - minimize to tray if tray is available."""
+        if pystray and self.tray_icon:
+            self.root.withdraw()
+            self.minimized_to_tray = True
+        else:
+            self._quit_app()
+
 
 def main():
     """Main entry point"""

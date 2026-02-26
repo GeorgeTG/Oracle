@@ -18,6 +18,7 @@ class ServiceEventType(str, Enum):
     MAP_STARTED = "map_started"
     MAP_FINISHED = "map_finished"
     MAP_STATS = "map_stats"
+    MAP_STATUS = "map_status"
     MARKET_ACTION = "market_action"
     MARKET_TRANSACTION = "market_transaction"
     STATS_UPDATE = "stats_update"
@@ -35,7 +36,14 @@ class ServiceEventType(str, Enum):
     NOTIFICATION = "notification"
     ITEM_DATA_CHANGED = "item_data_changed"
     LEVEL_PROGRESS = "level_progress"
-    
+    ITEM_OBTAINED = "item_obtained"
+    HOTKEY_PRESSED = "hotkey_pressed"
+    OVERLAY_BOUNDS_UPDATE = "overlay_bounds_update"
+    HOVER_ENTER = "hover_enter"
+    HOVER_LEAVE = "hover_leave"
+    OVERLAY_INFO_TEXT = "overlay_info_text"
+    VIEW_CHANGED = "view_changed"
+
     def __str__(self) -> str:
         return self.value
 

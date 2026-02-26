@@ -6,20 +6,74 @@ import { ConfigurationService } from './configuration.service';
 import { ServiceEventType } from '../models/enums';
 import { StatsUpdateEvent, MapStartedEvent } from '../models/service-events';
 
+export interface StatsHistoryData {
+  currencyPerMap: number[];
+  currencyPerHour: number[];
+  currencyCurrentPerHour: number[];
+  currencyCurrentRaw: number[];
+  expPerHour: number[];
+  inventoryValue: number[];
+  labels: string[];
+}
+
+class StatsHistory {
+  private series: Record<string, number[]> = {
+    currencyPerMap: [],
+    currencyPerHour: [],
+    currencyCurrentPerHour: [],
+    currencyCurrentRaw: [],
+    expPerHour: [],
+    inventoryValue: [],
+  };
+
+  constructor(private maxDataPoints: number = 50) {}
+
+  push(event: StatsUpdateEvent): void {
+    this.series['currencyPerMap'].push(event.currency_per_map || 0);
+    this.series['currencyPerHour'].push(event.currency_per_hour || 0);
+    this.series['currencyCurrentPerHour'].push(event.currency_current_per_hour || 0);
+    this.series['currencyCurrentRaw'].push(event.currency_current_raw || 0);
+    this.series['expPerHour'].push(event.exp_per_hour || 0);
+    this.series['inventoryValue'].push(event.inventory_value || 0);
+
+    // Trim all series to max data points
+    if (this.length > this.maxDataPoints) {
+      for (const key of Object.keys(this.series)) {
+        this.series[key].shift();
+      }
+    }
+  }
+
+  get length(): number {
+    return this.series['currencyPerMap'].length;
+  }
+
+  snapshot(): StatsHistoryData {
+    return {
+      currencyPerMap: [...this.series['currencyPerMap']],
+      currencyPerHour: [...this.series['currencyPerHour']],
+      currencyCurrentPerHour: [...this.series['currencyCurrentPerHour']],
+      currencyCurrentRaw: [...this.series['currencyCurrentRaw']],
+      expPerHour: [...this.series['expPerHour']],
+      inventoryValue: [...this.series['inventoryValue']],
+      labels: Array.from({ length: this.length }, (_, i) => `${i + 1}`),
+    };
+  }
+
+  clear(): void {
+    for (const key of Object.keys(this.series)) {
+      this.series[key] = [];
+    }
+  }
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class StatsService {
   private lastStatsEvent$ = new BehaviorSubject<StatsUpdateEvent | null>(null);
   private lastMapEvent$ = new BehaviorSubject<MapStartedEvent | null>(null);
-
-  // Historical data for charts
-  private currencyPerMapHistory: number[] = [];
-  private currencyPerHourHistory: number[] = [];
-  private currencyCurrentPerHourHistory: number[] = [];
-  private currencyCurrentRawHistory: number[] = [];
-  private expPerHourHistory: number[] = [];
-  private maxDataPoints = 50;
+  private history = new StatsHistory(50);
 
   constructor(
     private http: HttpClient,
@@ -32,53 +86,20 @@ export class StatsService {
       .subscribe(event => {
         console.log('[StatsService] Stats update received:', event);
         this.lastStatsEvent$.next(event);
-        this.updateHistory(event);
+        this.history.push(event);
       });
 
     // Subscribe to map events and keep the last event
     this.websocketService
-      .subscribe<MapStartedEvent>(ServiceEventType.MAP_STARTED)
+      .subscribe<MapStartedEvent>(ServiceEventType.MAP_STARTED, ServiceEventType.MAP_STATUS)
       .subscribe(event => {
         console.log('[StatsService] Map started:', event);
         this.lastMapEvent$.next(event);
       });
   }
 
-  private updateHistory(event: StatsUpdateEvent): void {
-    // Add new data points
-    this.currencyPerMapHistory.push(event.currency_per_map || 0);
-    this.currencyPerHourHistory.push(event.currency_per_hour || 0);
-    this.currencyCurrentPerHourHistory.push(event.currency_current_per_hour || 0);
-    this.currencyCurrentRawHistory.push(event.currency_current_raw || 0);
-    this.expPerHourHistory.push(event.exp_per_hour || 0);
-
-    // Keep only last N data points
-    if (this.currencyPerMapHistory.length > this.maxDataPoints) {
-      this.currencyPerMapHistory.shift();
-      this.currencyPerHourHistory.shift();
-      this.currencyCurrentPerHourHistory.shift();
-      this.currencyCurrentRawHistory.shift();
-      this.expPerHourHistory.shift();
-    }
-  }
-
-  getHistory() {
-    return {
-      currencyPerMap: [...this.currencyPerMapHistory],
-      currencyPerHour: [...this.currencyPerHourHistory],
-      currencyCurrentPerHour: [...this.currencyCurrentPerHourHistory],
-      currencyCurrentRaw: [...this.currencyCurrentRawHistory],
-      expPerHour: [...this.expPerHourHistory],
-      labels: Array.from({ length: this.currencyPerMapHistory.length }, (_, i) => `${i + 1}`)
-    };
-  }
-
-  clearHistory(): void {
-    this.currencyPerMapHistory = [];
-    this.currencyPerHourHistory = [];
-    this.currencyCurrentPerHourHistory = [];
-    this.currencyCurrentRawHistory = [];
-    this.expPerHourHistory = [];
+  getHistory(): StatsHistoryData {
+    return this.history.snapshot();
   }
 
   /**
@@ -122,7 +143,7 @@ export class StatsService {
     const ip = localStorage.getItem('ws_ip') || '127.0.0.1';
     const port = localStorage.getItem('ws_port') || '8000';
     const url = `http://${ip}:${port}/sessions`;
-    this.clearHistory(); // Clear history when starting new session
+    this.history.clear();
     return this.http.post(url, {});
   }
 
@@ -130,7 +151,7 @@ export class StatsService {
     const ip = localStorage.getItem('ws_ip') || '127.0.0.1';
     const port = localStorage.getItem('ws_port') || '8000';
     const url = `http://${ip}:${port}/stats/reset`;
-    this.clearHistory(); // Clear history when resetting stats
+    this.history.clear();
     return this.http.post(url, {});
   }
 }

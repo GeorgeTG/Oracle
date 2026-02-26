@@ -1,7 +1,7 @@
 {
   "$schema": "https://schema.tauri.app/config/2",
   "productName": "oracle",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "identifier": "com.georg.oracle",
   "build": {
     "beforeDevCommand": "bun run start",
@@ -51,7 +51,14 @@
           "permissions": [
             "core:default",
             "core:window:allow-set-decorations",
-            "core:window:allow-set-shadow"
+            "core:window:allow-set-shadow",
+            "core:window:allow-set-ignore-cursor-events",
+            "core:window:allow-cursor-position",
+            "core:window:allow-set-fullscreen",
+            "core:window:allow-set-size",
+            "core:window:allow-set-position",
+            "core:window:allow-outer-position",
+            "core:window:allow-outer-size"
           ]
         }
       ]
@@ -61,13 +68,15 @@
     "active": true,
     "targets": ["app"],
     "icon": [
+      "../src/assets/android-chrome-512x512.png",
+      "../src/assets/android-chrome-192x192.png",
       "../src/assets/favicon-32x32.png",
-      "../src/assets/favicon-16x16.png",
       "../src/assets/favicon.ico"
     ],
     "resources": [
+      "../src/assets/android-chrome-512x512.png",
+      "../src/assets/android-chrome-192x192.png",
       "../src/assets/favicon-32x32.png",
-      "../src/assets/favicon-16x16.png",
       "../src/assets/favicon.ico"
     ]
   }

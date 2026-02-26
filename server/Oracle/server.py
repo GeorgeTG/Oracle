@@ -24,7 +24,7 @@ from Oracle.tooling.logger import Logger
 from Oracle.tooling.paths import get_base_path
 from Oracle.tooling.config import Config
 from Oracle.api.dependencies import get_router, get_service_manager
-from Oracle.api import maps, sessions, inventory, stats, websocket, items, market, players, system
+from Oracle.api import maps, sessions, inventory, stats, websocket, items, market, players, system, dashboard
 
 
 router = None
@@ -75,6 +75,11 @@ async def lifespan(app: FastAPI):
     price_db = await PriceDB.instance()
     await price_db.refresh_pricelist()
     logger.info("💰 PriceDB initialized")
+
+    # Load item names from database
+    from Oracle.parsing.utils.item_db import load_items_from_db
+    await load_items_from_db()
+    logger.info("📦 Item names loaded from database")
     
     # Init EventBus, Router and ServiceManager
     global service_manager, router, event_bus
@@ -216,6 +221,7 @@ app.include_router(stats.router)
 app.include_router(websocket.router)
 app.include_router(players.router)
 app.include_router(system.router)
+app.include_router(dashboard.router)
 
 
 @app.get(

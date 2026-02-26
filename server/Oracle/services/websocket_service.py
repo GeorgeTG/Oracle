@@ -1,8 +1,10 @@
 # Oracle/services/ws_broadcast.py
 
+import asyncio
 import json
 import traceback
 from datetime import datetime
+from pathlib import Path
 from typing import List, Any
 
 from fastapi import WebSocket
@@ -10,15 +12,19 @@ from fastapi import WebSocket
 from Oracle.parsing.parsers.events import ParserEvent
 from Oracle.parsing.parsers.events.parser_event_type import ParserEventType
 from Oracle.parsing.parsers.events.player_join import PlayerJoinEvent
+from Oracle.parsing.parsers.events.stage_affix import StageAffixEvent
 
 from Oracle.events import EventBus
-from Oracle.services.events.map_events import MapStartedEvent, MapFinishedEvent, MapRecordEvent
+from Oracle.services.events.map_events import MapStartedEvent, MapStatusEvent, MapFinishedEvent, MapRecordEvent
 from Oracle.services.events.market_events import MarketActionEvent, MarketTransactionEvent
 from Oracle.services.events.notification_events import NotificationEvent
 from Oracle.services.events.service_event import ServiceEventType, ServiceEvent
 from Oracle.services.events.session_events import SessionStartedEvent, SessionFinishedEvent, SessionRestoreEvent
 from Oracle.services.events.stats_events import StatsUpdateEvent
 from Oracle.services.events.level_events import LevelProgressEvent
+from Oracle.services.events.item_events import ItemObtainedEvent, ItemDataChangedEvent
+from Oracle.services.events.hotkey_events import HotkeyPressedEvent
+from Oracle.services.events.overlay_events import OverlayBoundsUpdateEvent, HoverEnterEvent, HoverLeaveEvent, OverlayInfoTextEvent, ViewChangedEvent
 from Oracle.services.events.websocket_events import WebSocketEvent, WebSocketStatus
 from Oracle.services.service_base import ServiceBase
 
@@ -43,7 +49,32 @@ class WebSocketBroadcastService(ServiceBase):
     def __init__(self, event_bus: EventBus):
         super().__init__(event_bus)
         self.clients: List[WebSocket] = []
+        self._heartbeat_task: asyncio.Task | None = None
+        self._server_version = self._load_version()
         logger.info("🕸️  WebSocketBroadcastService initialized")
+
+    def _load_version(self) -> str:
+        try:
+            # Production: build.json next to server root
+            build_path = Path(__file__).parent.parent.parent / "build.json"
+            if not build_path.exists():
+                # Development: deploy/targets/server/build.json
+                build_path = Path(__file__).parent.parent.parent.parent / "deploy" / "targets" / "server" / "build.json"
+            with open(build_path) as f:
+                return json.load(f).get("version", "unknown")
+        except Exception:
+            return "dev"
+
+    async def _heartbeat_loop(self):
+        while True:
+            await asyncio.sleep(1)
+            if self.clients:
+                await self._broadcast_to_clients({
+                    "type": "heartbeat",
+                    "timestamp": datetime.now().isoformat(),
+                    "name": "server",
+                    "version": self._server_version
+                })
 
     def _serialize_value(self, value: Any) -> Any:
         """Recursively serialize a single value to JSON-compatible format."""
@@ -80,7 +111,7 @@ class WebSocketBroadcastService(ServiceBase):
 
     async def _broadcast_to_clients(self, data: dict):
         """Broadcast data to all connected WebSocket clients."""
-        logger.debug(f"🕸️ Broadcasting to {len(self.clients)} client(s), event type: {data.get('type', 'unknown')}")
+        #ogger.debug(f"🕸️ Broadcasting to {len(self.clients)} client(s), event type: {data.get('type', 'unknown')}")
         
         # Serialize datetime objects before sending
         try:
@@ -94,7 +125,7 @@ class WebSocketBroadcastService(ServiceBase):
         for ws in self.clients:
             try:
                 await ws.send_json(serialized_data)
-                logger.debug(f"🕸️ ✅ Sent {serialized_data.get('type')} to {ws.client}")
+                #ogger.debug(f"🕸️ ✅ Sent {serialized_data.get('type')} to {ws.client}")
             except (ConnectionResetError, ConnectionAbortedError, BrokenPipeError) as e:
                 # Network errors - client is dead
                 logger.warning(f"🕸️ Connection lost to {ws.client}: {e}")
@@ -113,6 +144,9 @@ class WebSocketBroadcastService(ServiceBase):
         """Handle WebSocket connection."""
         self.clients.append(event.websocket)
         logger.info(f"🕸️ Client connected: {event.client_info} - Total clients: {len(self.clients)}")
+        # Publish CLIENT_CONNECTED event so other services can send their current state
+        logger.debug(f"🕸️ Publishing CLIENT_CONNECTED event for other services")
+        await self.publish(ServiceEvent(timestamp=datetime.now(), type=ServiceEventType.CLIENT_CONNECTED))
 
     @event_handler(ServiceEventType.WEBSOCKET_DISCONNECTED)
     async def on_websocket_disconnected(self, event: WebSocketEvent):
@@ -125,6 +159,12 @@ class WebSocketBroadcastService(ServiceBase):
     async def on_map_started(self, event: MapStartedEvent):
         """Broadcast map started event to clients."""
         logger.debug(f"🕸️ Broadcasting MapStartedEvent: {event.level_id}")
+        await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ServiceEventType.MAP_STATUS)
+    async def on_map_status(self, event: MapStatusEvent):
+        """Broadcast current map status to clients (sent on client connect, does not trigger stats)."""
+        logger.debug(f"🕸️ Broadcasting MapStatusEvent: {event.level_id}")
         await self._broadcast_to_clients(event.to_dict())
 
     @event_handler(ServiceEventType.MAP_FINISHED)
@@ -143,6 +183,12 @@ class WebSocketBroadcastService(ServiceBase):
     async def on_player_join(self, event: PlayerJoinEvent):
         """Broadcast player join event to clients."""
         logger.debug(f"🕸️ Broadcasting PlayerJoinEvent: {event.player_name}")
+        await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ParserEventType.STAGE_AFFIX)
+    async def on_stage_affix(self, event: StageAffixEvent):
+        """Broadcast stage affix event to clients."""
+        logger.debug(f"🕸️ Broadcasting StageAffixEvent: {len(event.affixes)} affixes")
         await self._broadcast_to_clients(event.to_dict())
 
     @event_handler(ServiceEventType.SESSION_STARTED)
@@ -176,7 +222,20 @@ class WebSocketBroadcastService(ServiceBase):
         """Broadcast notification event to clients."""
         logger.debug(f"🕸️ Broadcasting NotificationEvent: {event.title} ({event.severity.value})")
         await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ServiceEventType.ITEM_OBTAINED)
+    async def on_item_obtained(self, event: ItemObtainedEvent):
+        """Broadcast item obtained event to clients."""
+        action = "gained" if event.delta > 0 else "lost"
+        logger.debug(f"🕸️ Broadcasting ItemObtainedEvent: {event.item_name or event.item_id} {action} {abs(event.delta)}")
+        await self._broadcast_to_clients(event.to_dict())
     
+    @event_handler(ServiceEventType.ITEM_DATA_CHANGED)
+    async def on_item_data_changed(self, event: ItemDataChangedEvent):
+        """Broadcast item data changed event to clients."""
+        logger.debug(f"🕸️ Broadcasting ItemDataChangedEvent: {event.name or event.item_id} price={event.price}")
+        await self._broadcast_to_clients(event.to_dict())
+
     @event_handler(ServiceEventType.MARKET_ACTION)
     async def on_market_close(self, event: MarketActionEvent):
         """Broadcast market close event to clients."""
@@ -194,16 +253,52 @@ class WebSocketBroadcastService(ServiceBase):
         """Broadcast level progress event to clients."""
         logger.debug(f"🕸️ Broadcasting LevelProgressEvent: Level {event.level} - {event.percentage:.1f}%")
         await self._broadcast_to_clients(event.to_dict())
-    
+
+    @event_handler(ServiceEventType.HOTKEY_PRESSED)
+    async def on_hotkey_pressed(self, event: HotkeyPressedEvent):
+        """Broadcast hotkey pressed event to clients."""
+        logger.debug(f"🕸️ Broadcasting HotkeyPressedEvent: key={event.key}")
+        await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ServiceEventType.OVERLAY_BOUNDS_UPDATE)
+    async def on_overlay_bounds_update(self, event: OverlayBoundsUpdateEvent):
+        """Broadcast overlay bounds update to clients (consumed by Oracle-Hotkey)."""
+        await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ServiceEventType.HOVER_ENTER)
+    async def on_hover_enter(self, event: HoverEnterEvent):
+        """Broadcast hover enter event to clients."""
+        logger.debug("🕸️ Broadcasting HoverEnterEvent")
+        await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ServiceEventType.HOVER_LEAVE)
+    async def on_hover_leave(self, event: HoverLeaveEvent):
+        """Broadcast hover leave event to clients."""
+        logger.debug("🕸️ Broadcasting HoverLeaveEvent")
+        await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ServiceEventType.OVERLAY_INFO_TEXT)
+    async def on_overlay_info_text(self, event: OverlayInfoTextEvent):
+        """Broadcast overlay info text to clients."""
+        await self._broadcast_to_clients(event.to_dict())
+
+    @event_handler(ServiceEventType.VIEW_CHANGED)
+    async def on_view_changed(self, event: ViewChangedEvent):
+        """Broadcast view changed event to clients."""
+        await self._broadcast_to_clients(event.to_dict())
+
     async def handle_event(self, event: ParserEvent):
         pass 
 
     async def startup(self):
         """Initialize websocket service."""
-        pass
+        self._heartbeat_task = asyncio.create_task(self._heartbeat_loop())
+        logger.info(f"🕸️ Heartbeat started (server v{self._server_version})")
 
     async def shutdown(self):
         """Shutdown websocket service and close all connections."""
+        if self._heartbeat_task:
+            self._heartbeat_task.cancel()
         logger.info(f"🕸️ Shutting down WebSocketBroadcastService ({len(self.clients)} clients)")
         
         # Close all WebSocket connections gracefully

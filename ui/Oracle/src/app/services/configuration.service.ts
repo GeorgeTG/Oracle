@@ -10,6 +10,9 @@ export interface ConfigurationState {
   transparentOverlay: boolean;
   showDataPerMinute: boolean;
   aggregateNumbers: boolean;
+  hotkeyKey: string;
+  toggleOverlayKey: string;
+  riverMinValue: number;
 }
 
 /**
@@ -50,7 +53,10 @@ export class ConfigurationService {
     wsPort: '8000',
     transparentOverlay: false,
     showDataPerMinute: false,
-    aggregateNumbers: false
+    aggregateNumbers: false,
+    hotkeyKey: 'PageUp',
+    toggleOverlayKey: 'PageDown',
+    riverMinValue: 1
   };
 
   private configSubject = new BehaviorSubject<ConfigurationState>(this.DEFAULT_CONFIG);
@@ -74,7 +80,10 @@ export class ConfigurationService {
       wsPort: localStorage.getItem('ws_port') || this.DEFAULT_CONFIG.wsPort,
       transparentOverlay: localStorage.getItem('transparent_overlay') === 'true',
       showDataPerMinute: localStorage.getItem('show_data_per_minute') === 'true',
-      aggregateNumbers: localStorage.getItem('aggregate_numbers') === 'true'
+      aggregateNumbers: localStorage.getItem('aggregate_numbers') === 'true',
+      hotkeyKey: localStorage.getItem('hotkey_key') || this.DEFAULT_CONFIG.hotkeyKey,
+      toggleOverlayKey: localStorage.getItem('toggle_overlay_key') || this.DEFAULT_CONFIG.toggleOverlayKey,
+      riverMinValue: parseFloat(localStorage.getItem('river_min_value') || '') || this.DEFAULT_CONFIG.riverMinValue
     };
     this.configSubject.next(config);
   }
@@ -92,6 +101,9 @@ export class ConfigurationService {
     localStorage.setItem('transparent_overlay', newConfig.transparentOverlay.toString());
     localStorage.setItem('show_data_per_minute', newConfig.showDataPerMinute.toString());
     localStorage.setItem('aggregate_numbers', newConfig.aggregateNumbers.toString());
+    localStorage.setItem('hotkey_key', newConfig.hotkeyKey);
+    localStorage.setItem('toggle_overlay_key', newConfig.toggleOverlayKey);
+    localStorage.setItem('river_min_value', newConfig.riverMinValue.toString());
 
     // Emit new state
     this.configSubject.next(newConfig);

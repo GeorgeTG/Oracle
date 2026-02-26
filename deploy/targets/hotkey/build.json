@@ -1,0 +1,23 @@
+{
+  "name": "hotkey",
+  "version": "2.0.0",
+  "build": "2026-02-26_17-52-41-276Z",
+  "root": "hotkey",
+  "venv": true,
+  "dir": "deploy/build",
+  "output": "deploy/output/hotkey",
+  "output_to_root": true,
+  "requires": [],
+  "script": "build.ts",
+  "targets": [
+    {
+      "glob_source": "build/dist/Oracle-Hotkey.exe",
+      "output": "/Oracle-Hotkey.exe",
+      "release_only": true
+    },
+    {
+      "glob_source": "../hotkey/config.toml",
+      "output": "/config.toml"
+    }
+  ]
+}

@@ -150,9 +150,11 @@ export interface StatsUpdateEvent extends ServiceEvent {
   currency_per_map?: number;
   currency_per_hour?: number;
   currency_total?: number;
+  market_currency_total?: number;
   currency_current_per_hour?: number;
   currency_current_raw?: number;
   map_timer?: number;
+  inventory_value?: number;
   type: ServiceEventType;
 }
 
@@ -170,5 +172,52 @@ export interface NotificationEvent extends ServiceEvent {
   content: string;
   severity: NotificationSeverity;
   duration?: number;
+  type: ServiceEventType;
+}
+
+// Generated from services\events\item_events.py
+export interface ItemObtainedEvent extends ServiceEvent {
+  item_id: number;
+  item_name?: string;
+  delta: number;
+  item_price: number;
+  total_value: number;
+  type: ServiceEventType;
+}
+
+// Generated from services\events\hotkey_events.py
+export interface HotkeyPressedEvent extends ServiceEvent {
+  key: string;
+  type: ServiceEventType;
+}
+
+// Generated from services\events\overlay_events.py
+export interface DialogBounds {
+  panel: string;
+  visible: boolean;
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+}
+
+export interface HoverEnterEvent extends ServiceEvent {
+  type: ServiceEventType;
+}
+
+export interface HoverLeaveEvent extends ServiceEvent {
+  type: ServiceEventType;
+}
+
+export interface OverlayInfoTextEvent extends ServiceEvent {
+  text: string;
+  severity: 'info' | 'warn' | 'danger';
+  duration?: number;
+  type: ServiceEventType;
+}
+
+// Generated from services\events\overlay_events.py
+export interface ViewChangedEvent extends ServiceEvent {
+  view: string;
   type: ServiceEventType;
 }

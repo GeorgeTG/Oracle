@@ -1,0 +1,208 @@
+.dashboard-container {
+  width: 100%;
+}
+
+.stat-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(71, 85, 105, 0.5);
+  border-radius: 0;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.stat-value {
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+/* Select Styling */
+::ng-deep .p-select {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 0 !important;
+}
+
+::ng-deep .p-select:hover {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+}
+
+::ng-deep .p-select .p-select-label {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.5rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+::ng-deep .p-select .p-select-dropdown-icon {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+
+::ng-deep .p-select-overlay {
+  background: rgba(30, 41, 59, 0.95) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  border-radius: 0 !important;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3) !important;
+}
+
+::ng-deep .p-select-option {
+  color: rgba(226, 232, 240, 0.9) !important;
+  padding: 0.75rem 1rem !important;
+  font-size: 0.875rem !important;
+}
+
+::ng-deep .p-select-option:hover {
+  background: rgba(59, 130, 246, 0.15) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+::ng-deep .p-select-option.p-focus {
+  background: rgba(59, 130, 246, 0.2) !important;
+  color: rgba(96, 165, 250, 1) !important;
+}
+
+::ng-deep .p-select-option.p-selected {
+  background: rgba(59, 130, 246, 0.3) !important;
+  color: rgba(147, 197, 253, 1) !important;
+  font-weight: 500 !important;
+}
+
+/* Table header styling */
+::ng-deep .p-datatable .p-datatable-thead > tr > th {
+  background: rgba(30, 41, 59, 0.8) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1rem 0.75rem !important;
+  font-weight: 600 !important;
+  font-size: 0.875rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+}
+
+/* Sort icons */
+::ng-deep .p-datatable .p-sortable-column-icon {
+  color: rgba(255, 255, 255, 0.5) !important;
+  margin-left: 0.5rem !important;
+}
+
+::ng-deep .p-datatable .p-sortable-column:hover .p-sortable-column-icon {
+  color: rgba(99, 102, 241, 0.8) !important;
+}
+
+/* Table body styling */
+::ng-deep .p-datatable .p-datatable-tbody > tr {
+  background: rgba(30, 41, 59, 0.4) !important;
+  border-color: rgba(71, 85, 105, 0.3) !important;
+  transition: background 0.2s ease !important;
+}
+
+::ng-deep .p-datatable .p-datatable-tbody > tr:hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+  box-shadow: -3px 0 0 0 rgba(99, 102, 241, 0.6) inset !important;
+}
+
+/* Striped rows */
+::ng-deep .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even) {
+  background: rgba(15, 23, 42, 0.4) !important;
+}
+
+::ng-deep .p-datatable.p-datatable-striped .p-datatable-tbody > tr:nth-child(even):hover {
+  background: rgba(99, 102, 241, 0.15) !important;
+}
+
+/* Table cells */
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+  color: rgba(255, 255, 255, 0.9) !important;
+  padding: 0.5rem 0.75rem !important;
+  border-color: rgba(71, 85, 105, 0.3) !important;
+  font-size: 0.875rem !important;
+}
+
+/* Loading overlay */
+::ng-deep .p-datatable .p-datatable-loading-overlay {
+  background: rgba(15, 23, 42, 0.8) !important;
+}
+
+::ng-deep .p-datatable .p-datatable-loading-icon {
+  color: rgba(99, 102, 241, 0.8) !important;
+}
+
+/* Paginator styling */
+::ng-deep .p-paginator {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border-color: rgba(71, 85, 105, 0.5) !important;
+  padding: 1rem !important;
+  border-radius: 0 !important;
+  margin-top: 1rem !important;
+}
+
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+  color: rgba(255, 255, 255, 0.7) !important;
+  min-width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page:hover {
+  background: rgba(99, 102, 241, 0.2) !important;
+  color: white !important;
+}
+
+::ng-deep .p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+  background: rgba(99, 102, 241, 0.8) !important;
+  color: white !important;
+  font-weight: 600 !important;
+}
+
+::ng-deep .p-paginator .p-paginator-first,
+::ng-deep .p-paginator .p-paginator-prev,
+::ng-deep .p-paginator .p-paginator-next,
+::ng-deep .p-paginator .p-paginator-last {
+  color: rgba(255, 255, 255, 0.7) !important;
+  min-width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0 !important;
+  transition: all 0.2s ease !important;
+}
+
+::ng-deep .p-paginator .p-paginator-first:hover:not(.p-disabled),
+::ng-deep .p-paginator .p-paginator-prev:hover:not(.p-disabled),
+::ng-deep .p-paginator .p-paginator-next:hover:not(.p-disabled),
+::ng-deep .p-paginator .p-paginator-last:hover:not(.p-disabled) {
+  background: rgba(99, 102, 241, 0.2) !important;
+  color: white !important;
+}
+
+::ng-deep .p-paginator .p-dropdown,
+::ng-deep .p-paginator .p-select {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: white !important;
+  border-radius: 0 !important;
+}
+
+::ng-deep .p-paginator .p-dropdown .p-dropdown-label,
+::ng-deep .p-paginator .p-select .p-select-label {
+  color: white !important;
+  padding: 0.25rem 0.5rem !important;
+}
+
+::ng-deep .p-paginator .p-paginator-current {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-size: 0.875rem !important;
+}
+
+/* Empty message */
+::ng-deep .p-datatable .p-datatable-tbody > tr > td.text-center {
+  padding: 0.5rem 1rem !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 1rem !important;
+}

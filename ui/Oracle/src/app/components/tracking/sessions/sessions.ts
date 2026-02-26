@@ -6,7 +6,6 @@ import { PlayerService } from '../../../services/player.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { DataView } from 'primeng/dataview';
 import { Card } from 'primeng/card';
-import { Tag } from 'primeng/tag';
 import { Select } from 'primeng/select';
 import { SessionDetailsComponent } from '../../shared/session-details/session-details';
 import { CurrencyPipe } from '../../../pipes/currency.pipe';
@@ -16,7 +15,7 @@ import { Subscription } from 'rxjs';
 @Component({
   selector: 'app-tracking-sessions',
   standalone: true,
-  imports: [CommonModule, FormsModule, DataView, Card, Tag, Select, SessionDetailsComponent, CurrencyPipe, DurationPipe],
+  imports: [CommonModule, FormsModule, DataView, Card, Select, SessionDetailsComponent, CurrencyPipe, DurationPipe],
   templateUrl: './sessions.html',
   styleUrl: './sessions.css',
 })

@@ -1,6 +1,6 @@
 {
   "name": "package",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "build": "",
 
   "root": "deploy/output",
@@ -8,7 +8,7 @@
   "output": "deploy/output/package",
   "venv" : false,
   
-  "requires": ["frontend", "server", "launcher"],
+  "requires": ["frontend", "server", "launcher", "hotkey"],
   "script": "build.ts",
   "targets": []
 }

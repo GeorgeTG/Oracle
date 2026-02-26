@@ -3,8 +3,9 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { WebSocketService } from './websocket.service';
 import { ConfigurationService } from './configuration.service';
+import { ToastService } from './toast.service';
 import { ServiceEventType } from '../models/enums';
-import { MarketTransactionEvent } from '../models/service-events';
+import { MarketTransactionEvent, ItemObtainedEvent } from '../models/service-events';
 
 export interface MarketTransaction {
   id: number;
@@ -38,7 +39,8 @@ export class MarketService {
   constructor(
     private http: HttpClient,
     private websocketService: WebSocketService,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
+    private toastService: ToastService
   ) {
     this.initializeWebSocketSubscriptions();
   }

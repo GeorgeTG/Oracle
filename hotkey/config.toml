@@ -1,0 +1,13 @@
+[server]
+host = "127.0.0.1"
+port = 8000
+
+[hotkey]
+edit_mode_key = "page_up"
+toggle_overlay_key = "page_down"
+
+[hover]
+enabled = true
+hover_delay_ms = 500
+leave_delay_ms = 500
+poll_interval_ms = 50

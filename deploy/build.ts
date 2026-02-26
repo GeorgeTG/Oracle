@@ -245,7 +245,7 @@ async function main() {
   program
     .name('build')
     .description('Oracle Build System')
-    .option('-t, --target <type>', 'Build target: server, frontend, launcher, package, or all', 'all')
+    .option('-t, --target <type>', 'Build target: server, frontend, launcher, hotkey, package, or all', 'all')
     .option('-r, --release', 'Create release build with executables', false)
     .option('-c, --clean', 'Clean output directory before building', false)
     .option('-v, --verbose', 'Show detailed command output', false)
@@ -271,7 +271,7 @@ async function main() {
     // Build based on target
     if (options.target === 'all') {
       // Build all except package
-      const targets = ['frontend', 'server', 'launcher'];
+      const targets = ['frontend', 'server', 'launcher', 'hotkey'];
       for (const target of targets) {
         const success = await buildTarget(target, options);
         if (!success) throw new Error(`${target} build failed`);

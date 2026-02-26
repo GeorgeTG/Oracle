@@ -14,7 +14,7 @@ from Oracle.parsing.utils.item_db import item_lookup
 
 from Oracle.events import EventBus
 from Oracle.services.events.inventory import InventoryUpdateEvent, RequestInventoryEvent, InventorySnapshotEvent
-from Oracle.services.events.map_events import MapFinishedEvent, MapStartedEvent, MapStatsEvent, MapRecordEvent
+from Oracle.services.events.map_events import MapFinishedEvent, MapStartedEvent, MapStatusEvent, MapStatsEvent, MapRecordEvent
 from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.service_base import ServiceBase
 from Oracle.services.tooling.decorators import event_handler
@@ -52,6 +52,10 @@ class MapService(ServiceBase):
         self.state = MapState.IDLE
         self.current_map_id: int | None = 0
         self.current_map_uuid: int | None = None
+        self.last_map_id: int | None = None
+        self.last_map_start_time: datetime | None = None
+        self.last_map_data: MapData | None = None
+        self.last_map_affixes: list[dict] | None = None
         self.current_map: MapData | None = None
         self.inventory: InventorySnapshot | None = None
         self.pre_enter: InventorySnapshot | None = None
@@ -84,6 +88,8 @@ class MapService(ServiceBase):
         
         # Get MapData if available
         self.current_map = get_map_by_id(level_id)
+        if not self.current_map:
+            logger.warning(f"🗺️ Unknown map ID: {level_id}")
 
         inventory_event = cast(InventorySnapshotEvent | None, await self.request_and_wait(
             RequestInventoryEvent(timestamp=datetime.now()),
@@ -112,12 +118,16 @@ class MapService(ServiceBase):
     async def end_map(self):
         """Handle end of current map."""
         logger.debug(f"🗺️ Ending map: {self.current_map_id}")
-        
+
         # Calculate duration
         end_time = datetime.now()
         duration = (end_time - self.map_start_time).total_seconds() if self.map_start_time else 0.0
-        
+
         self.state = MapState.IDLE
+        self.last_map_id = self.current_map_id
+        self.last_map_start_time = self.map_start_time
+        self.last_map_data = self.current_map
+        self.last_map_affixes = self.current_affixes
         self.current_map_id = None
         self.current_map_uuid = None
 
@@ -135,7 +145,7 @@ class MapService(ServiceBase):
             map=self.current_map,
             affixes=self.current_affixes
         ))
-        
+
         self.map_start_time = None
         self.current_map = None
         self.current_affixes = None
@@ -144,31 +154,35 @@ class MapService(ServiceBase):
 
     def _calculate_consumed_items(self) -> list[InventoryItem]:
         """Calculate items consumed between pre_enter and current inventory."""
+        return self._calculate_consumed_with(self.pre_enter, self.inventory)
+
+    def _calculate_consumed_with(self, pre: Optional[InventorySnapshot], post: Optional[InventorySnapshot]) -> list[InventoryItem]:
+        """Calculate items consumed between two inventory snapshots."""
         consumed_items = []
-        
-        if not self.pre_enter or not self.inventory:
+
+        if not pre or not post:
             return consumed_items
-        
+
         # Get differences (negative values = consumed)
-        diff = self.inventory.compare_with(self.pre_enter)
-        
+        diff = post.compare_with(pre)
+
         # Build list of consumed InventoryItems (only negative deltas)
         for item_id, delta in diff.items():
             if delta < 0:  # Item was consumed
                 # Get item info from item_lookup
                 item_info = item_lookup(item_id)
-                
+
                 consumed_items.append(InventoryItem(
                     item_id=item_id,
                     quantity=abs(delta),  # Make positive for display
                     name=item_info.get("name"),
                     category=item_info.get("type")
                 ))
-        
+
         if consumed_items:
             consumed_summary = ", ".join([f"{item.name or item.item_id} x{item.quantity}" for item in consumed_items])
             logger.debug(f"🗺️ Consumed items: {consumed_summary}")
-        
+
         return consumed_items
 
     async def _save_affixes(self, map_completion: MapCompletion):
@@ -256,9 +270,11 @@ class MapService(ServiceBase):
 
     @event_handler(ParserEventType.GAME_VIEW)
     async def on_game_view(self, event: GameViewEvent):
-        """Capture pre-enter inventory snapshot when MysteryAreaCtrl view is detected."""
-        if event.view.endswith('MysteryAreaCtrl'):
-            logger.debug(f"🗺️ MysteryAreaCtrl detected, capturing pre-enter inventory snapshot")
+        """Capture pre-enter inventory snapshot when map selection view is detected."""
+        logger.debug(f"🎮 GameView: {event.view}")
+        map_selection_views = ('MysteryAreaCtrl', 'MysteryCorrosionBossDetailCtrl', 'TowerCtrl')
+        if event.view.endswith(map_selection_views):
+            logger.debug(f"🗺️ Map selection view detected ({event.view}), capturing pre-enter inventory snapshot")
             inventory_event = await self.request_and_wait(
                 RequestInventoryEvent(timestamp=datetime.now()),
                 ServiceEventType.INVENTORY_SNAPSHOT,
@@ -268,13 +284,41 @@ class MapService(ServiceBase):
             if self.pre_enter:
                 logger.debug(f"🗺️ Pre-enter snapshot captured - {len(self.pre_enter.data)} items")
 
+    @event_handler(ServiceEventType.CLIENT_CONNECTED)
+    async def on_client_connected(self, _event: object):
+        """Send current map state to newly connected client."""
+        logger.debug(f"🗺️ Client connected event received, state={self.state}, map_id={self.current_map_id}")
+        if self.state == MapState.FARMING and self.current_map_id:
+            logger.info(f"🗺️ Sending current map state to new client: {self.current_map_id}")
+            inventory_copy = self.inventory.data.copy() if self.inventory and self.inventory.data else None
+            await self.publish(MapStatusEvent(
+                timestamp=self.map_start_time or datetime.now(),
+                level_id=self.current_map_id,
+                level_uid=self.current_map_uuid or 0,
+                level_type=0,
+                map=self.current_map,
+                consumed_items=self.consumed_items,
+                inventory=inventory_copy
+            ))
+
     @event_handler(ParserEventType.EXIT_LEVEL, ParserEventType.ENTER_LEVEL, ParserEventType.GAME_PAUSE)
     async def handle_event(self, event: ExitLevelEvent | EnterLevelEvent | GamePauseEvent):
         if event.type == ParserEventType.ENTER_LEVEL:
             map_id = str(event.map) if event.map else event.level_id
             if  not self.current_map_id or (self.current_map_id < 1000 and event.level_id >= 1000):
-                await self.start_map(event.level_id, event.level_uid, event.level_type)
-                logger.debug(f"🗺️ Entered new level: {map_id}, State: {self.state}")
+                # Check if this is a re-entry into the same map
+                # If pre_enter is None (no map selection screen visited) and same map ID, it's a re-entry
+                if self.last_map_id == event.level_id and self.pre_enter is None:
+                    logger.info(f"🗺️ Re-entered same map {map_id} with no consumed items, resuming previous map state")
+                    self.state = MapState.FARMING
+                    self.current_map_id = event.level_id
+                    self.current_map_uuid = event.level_uid
+                    self.map_start_time = self.last_map_start_time
+                    self.current_map = self.last_map_data
+                    self.current_affixes = self.last_map_affixes
+                else:
+                    await self.start_map(event.level_id, event.level_uid, event.level_type)
+                    logger.debug(f"🗺️ Entered new level: {map_id}, State: {self.state}")
             elif self.current_map_id == event.level_id:
                 logger.debug(f"🗺️ Re-entered current level: {map_id}, State: {self.state}")
             elif event.level_id < 1000:

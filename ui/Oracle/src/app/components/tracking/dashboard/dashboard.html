@@ -1,0 +1,242 @@
+<div class="dashboard-container p-4">
+  <!-- Header + Filters -->
+  <div class="flex justify-between items-center mb-4">
+    <div>
+      <h2 class="text-3xl font-bold text-white">Dashboard</h2>
+      <p class="text-gray-400 text-sm">Aggregated statistics across all sessions</p>
+    </div>
+    <div class="flex items-center gap-4">
+      <p-select
+        [(ngModel)]="selectedPlayerFilter"
+        (onChange)="onFilterChange()"
+        [options]="players"
+        optionLabel="label"
+        optionValue="value"
+        placeholder="Filter by Player"
+        [showClear]="false"
+        [loading]="loadingPlayers"
+        appendTo="body"
+        [style]="{'min-width': '200px'}"
+      ></p-select>
+    </div>
+  </div>
+
+  <!-- Overview Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 mb-6">
+    <div class="stat-card">
+      <div class="stat-label">Total Sessions</div>
+      <div class="stat-value text-blue-400">{{ overview?.total_sessions ?? '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Maps</div>
+      <div class="stat-value text-blue-400">{{ overview?.total_maps ?? '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Playtime</div>
+      <div class="stat-value text-purple-400">{{ overview ? formatHours(overview.total_playtime_hours) : '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total Currency</div>
+      <div class="stat-value text-green-400">{{ overview ? (overview.total_currency | currency) : '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Total EXP</div>
+      <div class="stat-value text-yellow-400">{{ overview ? (overview.total_exp | currency:false:'exp') : '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg Currency / {{ periodicUnitShort === 'h' ? 'Hour' : 'Min' }}</div>
+      <div class="stat-value text-green-400">{{ overview ? (overview.avg_currency_per_hour | currency:true) : '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg Currency / Map</div>
+      <div class="stat-value text-green-400">{{ overview ? (overview.avg_currency_per_map | currency) : '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg EXP / {{ periodicUnitShort === 'h' ? 'Hour' : 'Min' }}</div>
+      <div class="stat-value text-yellow-400">{{ overview ? (overview.avg_exp_per_hour | currency:true:'exp') : '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Avg Maps / Session</div>
+      <div class="stat-value text-blue-400">{{ overview?.avg_maps_per_session ?? '-' }}</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Active Since</div>
+      <div class="stat-value text-gray-300 text-sm">{{ formatDate(overview?.first_session ?? null) }}</div>
+    </div>
+  </div>
+
+  <!-- Heroes Table -->
+  <div class="mb-6">
+    <h3 class="text-xl font-semibold text-white mb-3">
+      <i class="pi pi-users mr-2"></i>Heroes
+    </h3>
+    <p-table
+      [value]="heroes"
+      [loading]="loadingHeroes"
+      [sortField]="'total_currency'"
+      [sortOrder]="-1"
+      styleClass="p-datatable-sm p-datatable-striped"
+      [scrollable]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="player_name">Hero <p-sortIcon field="player_name"></p-sortIcon></th>
+          <th pSortableColumn="total_sessions">Sessions <p-sortIcon field="total_sessions"></p-sortIcon></th>
+          <th pSortableColumn="total_maps">Maps <p-sortIcon field="total_maps"></p-sortIcon></th>
+          <th pSortableColumn="total_playtime_hours">Playtime <p-sortIcon field="total_playtime_hours"></p-sortIcon></th>
+          <th pSortableColumn="total_currency">Total Currency <p-sortIcon field="total_currency"></p-sortIcon></th>
+          <th pSortableColumn="avg_currency_per_hour">Avg/{{ periodicUnitShort === 'h' ? 'Hour' : 'Min' }} <p-sortIcon field="avg_currency_per_hour"></p-sortIcon></th>
+          <th pSortableColumn="avg_currency_per_map">Avg/Map <p-sortIcon field="avg_currency_per_map"></p-sortIcon></th>
+          <th pSortableColumn="best_currency_per_hour">Best/Hour <p-sortIcon field="best_currency_per_hour"></p-sortIcon></th>
+          <th pSortableColumn="last_played">Last Played <p-sortIcon field="last_played"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-hero>
+        <tr>
+          <td class="font-semibold text-white">{{ hero.player_name }}</td>
+          <td>{{ hero.total_sessions }}</td>
+          <td>{{ hero.total_maps }}</td>
+          <td>{{ formatHours(hero.total_playtime_hours) }}</td>
+          <td class="text-green-400 font-semibold">{{ hero.total_currency | currency }}</td>
+          <td class="text-yellow-400">{{ hero.avg_currency_per_hour | currency:true }}</td>
+          <td>{{ hero.avg_currency_per_map | currency }}</td>
+          <td class="text-blue-400">{{ hero.best_currency_per_hour | currency:true }}</td>
+          <td class="text-gray-400 text-sm">{{ formatDate(hero.last_played) }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="9" class="text-center text-gray-400 py-4">No hero data available</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Top Items Table -->
+  <div class="mb-6">
+    <h3 class="text-xl font-semibold text-white mb-3">
+      <i class="pi pi-tags mr-2"></i>Top Items
+    </h3>
+    <p-table
+      [value]="topItems"
+      [loading]="loadingItems"
+      [sortField]="'total_value'"
+      [sortOrder]="-1"
+      styleClass="p-datatable-sm p-datatable-striped"
+      [scrollable]="true"
+      [rows]="20"
+      [paginator]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="name">Item <p-sortIcon field="name"></p-sortIcon></th>
+          <th pSortableColumn="category">Category <p-sortIcon field="category"></p-sortIcon></th>
+          <th pSortableColumn="total_quantity">Quantity <p-sortIcon field="total_quantity"></p-sortIcon></th>
+          <th pSortableColumn="total_value">Total Value <p-sortIcon field="total_value"></p-sortIcon></th>
+          <th pSortableColumn="current_price">Current Price <p-sortIcon field="current_price"></p-sortIcon></th>
+          <th pSortableColumn="drop_count">Drop Count <p-sortIcon field="drop_count"></p-sortIcon></th>
+          <th pSortableColumn="maps_dropped_in">Maps <p-sortIcon field="maps_dropped_in"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-item>
+        <tr>
+          <td class="font-semibold text-white">{{ item.name }}</td>
+          <td>
+            @if (item.category) {
+              <span class="inline-block px-3 py-1 text-sm font-medium bg-blue-900/40 text-blue-300 border border-blue-700/50">
+                {{ item.category }}
+              </span>
+            } @else {
+              <span class="text-gray-500">-</span>
+            }
+          </td>
+          <td><span class="font-bold">{{ item.total_quantity }}</span></td>
+          <td class="text-green-400 font-semibold">{{ item.total_value | currency }}</td>
+          <td class="text-yellow-400">{{ item.current_price | currency }}</td>
+          <td>{{ item.drop_count }}</td>
+          <td>{{ item.maps_dropped_in }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center text-gray-400 py-4">No item data available</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+
+  <!-- Efficiency Table -->
+  <div class="mb-6">
+    <div class="flex justify-between items-center mb-3">
+      <h3 class="text-xl font-semibold text-white">
+        <i class="pi pi-chart-line mr-2"></i>Efficiency
+      </h3>
+      <p-select
+        [(ngModel)]="selectedGroupBy"
+        (onChange)="onGroupByChange()"
+        [options]="groupByOptions"
+        optionLabel="label"
+        optionValue="value"
+        [style]="{'min-width': '140px'}"
+        appendTo="body"
+      ></p-select>
+    </div>
+
+    <!-- Efficiency Summary -->
+    @if (efficiencySummary) {
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
+        <div class="stat-card">
+          <div class="stat-label">Avg Currency / Period</div>
+          <div class="stat-value text-green-400">{{ efficiencySummary.avg_daily_currency | currency }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Avg Playtime / Period</div>
+          <div class="stat-value text-purple-400">{{ formatHours(efficiencySummary.avg_daily_playtime_hours) }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Best Period</div>
+          <div class="stat-value text-blue-400 text-sm">{{ efficiencySummary.best_period ?? '-' }}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Best Currency</div>
+          <div class="stat-value text-green-400">{{ efficiencySummary.best_currency | currency }}</div>
+        </div>
+      </div>
+    }
+
+    <p-table
+      [value]="efficiencyPeriods"
+      [loading]="loadingEfficiency"
+      styleClass="p-datatable-sm p-datatable-striped"
+      [scrollable]="true"
+      [rows]="15"
+      [paginator]="true"
+    >
+      <ng-template pTemplate="header">
+        <tr>
+          <th pSortableColumn="period">Period <p-sortIcon field="period"></p-sortIcon></th>
+          <th pSortableColumn="sessions">Sessions <p-sortIcon field="sessions"></p-sortIcon></th>
+          <th pSortableColumn="maps">Maps <p-sortIcon field="maps"></p-sortIcon></th>
+          <th pSortableColumn="playtime_hours">Playtime <p-sortIcon field="playtime_hours"></p-sortIcon></th>
+          <th pSortableColumn="currency">Currency <p-sortIcon field="currency"></p-sortIcon></th>
+          <th pSortableColumn="currency_per_hour">Currency/Hour <p-sortIcon field="currency_per_hour"></p-sortIcon></th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-period>
+        <tr>
+          <td class="font-semibold text-white">{{ period.period }}</td>
+          <td>{{ period.sessions }}</td>
+          <td>{{ period.maps }}</td>
+          <td>{{ formatHours(period.playtime_hours) }}</td>
+          <td class="text-green-400 font-semibold">{{ period.currency | currency }}</td>
+          <td class="text-yellow-400">{{ period.currency_per_hour | currency:true }}</td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="6" class="text-center text-gray-400 py-4">No efficiency data available</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
+</div>

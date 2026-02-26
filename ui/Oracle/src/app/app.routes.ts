@@ -5,6 +5,7 @@ export const routes: Routes = [
   { path: 'live/currency', loadComponent: () => import('./components/live/currency/currency').then(m => m.CurrencyComponent) },
   { path: 'live/session', loadComponent: () => import('./components/live/session/session').then(m => m.SessionComponent) },
   { path: 'overlay/stats', loadComponent: () => import('./components/overlay/stats-overlay/stats-overlay').then(m => m.StatsOverlayComponent) },
+  { path: 'tracking/dashboard', loadComponent: () => import('./components/tracking/dashboard/dashboard').then(m => m.DashboardComponent) },
   { path: 'tracking/maps', loadComponent: () => import('./components/tracking/maps/maps').then(m => m.MapsComponent) },
   { path: 'tracking/sessions', loadComponent: () => import('./components/tracking/sessions/sessions').then(m => m.SessionsComponent) },
   { path: 'tracking/market', loadComponent: () => import('./components/tracking/market/market').then(m => m.MarketComponent) },

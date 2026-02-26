@@ -1,28 +1,539 @@
-/* Stats Overlay Compact Styling */
+/* Overlay base styles */
 :host {
   display: block;
   font-size: 12px;
 }
 
-/* Transparent mode support */
+/* Fullscreen transparent mode */
 :host.transparent-mode {
+  width: 100vw;
+  height: 100vh;
   background: transparent;
+  overflow: hidden;
 }
 
-.transparent-container {
-  padding: 0.75rem;
+/* View mode (not edit mode) - dialogs visible but non-interactive and transparent */
+:host.transparent-mode:not(.edit-mode) ::ng-deep .overlay-dialog {
+  pointer-events: none;
+}
+
+:host.transparent-mode:not(.edit-mode) ::ng-deep .overlay-dialog.p-dialog {
+  background: rgba(15, 23, 42, 0.5) !important;
+  box-shadow: none !important;
+  border-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+:host.transparent-mode:not(.edit-mode) ::ng-deep .overlay-dialog .p-dialog-header {
+  background: rgba(30, 41, 59, 0.5) !important;
+  border-bottom-color: rgba(51, 65, 85, 0.4) !important;
+}
+
+:host.transparent-mode:not(.edit-mode) ::ng-deep .overlay-dialog .p-dialog-content {
+  background: rgba(15, 23, 42, 0.5) !important;
+}
+
+:host.transparent-mode:not(.edit-mode) ::ng-deep .overlay-dialog .p-dialog-close-button {
+  display: none !important;
+}
+
+/* Edit mode - show 40% opacity background */
+:host.transparent-mode.edit-mode {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Normal windowed mode */
+:host:not(.transparent-mode) {
+  background: #111827;
   min-height: 100vh;
-  background: transparent;
-}
-
-.transparent-grid {
-  background: rgba(15, 23, 42, 0.85);
-  backdrop-filter: blur(10px);
-  border: none;
-  box-shadow: none;
-  border-radius: 8px;
   padding: 0.5rem;
 }
 
-/* Keep glow effects even in transparent mode */
+/* Edit Mode Branding - centered */
+.edit-mode-branding {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  pointer-events: none;
+  z-index: 1;
+  padding: 24px 40px;
+  border: 2px solid rgba(255, 255, 255, 0.8);
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.8);
+}
 
+/* Radial Control Menu */
+.radial-menu {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  width: 120px;
+  height: 120px;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0.4;
+  transition: opacity 0.3s ease;
+}
+
+.radial-menu-interactive,
+.radial-menu:hover {
+  opacity: 1;
+}
+
+:host.transparent-mode:not(.edit-mode):not(.hover-mode) .radial-menu {
+  pointer-events: none;
+}
+
+:host.transparent-mode.edit-mode .radial-menu,
+:host.transparent-mode.hover-mode .radial-menu,
+:host:not(.transparent-mode) .radial-menu {
+  pointer-events: auto;
+}
+
+.radial-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.85);
+  border: 2px solid rgba(51, 65, 85, 0.6);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.radial-menu-interactive .radial-ring,
+.radial-menu-interactive .radial-center {
+  cursor: grab;
+}
+
+.radial-menu-interactive .radial-ring:active,
+.radial-menu-interactive .radial-center:active {
+  cursor: grabbing;
+}
+
+.radial-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(30, 41, 59, 0.9);
+  border: 1px solid rgba(51, 65, 85, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.radial-logo {
+  width: 20px;
+  height: 20px;
+}
+
+.radial-btn {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  color: #9ca3af;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 13px;
+  z-index: 3;
+}
+
+.radial-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.radial-btn.active {
+  background: rgba(59, 130, 246, 0.35);
+  border-color: rgba(59, 130, 246, 0.6);
+  color: #60a5fa;
+  box-shadow: 0 0 8px rgba(59, 130, 246, 0.4);
+}
+
+.radial-top {
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.radial-top:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.radial-right {
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+}
+.radial-right:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.radial-bottom {
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.radial-bottom:hover {
+  transform: translateX(-50%) scale(1.1);
+}
+
+.radial-left {
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+}
+.radial-left:hover {
+  transform: translateY(-50%) scale(1.1);
+}
+
+.radial-top-left {
+  top: 16px;
+  left: 16px;
+}
+.radial-top-left:hover {
+  transform: scale(1.1);
+}
+
+.radial-top-right {
+  top: 16px;
+  right: 16px;
+}
+.radial-top-right:hover {
+  transform: scale(1.1);
+}
+
+.radial-bottom-left {
+  bottom: 16px;
+  left: 16px;
+}
+.radial-bottom-left:hover {
+  transform: scale(1.1);
+}
+
+.radial-bottom-right {
+  bottom: 16px;
+  right: 16px;
+}
+.radial-bottom-right:hover {
+  transform: scale(1.1);
+}
+
+/* Stat cells inside dialogs */
+.stat-cell {
+  background: #1e293b;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+
+.stat-label {
+  color: #9ca3af;
+  font-size: 10px;
+}
+
+.stat-value {
+  font-size: 13px;
+  font-weight: 600;
+  color: #e5e7eb;
+}
+
+/* PrimeNG Dialog overrides for overlay */
+:host ::ng-deep .overlay-dialog {
+  pointer-events: auto;
+}
+
+:host ::ng-deep .overlay-dialog.p-dialog {
+  background: #0f172a !important;
+  border: 1px solid #334155 !important;
+  border-radius: 8px !important;
+  box-shadow: none !important;
+}
+
+:host ::ng-deep .overlay-dialog .p-dialog-header {
+  background: #1e293b !important;
+  border-bottom: 1px solid #334155 !important;
+  padding: 8px 12px !important;
+  color: #e5e7eb !important;
+  font-size: 12px !important;
+  cursor: move;
+  border-radius: 8px 8px 0 0;
+}
+
+:host ::ng-deep .overlay-dialog .p-dialog-title {
+  font-size: 12px !important;
+  font-weight: 600;
+}
+
+:host ::ng-deep .overlay-dialog .p-dialog-content {
+  background: #0f172a !important;
+  padding: 8px 12px !important;
+  color: #e5e7eb !important;
+}
+
+:host ::ng-deep .overlay-dialog .p-dialog-close-button {
+  color: #9ca3af !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
+:host ::ng-deep .overlay-dialog .p-dialog-close-button:hover {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Remove dialog mask/backdrop for non-modal overlay dialogs */
+:host ::ng-deep .p-dialog-mask {
+  pointer-events: none !important;
+  background: transparent !important;
+  /* Disable flexbox centering so left/top positioning works */
+  display: block !important;
+}
+
+/* Make dialogs absolutely positioned so left/top work */
+:host ::ng-deep .overlay-dialog.p-dialog {
+  position: absolute !important;
+}
+
+/* Hover mode - dialogs interactive with subtle blue glow, no edit mode UI */
+:host.transparent-mode.hover-mode {
+  background: transparent;
+}
+
+:host.transparent-mode.hover-mode ::ng-deep .overlay-dialog {
+  pointer-events: auto;
+}
+
+:host.transparent-mode.hover-mode ::ng-deep .overlay-dialog.p-dialog {
+  background: rgba(15, 23, 42, 0.75) !important;
+  box-shadow: 0 0 12px rgba(59, 130, 246, 0.4), 0 0 4px rgba(59, 130, 246, 0.2) !important;
+  border-color: rgba(59, 130, 246, 0.5) !important;
+}
+
+:host.transparent-mode.hover-mode ::ng-deep .overlay-dialog .p-dialog-header {
+  background: rgba(30, 41, 59, 0.75) !important;
+  border-bottom-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+:host.transparent-mode.hover-mode ::ng-deep .overlay-dialog .p-dialog-content {
+  background: rgba(15, 23, 42, 0.75) !important;
+}
+
+/* Currency River */
+.currency-river {
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  overflow: hidden;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.river-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 2px 8px;
+  font-size: 28px;
+  font-weight: 700;
+  white-space: nowrap;
+  animation: river-scroll-up 4.5s ease-out forwards;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.river-positive .river-value {
+  color: #4ade80;
+}
+
+.river-negative .river-value {
+  color: #f87171;
+}
+
+.river-icon {
+  width: 32px;
+  height: 32px;
+}
+
+.river-large {
+  font-size: 44px;
+}
+
+.river-large .river-icon {
+  width: 44px;
+  height: 44px;
+}
+
+.river-xlarge {
+  font-size: 60px;
+}
+
+.river-xlarge .river-icon {
+  width: 56px;
+  height: 56px;
+}
+
+/* River edit mode - visible outline + draggable */
+.currency-river-edit {
+  border: 2px dashed rgba(59, 130, 246, 0.6);
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.08);
+  pointer-events: auto;
+  cursor: move;
+}
+
+.river-edit-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(59, 130, 246, 0.8);
+  padding: 4px 0;
+}
+
+/* Info Text River */
+.info-text-river {
+  position: absolute;
+  width: 800px;
+  height: 500px;
+  overflow: hidden;
+  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.info-text-item {
+  padding: 2px 8px;
+  font-size: 65px;
+  font-weight: 600;
+  white-space: nowrap;
+  text-align: center;
+  animation: info-text-scroll-up linear forwards;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+.info-text-info {
+  color: #e5e7eb;
+}
+
+.info-text-warn {
+  color: #fbbf24;
+}
+
+.info-text-danger {
+  color: #f87171;
+}
+
+/* Info text edit mode */
+.info-text-river-edit {
+  border: 2px dashed rgba(59, 130, 246, 0.6);
+  border-radius: 8px;
+  background: rgba(59, 130, 246, 0.08);
+  pointer-events: auto;
+  cursor: move;
+}
+
+.info-text-edit-label {
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(59, 130, 246, 0.8);
+  padding: 4px 0;
+}
+
+@keyframes info-text-scroll-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+}
+
+@keyframes river-scroll-up {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  70% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-80px);
+  }
+}
+
+/* Map detail buttons */
+.map-detail-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 4px 8px;
+  font-size: 10px;
+  font-weight: 600;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.map-detail-btn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.12);
+  color: #e5e7eb;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.map-detail-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Affix items in popup */
+.affix-item {
+  background: #1e293b;
+  padding: 6px 8px;
+  border-radius: 4px;
+  border-left: 2px solid #22d3ee;
+}
+
+/* Popup dialog overrides - ensure interactive even in transparent mode */
+:host ::ng-deep .overlay-popup-dialog {
+  pointer-events: auto !important;
+}
+
+:host ::ng-deep .overlay-popup-dialog .p-dialog-mask {
+  pointer-events: auto !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+:host ::ng-deep .overlay-popup-dialog.p-dialog {
+  position: relative !important;
+}
+
+/* Note: Confirm dialog styles are in global styles.css since PrimeNG renders it at body level */

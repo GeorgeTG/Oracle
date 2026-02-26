@@ -54,6 +54,22 @@ class MapStatsEvent(ServiceEvent):
 
 
 @dataclass(kw_only=True)
+class MapStatusEvent(ServiceEvent):
+    """Event sent to newly connected clients with current map state (does not trigger stats recalculation)."""
+    level_id: int
+    level_uid: int
+    level_type: int
+    map: Optional[MapData] = None
+    consumed_items: List[InventoryItem] = field(default_factory=list)
+    inventory: Optional[Inventory] = None
+    type: ServiceEventType = ServiceEventType.MAP_STATUS
+
+    def __repr__(self) -> str:
+        map_info = f"{self.map.name} [{self.map.difficulty}]" if self.map else f"ID:{self.level_id}"
+        return f"<MapStatusEvent {map_info} uid={self.level_uid} @ {self.timestamp.isoformat()}>"
+
+
+@dataclass(kw_only=True)
 class MapRecordEvent(ServiceEvent):
     """Event fired when a map completion is recorded in the database."""
     map_record: Dict[str, str]  # Serialized MapCompletion model (as returned by GET /maps/{id})

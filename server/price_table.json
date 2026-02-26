@@ -1,1454 +1,5306 @@
 {
   "1001": {
     "name": "Starry Goose Fire",
-    "category": "Divinity Slate",
-    "price": 2309.0,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1208.4301075268818,
+    "updated_at": 1771803514
   },
   "1009": {
-    "name": "Long Four-Grid Copy Slate",
-    "category": "Cube Material",
-    "price": 3819.25,
-    "updated_at": 1767382383
+    "name": "Space Rift",
+    "type": "Divinity Slate",
+    "price": 906.2363636363636,
+    "updated_at": 1771803559
   },
   "1011": {
-    "name": "Return of the Stars",
-    "category": "Fluorescent Memory",
-    "price": 7.0667,
-    "updated_at": 1767382383
+    "name": "Residence of Stars",
+    "type": "Divinity Slate",
+    "price": 7.2,
+    "updated_at": 1771803578
   },
   "1012": {
     "name": "When Sparks Set the Prairie Ablaze",
-    "category": "Divinity Slate",
-    "price": 218,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 218.0,
+    "updated_at": 1771412754
   },
   "5011": {
     "name": "Elixir Of Oblivion",
-    "category": "Currency",
-    "price": 0.67,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.5611989010397633,
+    "updated_at": 1771802844
   },
   "5028": {
     "name": "Netherrealm Resonance",
-    "category": "Currency",
-    "price": 0.136,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.003983983983983988,
+    "updated_at": 1771793184
   },
   "5029": {
     "name": "Winding Key",
-    "category": "Currency",
-    "price": 0.295,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1.093793643228658,
+    "updated_at": 1771802825
   },
   "5030": {
     "name": "Twin Reflections",
-    "category": "Special Item",
-    "price": 31660.167,
-    "updated_at": 1767382383
+    "type": "Mirror",
+    "price": 107221.5,
+    "updated_at": 1771803105
   },
   "5031": {
-    "name": "Legendary Duck",
-    "category": "Special Item",
-    "price": 139.256,
-    "updated_at": 1767382383
+    "name": "Sprout of Legends",
+    "type": "Map Ticket",
+    "price": 177.3,
+    "updated_at": 1771803093
   },
   "5080": {
     "name": "Energy Core",
-    "category": "Crafting",
-    "price": 0.05,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.005986594624653362,
+    "updated_at": 1771793171
   },
   "5140": {
     "name": "Memory Scrap",
-    "category": "Memory Material",
-    "price": 0.039,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.0103930273130273,
+    "updated_at": 1771804175
   },
   "5143": {
     "name": "Memory Thread - Rare",
-    "category": "Memory Material",
-    "price": 0.018,
-    "updated_at": 1767382383
+    "type": "Memory Thread",
+    "price": 0.14078728822330658,
+    "updated_at": 1771804198
   },
   "5144": {
     "name": "Memory Thread - Epic",
-    "category": "Memory Material",
-    "price": 1.761,
-    "updated_at": 1767382383
+    "type": "Memory Thread",
+    "price": 0.9936345231690707,
+    "updated_at": 1771804203
   },
   "5201": {
-    "name": "Godhead Fragment",
-    "category": "Cube Material",
-    "price": 0.005,
-    "updated_at": 1767382383
+    "name": "Divinity Fragment",
+    "type": "",
+    "price": 0.0026431067896730805,
+    "updated_at": 1771803728
   },
   "5202": {
-    "name": "Godhead Contract - Fragment",
-    "category": "Cube Material",
-    "price": 195.0,
-    "updated_at": 1767382383
+    "name": "Divinity Pact Fragment",
+    "type": "",
+    "price": 53.0,
+    "updated_at": 1771803742
   },
   "5210": {
-    "name": "Divine Pyroxene",
-    "category": "Cube Material",
-    "price": 0.022,
-    "updated_at": 1767382383
+    "name": "Divine Stone",
+    "type": "Cube Material",
+    "price": 0.018543273032592896,
+    "updated_at": 1771802755
   },
   "5220": {
-    "name": "Sublime Wedge (Magic)",
-    "category": "Cube Material",
-    "price": 0.021,
-    "updated_at": 1767382383
+    "name": "Transcedence Wedge (Magic)",
+    "type": "Divinity Material",
+    "price": 0.009547201967397044,
+    "updated_at": 1771803692
   },
   "5230": {
     "name": "Sublime Wedge (Rare)",
-    "category": "Cube Material",
+    "type": "",
     "price": 0.239,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "5240": {
     "name": "Unifying Wedge",
-    "category": "Cube Material",
-    "price": 44.611,
-    "updated_at": 1767382383
+    "type": "Divinity Material",
+    "price": 39.80515242652086,
+    "updated_at": 1771803706
   },
   "5250": {
     "name": "Sublime Wedge (Legendary)",
-    "category": "Cube Material",
+    "type": "",
     "price": 21.543,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "5300": {
     "name": "Eternal Fragment",
-    "category": "Special Item",
+    "type": "",
     "price": 0.007,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "5310": {
-    "name": "Maze City Echoes - Momentary",
-    "category": "Game Ticket",
-    "price": 0.155,
-    "updated_at": 1767382383
+    "name": "Aeterna Reverberation - Fleeting",
+    "type": "Map Ticket",
+    "price": 0.010101010101009973,
+    "updated_at": 1771803251
   },
   "5311": {
-    "name": "Maze City Echoes - Eternal",
-    "category": "Game Ticket",
-    "price": 0.701,
-    "updated_at": 1767382383
+    "name": "Aeterna Reverberation - Eternal",
+    "type": "Map Ticket",
+    "price": 0.5600944896028323,
+    "updated_at": 1771803266
   },
   "5401": {
-    "name": "God of Strength Contract - God of Strength",
-    "category": "Cube Material",
-    "price": 550.2727,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - God of Might",
+    "type": "Divinity Pact",
+    "price": 577.4705882352941,
+    "updated_at": 1771803710
   },
   "5402": {
-    "name": "God of Strength Contract - Brave",
-    "category": "Cube Material",
-    "price": 227.7667,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - The Brave",
+    "type": "Divinity Pact",
+    "price": 378.8235294117647,
+    "updated_at": 1771804219
   },
   "5403": {
-    "name": "God of Strength Contract - Striker",
-    "category": "Cube Material",
-    "price": 315.5667,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Onslaughter",
+    "type": "Divinity Pact",
+    "price": 114.51020408163265,
+    "updated_at": 1771804221
   },
   "5404": {
-    "name": "God of Strength Contract - Warlord",
-    "category": "Cube Material",
-    "price": 182.1,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Warlorld",
+    "type": "Divinity Pact",
+    "price": 64.37037037037037,
+    "updated_at": 1771804230
   },
   "5405": {
-    "name": "God of Strength Contract - God of Hunting",
-    "category": "Cube Material",
-    "price": 244.9655,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Goddess of Hunting",
+    "type": "Divinity Pact",
+    "price": 71.98333333333335,
+    "updated_at": 1771804231
   },
   "5406": {
-    "name": "God of Strength Contract - Sharpshooter",
-    "category": "Cube Material",
-    "price": 210.3704,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Marksman",
+    "type": "Divinity Pact",
+    "price": 48.25,
+    "updated_at": 1771804235
   },
   "5407": {
-    "name": "God of Strength Contract - Blade Runner",
-    "category": "Cube Material",
-    "price": 190.1667,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Bladerunner",
+    "type": "Divinity Pact",
+    "price": 50.72,
+    "updated_at": 1771804238
   },
   "5408": {
-    "name": "Godhead Contract - Druid",
-    "category": "Cube Material",
-    "price": 195.0,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Druid",
+    "type": "Divinity Pact",
+    "price": 48.891891891891895,
+    "updated_at": 1771804262
   },
   "5409": {
-    "name": "Godhead Contract - God of Knowledge",
-    "category": "Cube Material",
-    "price": 695.5,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Goddess of Knowledge",
+    "type": "Divinity Pact",
+    "price": 789.5116279069767,
+    "updated_at": 1771804253
   },
   "5410": {
-    "name": "Godhead Contract - Mage",
-    "category": "Cube Material",
-    "price": 335.067,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Magister",
+    "type": "Divinity Pact",
+    "price": 207.2826086956522,
+    "updated_at": 1771804265
   },
   "5411": {
-    "name": "Godhead Contract - Mystic",
-    "category": "Cube Material",
-    "price": 617.7,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Arcanist",
+    "type": "Divinity Pact",
+    "price": 532.28,
+    "updated_at": 1771804268
   },
   "5412": {
-    "name": "Godhead Contract - Elementalist",
-    "category": "Cube Material",
-    "price": 202.5,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Elementalist",
+    "type": "Divinity Pact",
+    "price": 135.7439024390244,
+    "updated_at": 1771804277
   },
   "5413": {
-    "name": "Godhead Contract - God of War",
-    "category": "Cube Material",
-    "price": 232.9,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - God of War",
+    "type": "Divinity Pact",
+    "price": 112.625,
+    "updated_at": 1771804280
   },
   "5414": {
-    "name": "Godhead Contract - Shadow Dancer",
-    "category": "Cube Material",
-    "price": 216.7273,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Shadowdancer",
+    "type": "Divinity Pact",
+    "price": 112.70212765957447,
+    "updated_at": 1771804287
   },
   "5415": {
-    "name": "Godhead Contract - Swift Warrior",
-    "category": "Cube Material",
-    "price": 227.909,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Ronin",
+    "type": "Divinity Pact",
+    "price": 78.65625,
+    "updated_at": 1771804289
   },
   "5416": {
-    "name": "Godhead Contract - Ranger",
-    "category": "Cube Material",
-    "price": 252.0,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Ranger",
+    "type": "Divinity Pact",
+    "price": 203.93617021276594,
+    "updated_at": 1771804297
   },
   "5417": {
-    "name": "Godhead Contract - Deception God",
-    "category": "Cube Material",
-    "price": 444.3704,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Goddess Deception",
+    "type": "Divinity Pact",
+    "price": 169.95238095238096,
+    "updated_at": 1771804314
   },
   "5418": {
-    "name": "Godhead Contract - Shadow Slave",
-    "category": "Cube Material",
-    "price": 195.9091,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Shadowmaster",
+    "type": "Divinity Pact",
+    "price": 59.55,
+    "updated_at": 1771804329
   },
   "5419": {
-    "name": "Godhead Contract - Psychic",
-    "category": "Cube Material",
-    "price": 187.4333,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Psychic",
+    "type": "Divinity Pact",
+    "price": 52.81818181818182,
+    "updated_at": 1771804334
   },
   "5420": {
-    "name": "Godhead Contract - Shadow Warlock",
-    "category": "Cube Material",
-    "price": 196.7647,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Warlock",
+    "type": "Divinity Pact",
+    "price": 48.91304347826087,
+    "updated_at": 1771804336
   },
   "5421": {
-    "name": "Godhead Contract - Mechanical God",
-    "category": "Cube Material",
-    "price": 247.5,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - God of Machines",
+    "type": "Divinity Pact",
+    "price": 93.03448275862068,
+    "updated_at": 1771804341
   },
   "5422": {
-    "name": "Godhead Contract - Mechanic",
-    "category": "Cube Material",
-    "price": 200.3333,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Machinist",
+    "type": "Divinity Pact",
+    "price": 116.20408163265306,
+    "updated_at": 1771804345
   },
   "5423": {
-    "name": "Godhead Contract - Iron Vanguard",
-    "category": "Cube Material",
-    "price": 190.4706,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Steel Vanguard",
+    "type": "Divinity Pact",
+    "price": 48.04761904761905,
+    "updated_at": 1771804353
   },
   "5424": {
-    "name": "Godhead Contract - Alchemist",
-    "category": "Cube Material",
-    "price": 440.227,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Alchemist",
+    "type": "Divinity Pact",
+    "price": 73.05357142857143,
+    "updated_at": 1771804362
   },
   "5425": {
-    "name": "Godhead Contract - Fighter",
-    "category": "Cube Material",
-    "price": 183.3333,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Warrior",
+    "type": "Divinity Pact",
+    "price": 94.46153846153847,
+    "updated_at": 1771804368
   },
   "5426": {
-    "name": "Godhead Contract - Assassin",
-    "category": "Cube Material",
-    "price": 392.1538,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Assassin",
+    "type": "Divinity Pact",
+    "price": 1015.695652173913,
+    "updated_at": 1771804371
   },
   "5427": {
-    "name": "Godhead Contract - Prophet",
-    "category": "Cube Material",
-    "price": 221.1667,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Prophet",
+    "type": "Divinity Pact",
+    "price": 241.68571428571428,
+    "updated_at": 1771804380
   },
   "5428": {
-    "name": "Godhead Contract - Iron Guard",
-    "category": "Cube Material",
-    "price": 185.8261,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Sentinel",
+    "type": "Divinity Pact",
+    "price": 194.93333333333334,
+    "updated_at": 1771804392
   },
   "5429": {
-    "name": "Godhead Contract - Lich",
-    "category": "Cube Material",
-    "price": 611.4643,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Lich",
+    "type": "Divinity Pact",
+    "price": 216.6,
+    "updated_at": 1771804401
   },
   "5430": {
-    "name": "Divine Contract - Craftsman",
-    "category": "Cube Material",
-    "price": 199.0,
-    "updated_at": 1767382383
+    "name": "Divinity Pact - Artisan",
+    "type": "",
+    "price": 48.80487804878049,
+    "updated_at": 1771804415
   },
   "5700": {
     "name": "Tower Chip - Energy",
-    "category": "Outlaw Material",
+    "type": "",
     "price": 0.785,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "5701": {
-    "name": "Tower Chip - Fluorescence",
-    "category": "Outlaw Material",
-    "price": 6.938,
-    "updated_at": 1767382383
+    "name": "Tower Token - Fluorescence",
+    "type": "Tower Token",
+    "price": 4.563572174037903,
+    "updated_at": 1771802998
   },
   "5702": {
-    "name": "Tower Chip - Affix",
-    "category": "Outlaw Material",
-    "price": 72.333,
-    "updated_at": 1767382383
+    "name": "Tower Token - Affix",
+    "type": "Tower Token",
+    "price": 18.257582902802728,
+    "updated_at": 1771803005
   },
   "5703": {
-    "name": "Tower Chip - Uncertain Fate",
-    "category": "Outlaw Material",
-    "price": 1.0,
-    "updated_at": 1767382383
+    "name": "Tower Token - Undetermined Fate",
+    "type": "Tower Token",
+    "price": 4.304195599352074,
+    "updated_at": 1771803019
   },
   "5704": {
-    "name": "Tower Chip - Corrosion",
-    "category": "Outlaw Material",
-    "price": 91.433,
-    "updated_at": 1767382383
+    "name": "Tower Token - Corrosion",
+    "type": "Tower Token",
+    "price": 4.434330595874714,
+    "updated_at": 1771803029
   },
   "5705": {
-    "name": "Tower Chip - Treasure",
-    "category": "Outlaw Material",
-    "price": 1750.941,
-    "updated_at": 1767382383
+    "name": "Tower Token - Priceless",
+    "type": "Tower Token",
+    "price": 801.8333333333334,
+    "updated_at": 1771803052
   },
   "6002": {
-    "name": "Secret of the Cold Abyss",
-    "category": "Fluorescent Memory",
+    "name": "Secret of the Glacial Abyss",
+    "type": "",
     "price": 0.29,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "6003": {
-    "name": "The Crow's Cry",
-    "category": "Fluorescent Memory",
-    "price": 4.847,
-    "updated_at": 1767382383
+    "name": "Crow's Wail",
+    "type": "Fluorescent Memory",
+    "price": 2.473666666666664,
+    "updated_at": 1771803748
   },
   "6004": {
-    "name": "Black Calendar's Skill",
-    "category": "Fluorescent Memory",
-    "price": 0.333,
-    "updated_at": 1767382383
+    "name": "Maud's Trick",
+    "type": "Fluorescent Memory",
+    "price": 0.33459546777090565,
+    "updated_at": 1771803767
   },
   "6006": {
-    "name": "Moon of Omens",
-    "category": "Fluorescent Memory",
-    "price": 43.967,
-    "updated_at": 1767382383
+    "name": "Portent  Moon",
+    "type": "Fluorescent Memory",
+    "price": 24.51219512195122,
+    "updated_at": 1771803772
   },
   "6007": {
-    "name": "Lost Treasure",
-    "category": "Fluorescent Memory",
-    "price": 2.963,
-    "updated_at": 1767382383
+    "name": "Lost Secrets",
+    "type": "Fluorescent Memory",
+    "price": 3.0,
+    "updated_at": 1771803782
   },
   "6008": {
-    "name": "The Price of Not Being Cruel",
-    "category": "Fluorescent Memory",
-    "price": 36.733,
-    "updated_at": 1767382383
+    "name": "A Terrible Price",
+    "type": "Fluorescent Memory",
+    "price": 69.75,
+    "updated_at": 1771803795
   },
   "6019": {
-    "name": "The Strange Stone at the Center of the Sun",
-    "category": "Fluorescent Memory",
-    "price": 127.067,
-    "updated_at": 1767382383
+    "name": "Helio Rock",
+    "type": "Fluorescent Memory",
+    "price": 213.725,
+    "updated_at": 1771803805
   },
   "6026": {
-    "name": "Antonio's Help",
-    "category": "Fluorescent Memory",
-    "price": 1.986,
-    "updated_at": 1767382383
+    "name": "Antonius' Help",
+    "type": "Fluorescent Memory",
+    "price": 2.248897449280494,
+    "updated_at": 1771803841
   },
   "6027": {
-    "name": "Strange Stone of the Corona",
-    "category": "Fluorescent Memory",
-    "price": 15.167,
-    "updated_at": 1767382383
+    "name": "Aurele Rock",
+    "type": "Fluorescent Memory",
+    "price": 24.9838888888889,
+    "updated_at": 1771803827
   },
   "6054": {
-    "name": "Scholar's Strange Thought",
-    "category": "Fluorescent Memory",
-    "price": 169.75,
-    "updated_at": 1767382383
+    "name": "Clergy's Thinking",
+    "type": "Fluorescent Memory",
+    "price": 180.43429361979156,
+    "updated_at": 1771803834
   },
   "6111": {
-    "name": "Furicon Burst",
-    "category": "Fluorescent Memory",
-    "price": 14.467,
-    "updated_at": 1767382383
+    "name": "Supernova Eplosion",
+    "type": "Fluorescent Memory",
+    "price": 9.378484848484849,
+    "updated_at": 1771803860
   },
   "6118": {
-    "name": "Echoes of the Gods",
-    "category": "Fluorescent Memory",
-    "price": 9.983,
-    "updated_at": 1767382383
+    "name": "Echo of the Gods",
+    "type": "Fluorescent Memory",
+    "price": 13.2017395529005,
+    "updated_at": 1771803876
   },
   "6119": {
-    "name": "The Stray Firefly",
-    "category": "Fluorescent Memory",
-    "price": 272.5,
-    "updated_at": 1767382383
+    "name": "Stray Fireflies",
+    "type": "Fluorescent Memory",
+    "price": 124.835,
+    "updated_at": 1771803882
   },
   "6125": {
-    "name": "Hundred Million-Fold Windfall",
-    "category": "Fluorescent Memory",
-    "price": 11.141,
-    "updated_at": 1767382383
+    "name": "HundredFold Windfall",
+    "type": "Fluorescent Memory",
+    "price": 11.158938067293718,
+    "updated_at": 1771803884
   },
   "6127": {
     "name": "Burn Together",
-    "category": "Fluorescent Memory",
+    "type": "",
     "price": 247.0,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "6135": {
-    "name": "Desecrating the Star Cluster",
-    "category": "Fluorescent Memory",
-    "price": 8009.3,
-    "updated_at": 1767382383
+    "name": "Defile the Stars",
+    "type": "Fluorescent Memory",
+    "price": 9727.666666666666,
+    "updated_at": 1771803896
   },
   "6139": {
-    "name": "God's Supernova",
-    "category": "Fluorescent Memory",
-    "price": 250.5,
-    "updated_at": 1767382383
+    "name": "Divine Supernova",
+    "type": "Fluorescent Memory",
+    "price": 44.290294117647065,
+    "updated_at": 1771803926
   },
   "6141": {
-    "name": "Hollow Man's 😚",
-    "category": "Fluorescent Memory",
-    "price": 1.981,
-    "updated_at": 1767382383
+    "name": "The Kiss of the Heartless",
+    "type": "Fluorescent Memory",
+    "price": 6.401217366875628,
+    "updated_at": 1771803952
   },
   "6143": {
-    "name": "Second Level of Godhood",
-    "category": "Fluorescent Memory",
-    "price": 74.8,
-    "updated_at": 1767382383
+    "name": "Second Divinity",
+    "type": "Fluorescent Memory",
+    "price": 71.26,
+    "updated_at": 1771803964
   },
   "6147": {
-    "name": "One-tenth Twin Reflection",
-    "category": "Fluorescent Memory",
-    "price": 2383.567,
-    "updated_at": 1767382383
+    "name": "Gaze Upon the Reflection",
+    "type": "Fluorescent Memory",
+    "price": 11498.462962962964,
+    "updated_at": 1771803978
   },
   "6148": {
-    "name": "One-hundredth Twin Reflection",
-    "category": "Fluorescent Memory",
-    "price": 222.433,
-    "updated_at": 1767382383
+    "name": "Unhatched Shadow",
+    "type": "Fluorescent Memory",
+    "price": 1404.030303030303,
+    "updated_at": 1771803993
   },
   "6153": {
     "name": "Tomorrow's Direction",
-    "category": "Fluorescent Memory",
-    "price": 6.512,
-    "updated_at": 1767382383
+    "type": "Fluorescent Memory",
+    "price": 6.097553151809747,
+    "updated_at": 1771803998
   },
   "6205": {
     "name": "Unpredictable Direction",
-    "category": "Fluorescent Memory",
+    "type": "",
     "price": 0.34,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "6216": {
-    "name": "One-fifth Solitaire Boots",
-    "category": "Fluorescent Memory",
-    "price": 403.333,
-    "updated_at": 1767382383
+    "name": "Disappearing Shadow",
+    "type": "Fluorescent Memory",
+    "price": 231.81,
+    "updated_at": 1771804010
   },
   "6217": {
-    "name": "Unfettered Stars",
-    "category": "Fluorescent Memory",
-    "price": 2063.8,
-    "updated_at": 1767382383
+    "name": "Unfettered Constellation",
+    "type": "Fluorescent Memory",
+    "price": 1967.6346153846155,
+    "updated_at": 1771804064
   },
   "6218": {
-    "name": "The End of the Past",
-    "category": "Fluorescent Memory",
-    "price": 364.633,
-    "updated_at": 1767382383
+    "name": "End of the Past",
+    "type": "Fluorescent Memory",
+    "price": 2877.866666666667,
+    "updated_at": 1771804090
   },
   "6219": {
-    "name": "The Egg Day of the Past",
-    "category": "Fluorescent Memory",
-    "price": 23.99,
-    "updated_at": 1767382383
+    "name": "Beginning of the Past",
+    "type": "Fluorescent Memory",
+    "price": 695.258064516129,
+    "updated_at": 1771804111
   },
   "6220": {
     "name": "Starry Sky",
-    "category": "Fluorescent Memory",
+    "type": "",
     "price": -1.0,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "6221": {
-    "name": "Still in the Mirror",
-    "category": "Fluorescent Memory",
-    "price": 12.966,
-    "updated_at": 1767382383
+    "name": "Prism's Echo",
+    "type": "Fluorescent Memory",
+    "price": 2.7026528268076353,
+    "updated_at": 1771804120
   },
   "8604": {
     "name": "Precision - Self-Discipline",
-    "category": "Special Item",
+    "type": "",
     "price": 61.067,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "8608": {
     "name": "Precision - Intensive Enhancement",
-    "category": "Special Item",
+    "type": "",
     "price": 184.0667,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "8611": {
     "name": "Precision - Super Energy Symbiosis",
-    "category": "Special Item",
+    "type": "",
     "price": 1356.0,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "8614": {
     "name": "Precision - Throttling",
-    "category": "Special Item",
+    "type": "",
     "price": 4030.852,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "10001": {
     "name": "Sinful Plunder Compass",
-    "category": "Compass",
-    "price": 27,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 13.578035016235468,
+    "updated_at": 1771797196
   },
   "10002": {
     "name": "Sinful Plunder Compass (Artifact)",
-    "category": "Compass",
-    "price": 46.622,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 41.35,
+    "updated_at": 1771797199
   },
   "10003": {
     "name": "Transgression Plunder Compass",
-    "category": "Compass",
-    "price": 26.883,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 18.565576818109438,
+    "updated_at": 1771797201
   },
   "10010": {
     "name": "Novel Compass",
-    "category": "Compass",
-    "price": 1.949,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.46846485976808977,
+    "updated_at": 1771797206
   },
   "10011": {
     "name": "Lavish Novel Compass",
-    "category": "Compass",
-    "price": 3.086,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.8293393901619901,
+    "updated_at": 1771797211
   },
   "10012": {
     "name": "Conquering Novel Compass",
-    "category": "Compass",
-    "price": 9.883,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 9.11893419506463,
+    "updated_at": 1771797214
   },
   "10022": {
     "name": "Soldier Compass",
-    "category": "Compass",
-    "price": 0.323,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.2716161309134922,
+    "updated_at": 1771797217
   },
   "10023": {
     "name": "Strength in Numbers Soldier Compass",
-    "category": "Compass",
-    "price": 2.531,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.797661324747745,
+    "updated_at": 1771797221
   },
   "10032": {
     "name": "Veteran Compass",
-    "category": "Compass",
-    "price": 0.902,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.28327849755265994,
+    "updated_at": 1771797222
   },
   "10033": {
     "name": "Unrivaled Veteran Compass",
-    "category": "Compass",
-    "price": 6.603,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 7.732749359315872,
+    "updated_at": 1771797226
   },
   "10042": {
     "name": "Elite Compass",
-    "category": "Compass",
-    "price": 0.313,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.2767935948146764,
+    "updated_at": 1771797229
   },
   "10043": {
     "name": "Generous Elite Compass",
-    "category": "Compass",
-    "price": 7.546,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.753162186377235,
+    "updated_at": 1771797232
   },
   "10044": {
     "name": "Bountiful Elite Compass",
-    "category": "Compass",
-    "price": 143.164,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 140.675,
+    "updated_at": 1771797236
   },
   "10046": {
     "name": "Boss Compass",
-    "category": "Compass",
-    "price": 1.676,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.7050227683288351,
+    "updated_at": 1771797239
   },
   "10050": {
     "name": "Beacon Compass",
-    "category": "Compass",
-    "price": 0.45,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.602629822977945,
+    "updated_at": 1771797242
   },
   "10051": {
     "name": "Progressive Beacon Compass",
-    "category": "Compass",
-    "price": 4.2,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 7.541706592926282,
+    "updated_at": 1771797246
   },
   "10052": {
-    "name": "Ecliptic Compass",
-    "category": "Compass",
-    "price": 0.268,
-    "updated_at": 1767382383
+    "name": "Ecliptic Astrolabe",
+    "type": "Compass",
+    "price": 0.5050000000000054,
+    "updated_at": 1771797735
   },
   "10053": {
-    "name": "Vast Ecliptic Compass",
-    "category": "Compass",
+    "name": "Vast Ecliptic Astrolabe",
+    "type": "Compass",
     "price": 8.925,
-    "updated_at": 1767382383
+    "updated_at": 1771797746
   },
   "10054": {
-    "name": "Ascendant Ecliptic Compass",
-    "category": "Compass",
-    "price": 17.961,
-    "updated_at": 1767382383
+    "name": "Ascendant Ecliptic Astrolabe",
+    "type": "Compass",
+    "price": 9.930222222222223,
+    "updated_at": 1771797756
   },
   "10060": {
     "name": "Renown Edge Compass",
-    "category": "Compass",
-    "price": 10.822,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 6.796995370370371,
+    "updated_at": 1771797249
   },
   "10071": {
-    "name": "Armed Compass",
-    "category": "Compass",
-    "price": 0.999,
-    "updated_at": 1767382383
+    "name": "Militant Compass",
+    "type": "Compass",
+    "price": 0.6626028767928173,
+    "updated_at": 1771797283
   },
   "10072": {
     "name": "Priceless Militant Compass",
-    "category": "Compass",
-    "price": 8.564,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 9.901488095238097,
+    "updated_at": 1771797287
   },
   "10073": {
     "name": "Trinket Militant Compass",
-    "category": "Compass",
-    "price": 2.092,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 5.95,
+    "updated_at": 1771797291
   },
   "10081": {
     "name": "Ember Compass",
-    "category": "Compass",
-    "price": 1.967,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.4665160837329276,
+    "updated_at": 1771797294
   },
   "10082": {
     "name": "Bounty Ember Compass",
-    "category": "Compass",
-    "price": 2.726,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.9185624233016054,
+    "updated_at": 1771797297
   },
   "10083": {
     "name": "Reserve Ember Compass",
-    "category": "Compass",
-    "price": 2.322,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 6.716027107635316,
+    "updated_at": 1771797301
   },
   "10101": {
     "name": "Fluorescent Compass",
-    "category": "Compass",
-    "price": 0.567,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.33882739825452857,
+    "updated_at": 1771797304
   },
   "10102": {
     "name": "Colorful Fluorescent Compass",
-    "category": "Compass",
-    "price": 1.558,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.8973096612789326,
+    "updated_at": 1771797307
   },
   "10103": {
     "name": "Focus Fluorescent Compass",
-    "category": "Compass",
-    "price": 3.0,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 7.725535692412991,
+    "updated_at": 1771797310
   },
   "10110": {
     "name": "Flourishing Gods Compass",
-    "category": "Compass",
-    "price": 10.633,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 18.95514734582358,
+    "updated_at": 1771797314
   },
   "10120": {
-    "name": "Conquest Compass",
-    "category": "Compass",
-    "price": 4.624,
-    "updated_at": 1767382383
+    "name": "War Compass",
+    "type": "Compass",
+    "price": 2.4962850758718163,
+    "updated_at": 1771797516
   },
   "10122": {
-    "name": "Brave Compass",
-    "category": "Compass",
-    "price": 8.159,
-    "updated_at": 1767382383
+    "name": "Valiant War Compass",
+    "type": "Compass",
+    "price": 6.198995593756157,
+    "updated_at": 1771797371
   },
   "10130": {
-    "name": "War Compass",
-    "category": "Compass",
-    "price": 0.247,
-    "updated_at": 1767382383
+    "name": "Might Compass",
+    "type": "Compass",
+    "price": 0.3954993298827023,
+    "updated_at": 1771797513
   },
   "10131": {
-    "name": "Valiant War Compass",
-    "category": "Compass",
-    "price": 0.268,
-    "updated_at": 1767382383
+    "name": "Flourishing Might Compass",
+    "type": "Compass",
+    "price": 0.69759055055283,
+    "updated_at": 1771797541
   },
   "10133": {
     "name": "Onslaught Might Compass",
-    "category": "Compass",
-    "price": 2.967,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 5.570233766233767,
+    "updated_at": 1771797546
   },
   "10134": {
     "name": "Mecha Mighty Compass (Relic)",
-    "category": "Compass",
-    "price": 29.367,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 89.72,
+    "updated_at": 1771797550
   },
   "10140": {
     "name": "Hunting Compass",
-    "category": "Compass",
-    "price": 3.079,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 3.864929189204976,
+    "updated_at": 1771797554
   },
   "10142": {
     "name": "General Hunting Compass",
-    "category": "Compass",
-    "price": 3.065,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 6.512600116437594,
+    "updated_at": 1771797558
   },
   "10150": {
     "name": "Mechanical Compass",
-    "category": "Compass",
-    "price": 0.246,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.38582292775250177,
+    "updated_at": 1771797563
   },
   "10151": {
     "name": "Brilliant Mechanical Compass",
-    "category": "Compass",
-    "price": 0.738,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 4.917373968202177,
+    "updated_at": 1771797566
   },
   "10153": {
     "name": "Divide Mechanical Compass",
-    "category": "Compass",
-    "price": 7.117,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 92.09,
+    "updated_at": 1771797571
   },
   "10154": {
     "name": "Cruising Mechanical Compass (Artifact)",
-    "category": "Compass",
-    "price": 6.989,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 23.832558441558447,
+    "updated_at": 1771797577
   },
   "10160": {
     "name": "Dark Surge Compass",
-    "category": "Compass",
-    "price": 0.262,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.2663493398663012,
+    "updated_at": 1771797583
   },
   "10161": {
     "name": "Bandit Dark Surge Compass",
-    "category": "Compass",
-    "price": 4.304,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.6961821465617549,
+    "updated_at": 1771797586
   },
   "10162": {
     "name": "Divine Warrior Dark Surge Compass",
-    "category": "Compass",
-    "price": 13.933,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 29.274774774774777,
+    "updated_at": 1771797589
   },
   "10170": {
     "name": "Blacksail Compass",
-    "category": "Compass",
-    "price": 0.487,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.26270770171824753,
+    "updated_at": 1771797592
   },
   "10171": {
     "name": "Returning Blacksail Compass",
-    "category": "Compass",
-    "price": 2.602,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.697739064429129,
+    "updated_at": 1771797596
   },
   "10180": {
     "name": "Cube Compass",
-    "category": "Compass",
-    "price": 1.298,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.26030210291778355,
+    "updated_at": 1771797601
   },
   "10181": {
     "name": "Cube Compass: Two Extremes",
-    "category": "Compass",
-    "price": 8.883,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.9929985197592056,
+    "updated_at": 1771797644
   },
   "10182": {
-    "name": "Desire Incarnation Cube Compass",
-    "category": "Compass",
-    "price": 28.967,
-    "updated_at": 1767382383
+    "name": "Fortuitous Cube Compass",
+    "type": "Compass",
+    "price": 29.76936341072577,
+    "updated_at": 1771797640
   },
   "10190": {
     "name": "Aeterna Compass",
-    "category": "Compass",
-    "price": 0.257,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.2579207670145528,
+    "updated_at": 1771797647
   },
   "10191": {
     "name": "Familial Aeterna Compass",
-    "category": "Compass",
-    "price": 0.811,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.8267946595358703,
+    "updated_at": 1771797651
   },
   "10200": {
     "name": "Nightmare Compass",
-    "category": "Compass",
-    "price": 3.107,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1.7792599917545546,
+    "updated_at": 1771797656
   },
   "10210": {
     "name": "Folklore Compass",
-    "category": "Compass",
-    "price": 0.881,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.2690745099355262,
+    "updated_at": 1771797660
   },
   "10211": {
     "name": "Uncanny Folklore Compass",
-    "category": "Compass",
-    "price": 3.05,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.7663217808768773,
+    "updated_at": 1771797664
   },
   "10220": {
-    "name": "Doll Compass",
-    "category": "Compass",
-    "price": 0.248,
-    "updated_at": 1767382383
+    "name": "Doll Astrolabe",
+    "type": "Compass",
+    "price": 0.24891725593152114,
+    "updated_at": 1771797820
   },
   "10221": {
-    "name": "Collection Doll Compass",
-    "category": "Compass",
-    "price": 2.589,
-    "updated_at": 1767382383
+    "name": "Collection Doll Astrolabe",
+    "type": "Compass",
+    "price": 15.353285720400152,
+    "updated_at": 1771797824
   },
   "10222": {
-    "name": "Collection Doll Compass (Artifact)",
-    "category": "Compass",
-    "price": 29.633,
-    "updated_at": 1767382383
+    "name": "Collection Doll Astrolabe (Artifact)",
+    "type": "Compass",
+    "price": 81.16,
+    "updated_at": 1771797828
   },
   "10230": {
     "name": "Frozen Canvas Compass",
-    "category": "Compass",
-    "price": 0.283,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.6709164904914094,
+    "updated_at": 1771797669
   },
   "10231": {
     "name": "Frozen Canvas Compass: Abdundance",
-    "category": "Compass",
-    "price": 2.989,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 7.621273768714944,
+    "updated_at": 1771797672
   },
   "10240": {
     "name": "Arcana Compass",
-    "category": "Compass",
-    "price": 0.546,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.26176849858447826,
+    "updated_at": 1771797676
   },
   "10241": {
     "name": "Trump Card Arcana Compass",
-    "category": "Compass",
-    "price": 5.581,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.6890651697151281,
+    "updated_at": 1771797679
   },
   "10242": {
     "name": "The Fated Arcana Compass",
-    "category": "Compass",
-    "price": 53.332,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 21.98,
+    "updated_at": 1771797681
   },
   "10250": {
     "name": "Sandlord Compass",
-    "category": "Compass",
-    "price": 2.975,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1.422188309571397,
+    "updated_at": 1771797684
   },
   "10260": {
     "name": "Outlaw Compass",
-    "category": "Compass",
-    "price": 11.761,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.26086544745335105,
+    "updated_at": 1771797687
   },
   "10261": {
     "name": "Bounty Outlaw Compass",
-    "category": "Compass",
-    "price": 97.65,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 41.858770177671886,
+    "updated_at": 1771797691
   },
   "10262": {
     "name": "Alert Outlaw Compass",
-    "category": "Compass",
-    "price": 138.7,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 53.81916666666667,
+    "updated_at": 1771797695
   },
   "10270": {
-    "name": "Cage Compass",
-    "category": "Compass",
-    "price": 1.15,
-    "updated_at": 1767382383
+    "name": "Cage Astrolabe",
+    "type": "Compass",
+    "price": 0.26563659306757403,
+    "updated_at": 1771797845
   },
   "10272": {
-    "name": "Golden Cage Compass",
-    "category": "Compass",
-    "price": 380.1,
-    "updated_at": 1767382383
+    "name": "Golden Cage Astrolabe",
+    "type": "Compass",
+    "price": 533.1,
+    "updated_at": 1771797866
   },
   "12000": {
     "name": "Flourishing Profound Probe",
-    "category": "Probe",
-    "price": 9.931,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1.8419579053030515,
+    "updated_at": 1771797879
   },
   "12001": {
     "name": "Flourishing Deep Space Probe",
-    "category": "Probe",
-    "price": 62.6,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 32.03,
+    "updated_at": 1771797884
   },
   "12010": {
     "name": "Gear Profound Probe",
-    "category": "Probe",
-    "price": 19.167,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1.0219274135450944,
+    "updated_at": 1771797887
   },
   "12011": {
     "name": "Gear Deep Space Probe",
-    "category": "Probe",
-    "price": 102.2,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 69.42,
+    "updated_at": 1771797891
   },
   "12020": {
     "name": "Ember Profound Probe",
-    "category": "Probe",
-    "price": 9.889,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.3922348238751738,
+    "updated_at": 1771797894
   },
   "12021": {
     "name": "Ember Deep Space Probe",
-    "category": "Probe",
-    "price": 9.233,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1.960616009037062,
+    "updated_at": 1771797896
   },
   "12030": {
     "name": "Fluorescent Profound Probe",
-    "category": "Probe",
-    "price": 2.869,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 1.228103053637101,
+    "updated_at": 1771797899
   },
   "12031": {
     "name": "Fluorescent Deep Space Probe",
-    "category": "Probe",
-    "price": 51.967,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 17.675,
+    "updated_at": 1771797901
   },
   "12040": {
     "name": "Compass Profound Probe",
-    "category": "Probe",
-    "price": 8.567,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 8.400164326734956,
+    "updated_at": 1771797904
   },
   "12041": {
     "name": "Compass Deep Space Probe",
-    "category": "Probe",
-    "price": 59.667,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 81.28,
+    "updated_at": 1771797906
   },
   "12050": {
     "name": "Beacon Profound Probe",
-    "category": "Probe",
-    "price": 3.5,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.9911953289847153,
+    "updated_at": 1771797909
   },
   "100001": {
     "name": "Sinful Plunder Compass",
-    "category": "Compass",
+    "type": "",
     "price": 18.9919,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "100200": {
     "name": "Flame Sand",
-    "category": "Currency",
+    "type": "",
     "price": 0.002,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "100300": {
     "name": "Flame Elementium",
-    "category": "Currency",
+    "type": "",
     "price": 1.0,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "140004": {
     "name": "Shallow Dream Talking - Weapon",
-    "category": "Dream Material",
-    "price": 9.309,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 5.045471361639471,
+    "updated_at": 1771802683
   },
   "140005": {
     "name": "Shallow Dream Talking - Armor",
-    "category": "Dream Material",
+    "type": "",
     "price": 3.042,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "140006": {
-    "name": "Shallow Dream Talking - Accessory",
-    "category": "Dream Material",
-    "price": 19.971,
-    "updated_at": 1767382383
+    "name": "Shallow Dream Talking - Trinket",
+    "type": "",
+    "price": 20.78483809618695,
+    "updated_at": 1771802679
   },
   "200003": {
     "name": "Fine Ember",
-    "category": "Crafting",
-    "price": 0.055,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.23944378108049222,
+    "updated_at": 1771802694
   },
   "200021": {
     "name": "Truth Fossil",
-    "category": "Crafting",
-    "price": 22,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 5.825907127749629,
+    "updated_at": 1771802697
   },
   "200028": {
     "name": "Precious Ember",
-    "category": "Crafting",
-    "price": 0.1,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.024964218197369978,
+    "updated_at": 1771802691
   },
   "200029": {
     "name": "Matchless Ember",
-    "category": "Crafting",
-    "price": 0.01,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.15881673457610704,
+    "updated_at": 1771802688
   },
   "200030": {
     "name": "Ultimate Ember",
-    "category": "Crafting",
-    "price": 4.5,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 10.26824268494972,
+    "updated_at": 1771793165
   },
   "210000": {
     "name": "Aemberon Core",
-    "category": "Corruption Material",
+    "type": "",
     "price": 0.032,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "210001": {
     "name": "Familiar Core",
-    "category": "Corruption Material",
+    "type": "",
     "price": 102.406,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "210002": {
     "name": "Corrupted Axis",
-    "category": "Corruption Material",
-    "price": 32,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 32.0,
+    "updated_at": 1771412754
   },
   "210003": {
     "name": "Glorious Axis",
-    "category": "Corruption Material",
+    "type": "",
     "price": 1800.733,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "300006": {
     "name": "Sacred Fossil",
-    "category": "Crafting",
-    "price": 16.722,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 41.0,
+    "updated_at": 1771412754
   },
   "330001": {
     "name": "Snowpaper Fragment",
-    "category": "Special Item",
-    "price": 0.068,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.09433129484282039,
+    "updated_at": 1771803330
   },
   "338002": {
-    "name": "Star Catcher",
-    "category": "Special Item",
-    "price": 221.133,
-    "updated_at": 1767382383
+    "name": "Star Net",
+    "type": "",
+    "price": 361.9375,
+    "updated_at": 1771804162
   },
   "339001": {
-    "name": "Crazy Inspiration",
-    "category": "Special Item",
-    "price": 0.417,
-    "updated_at": 1767382383
+    "name": "Inspiration Essence",
+    "type": "",
+    "price": 1.2717136542845602,
+    "updated_at": 1771803347
   },
   "360403": {
     "name": "Basic Mod",
-    "category": "Tower Material",
-    "price": 7.944,
-    "updated_at": 1767382383
+    "type": "Outlaw Material",
+    "price": 0.873208896752022,
+    "updated_at": 1771802982
   },
   "360404": {
     "name": "Expansion Mod - Warlock",
-    "category": "Tower Material",
-    "price": 119.833,
-    "updated_at": 1767382383
+    "type": "Outlaw Material",
+    "price": 72.27913704873463,
+    "updated_at": 1771802966
   },
   "360405": {
     "name": "Expansion Mod - Vanguard",
-    "category": "Tower Material",
-    "price": 78.5,
-    "updated_at": 1767382383
+    "type": "Outlaw Material",
+    "price": 77.72029502232928,
+    "updated_at": 1771802960
   },
   "360406": {
     "name": "Expansion Mod - Sniper",
-    "category": "Tower Material",
-    "price": 35.333,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 29.483238095238107,
+    "updated_at": 1771802971
   },
   "360407": {
     "name": "Expansion Mod - Tank",
-    "category": "Tower Material",
-    "price": 59.233,
-    "updated_at": 1767382383
+    "type": "Outlaw Material",
+    "price": 52.78,
+    "updated_at": 1771802977
   },
   "370101": {
     "name": "Prism Gauge - Rare",
-    "category": "Overlay Material",
-    "price": 0.098,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.08721783303876487,
+    "updated_at": 1771802817
   },
   "370201": {
     "name": "Prism Gauge - Legendary",
-    "category": "Overlay Material",
-    "price": 0.235,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 5.443707490000459,
+    "updated_at": 1771802813
   },
   "400006": {
     "name": "Glacial Abyss Beacon (Timemark 7)",
-    "category": "Map Ticket",
+    "type": "",
     "price": 0.752,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "400007": {
     "name": "Glacial Abyss Beacon (Timemark 8)",
-    "category": "Map Ticket",
-    "price": 1.9,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.8697874606795584,
+    "updated_at": 1771802861
   },
   "400008": {
     "name": "Deep Space Beacon",
-    "category": "Map Ticket",
-    "price": 11.306,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 29.98050677655678,
+    "updated_at": 1771802863
   },
   "400014": {
     "name": "Blistering Lava Sea Beacon (Timemark 7)",
-    "category": "Map Ticket",
+    "type": "",
     "price": 0.989,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "400015": {
     "name": "Blistering Lava Sea Beacon (Timemark 8)",
-    "category": "Map Ticket",
-    "price": 1.4,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.3514555533125448,
+    "updated_at": 1771802859
   },
   "400021": {
     "name": "Steel Forge Beacon (Timemark 7)",
-    "category": "Map Ticket",
+    "type": "",
     "price": 0.652,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "400022": {
     "name": "Steel Forge Beacon (Timemark 8)",
-    "category": "Map Ticket",
-    "price": 0.8,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.10026399972183025,
+    "updated_at": 1771802856
   },
   "400027": {
     "name": "Thunder Wastes Beacon (Timemark 7)",
-    "category": "Map Ticket",
+    "type": "",
     "price": 0.97,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "400028": {
     "name": "Thunder Wastes Beacon (Timemark 8)",
-    "category": "Map Ticket",
-    "price": 0.9,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.16511737724672806,
+    "updated_at": 1771802854
   },
   "400032": {
     "name": "Voidlands Beacon (Timemark 7)",
-    "category": "Map Ticket",
+    "type": "",
     "price": 0.789,
-    "updated_at": 1767382383
+    "updated_at": 1771412754
   },
   "400033": {
     "name": "Voidlands Beacon (Timemark 8)",
-    "category": "Map Ticket",
-    "price": 0.9,
-    "updated_at": 1767382383
+    "type": "",
+    "price": 0.10090012499777817,
+    "updated_at": 1771802851
   },
   "410101": {
-    "name": "Command: Answer the Question",
-    "category": "Boss Ticket",
-    "price": 14.774,
-    "updated_at": 1767382383
+    "name": "Edict: Dart",
+    "type": "Map Ticket",
+    "price": 3.501620577926971,
+    "updated_at": 1771803198
   },
   "410102": {
-    "name": "Command: Diwo",
-    "category": "Boss Ticket",
-    "price": 10.54,
-    "updated_at": 1767382383
+    "name": "Edict: Dive",
+    "type": "Map Ticket",
+    "price": 3.5872930959074996,
+    "updated_at": 1771803208
   },
   "410103": {
-    "name": "Imperial Decree: Lu Yin",
-    "category": "Boss Ticket",
-    "price": 9.0,
-    "updated_at": 1767382383
+    "name": "Edict: Ruin",
+    "type": "Map Ticket",
+    "price": 3.526053846596984,
+    "updated_at": 1771803220
   },
   "410104": {
-    "name": "Imperial Decree: Du Mu",
-    "category": "Boss Ticket",
-    "price": 28.815,
-    "updated_at": 1767382383
+    "name": "Edict: Doom",
+    "type": "Map Ticket",
+    "price": 14.436023992735718,
+    "updated_at": 1771803230
   },
   "410201": {
     "name": "Void Sea Invitation - Craving",
-    "category": "Boss Ticket",
-    "price": 15.44,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 27.33512148277941,
+    "updated_at": 1771803176
   },
   "410202": {
     "name": "Void Sea Invitation - Ecstasy",
-    "category": "Boss Ticket",
-    "price": 52.44,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 66.85198133484575,
+    "updated_at": 1771803180
   },
   "410203": {
     "name": "Void Sea Invitation - Sorrow",
-    "category": "Boss Ticket",
-    "price": 73.979,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 21.668500722224913,
+    "updated_at": 1771803186
   },
   "410301": {
     "name": "Desire Core - Record",
-    "category": "Boss Ticket",
-    "price": 84.0,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 18.633216338990856,
+    "updated_at": 1771803158
   },
   "410302": {
     "name": "Desire Core - Creation",
-    "category": "Boss Ticket",
-    "price": 115.583,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 44.90704184704185,
+    "updated_at": 1771803163
   },
   "410303": {
     "name": "Desire Core - Devastation",
-    "category": "Boss Ticket",
-    "price": 176.633,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 66.77161976911977,
+    "updated_at": 1771803169
   },
   "410401": {
     "name": "Queen's Wick - Imprisoned",
-    "category": "Boss Ticket",
-    "price": 30.0,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 57.84166666666667,
+    "updated_at": 1771803142
   },
   "410402": {
     "name": "Queen's Wick - Pursuit",
-    "category": "Boss Ticket",
-    "price": 134.133,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 273.3958333333333,
+    "updated_at": 1771803147
   },
   "410403": {
     "name": "Queen's Wick - Revenge",
-    "category": "Boss Ticket",
-    "price": 14.4663,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 40.32,
+    "updated_at": 1771803152
   },
   "410501": {
     "name": "Queen's Grace - Slaughter",
-    "category": "Boss Ticket",
-    "price": 0.92,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 7.820455266955267,
+    "updated_at": 1771803123
   },
   "410502": {
     "name": "Queen's Grace - Authority",
-    "category": "Boss Ticket",
-    "price": 10.589,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 62.55428571428572,
+    "updated_at": 1771803130
   },
   "410503": {
     "name": "Queen's Grace - Lust",
-    "category": "Boss Ticket",
-    "price": 5.0,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 52.475,
+    "updated_at": 1771803135
   },
   "430000": {
     "name": "The Beginning",
-    "category": "Boss Ticket",
-    "price": 1.69,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 3.107754869712401,
+    "updated_at": 1771803297
   },
   "430001": {
-    "name": "The Beginning of the Beginning",
-    "category": "Boss Ticket",
-    "price": 0.898,
-    "updated_at": 1767382383
+    "name": "The End",
+    "type": "Map Ticket",
+    "price": 6.183139797584504,
+    "updated_at": 1771803305
   },
   "430002": {
-    "name": "The Beginning of the End",
-    "category": "Boss Ticket",
-    "price": 7.409,
-    "updated_at": 1767382383
+    "name": "Beginning of the End",
+    "type": "Map Ticket",
+    "price": 19.510086514081703,
+    "updated_at": 1771803316
   },
   "440001": {
     "name": "Divinity Emblem - Machine",
-    "category": "Divinity Emblem",
-    "price": 3.712,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 0.18986095995916447,
+    "updated_at": 1771803273
   },
   "440002": {
     "name": "Divinity Emblem - Might",
-    "category": "Divinity Emblem",
-    "price": 16.949,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 0.2886557358449706,
+    "updated_at": 1771803278
   },
   "440003": {
     "name": "Divinity Emblem - War",
-    "category": "Divinity Emblem",
-    "price": 12.75,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 0.23629499711097013,
+    "updated_at": 1771803282
   },
   "440004": {
     "name": "Divinity Emblem - Hunting",
-    "category": "Divinity Emblem",
-    "price": 3.351,
-    "updated_at": 1767382383
+    "type": "Map Ticket",
+    "price": 0.2779260375172945,
+    "updated_at": 1771803287
   },
   "990005": {
     "name": "The Essence of the Mist",
-    "category": "Game Ticket",
+    "type": "",
     "price": 72.75,
-    "updated_at": 1767382383
+    "updated_at": 1771412755
   },
   "990007": {
     "name": "Resident 😰 Eyes",
-    "category": "Game Ticket",
+    "type": "",
     "price": 0.82,
-    "updated_at": 1767382383
+    "updated_at": 1771412755
   },
   "990091": {
-    "name": "Conquering Ashes",
-    "category": "Game Ticket",
-    "price": 1,
-    "updated_at": 1767382383
+    "name": "Conquering Insignia",
+    "type": "Cosmetic Token",
+    "price": 15200.538461538461,
+    "updated_at": 1771803080
   },
   "3000001": {
-    "name": "Proof of the Weak I",
-    "category": "Game Ticket",
-    "price": 0.088,
-    "updated_at": 1767382383
+    "name": "Proof of the Brave I",
+    "type": "",
+    "price": 0.13900620031414554,
+    "updated_at": 1771802715
   },
   "3000002": {
-    "name": "Proof of the Weak II",
-    "category": "Game Ticket",
-    "price": 0.095,
-    "updated_at": 1767382383
+    "name": "Proof of the Brave II",
+    "type": "",
+    "price": 0.6299817304122385,
+    "updated_at": 1771802713
   },
   "3000003": {
-    "name": "Proof of the Strong III",
-    "category": "Game Ticket",
-    "price": 2.561,
-    "updated_at": 1767382383
+    "name": "Proof of the Brave III",
+    "type": "",
+    "price": 4.414592644092204,
+    "updated_at": 1771802710
   },
   "3000004": {
-    "name": "Brave Proof IV",
-    "category": "Gameplay Ticket",
-    "price": 22.55,
-    "updated_at": 1767382383
+    "name": "Proof of the Brave IV",
+    "type": "",
+    "price": 32.99,
+    "updated_at": 1771802707
   },
   "3000005": {
-    "name": "Superman Proof V",
-    "category": "Gameplay Ticket",
-    "price": 23.0,
-    "updated_at": 1767382383
+    "name": "Proof of the Brave V",
+    "type": "",
+    "price": 32.07434716873486,
+    "updated_at": 1771802700
   },
   "6055": {
-    "name": "",
-    "category": "",
-    "price": 93.0,
-    "updated_at": 1767382383
+    "name": "Antonius' Research",
+    "type": "Fluorescent Memory",
+    "price": 74.57214057610626,
+    "updated_at": 1771803849
   },
   "261001": {
     "name": "Sparks of Moth Fire",
-    "category": "Divinity Slate",
-    "price": 2000,
-    "updated_at": 1767382383
+    "type": "Divinity Slate",
+    "price": 1000.0,
+    "updated_at": 1771803531
+  },
+  "4528": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7208": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382049": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7135": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "100400": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380201": {
+    "name": "",
+    "type": "",
+    "price": 1.892408209946256,
+    "updated_at": 1771798015
+  },
+  "7618": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8006": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "5142": {
+    "name": "Memory Thread - Magic",
+    "type": "Memory Thread",
+    "price": 0.32933032868998974,
+    "updated_at": 1771804192
+  },
+  "400026": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400011": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7479": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7434": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7123": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382037": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7082": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380103": {
+    "name": "Vorax Amputated Limb - Decayed",
+    "type": "Vorax Amputated Limb",
+    "price": 0.16640329412101654,
+    "updated_at": 1771803458
+  },
+  "7418": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "5141": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400024": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7525": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7429": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382112": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "71003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7078": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382032": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7088": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7522": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7477": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382171": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7534": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382080": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360502": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7111": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7057": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7430": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7509": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382215": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7472": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382142": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7504": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382051": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7478": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380202": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7114": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7108": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7494": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382209": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7455": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382116": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "261010": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7206": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400009": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382039": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380105": {
+    "name": "Sullied Suture",
+    "type": "Vorax Suture",
+    "price": 0.2789333890673192,
+    "updated_at": 1771803380
+  },
+  "7116": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8029": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7113": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7528": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7521": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382181": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7424": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400019": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382113": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260103": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "101200": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400004": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382033": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "5039": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7616": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8311": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "370701": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7139": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382175": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7423": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400017": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382081": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360623": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400002": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382005": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7033": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7485": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7613": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7473": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7510": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382223": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400031": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382145": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400012": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382077": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400000": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7086": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7416": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "201003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7107": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7507": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382211": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400025": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382127": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400010": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7040": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7081": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7112": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7463": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "250001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382189": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400020": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382115": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400005": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "10290": {
+    "name": "Pig Iron Scalpel",
+    "type": "",
+    "price": 2.089687381194135,
+    "updated_at": 1771798002
+  },
+  "8315": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7071": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7606": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360102": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382179": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400018": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380203": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7051": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7614": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7896": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "400013": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "71002": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380006": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380007": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8317": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7526": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "261005": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8000": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7090": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "201028": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "101300": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "201029": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "201030": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3711": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "340002": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "340006": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "340008": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "340007": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "340005": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "340003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4533": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "10291": {
+    "name": "Sterling Silver Scalpel",
+    "type": "",
+    "price": 8.96654494876193,
+    "updated_at": 1771798006
+  },
+  "4522": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350737": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4630": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "2219": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4637": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7137": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7515": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4731": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360201": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360101": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "261003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7441": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7432": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7454": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380004": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3409": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7949": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7960": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3811": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380009": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "10280": {
+    "name": "Overrealm Compass",
+    "type": "",
+    "price": 0.26094258485284116,
+    "updated_at": 1771797698
+  },
+  "7154": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "5040": {
+    "name": "Deep Space Resonance",
+    "type": "",
+    "price": 0.7,
+    "updated_at": 1771412755
+  },
+  "4639": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3611": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8313": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7177": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3210": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7032": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7770": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7407": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8306": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382016": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7930": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7961": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7612": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7427": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7214": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7444": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8312": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4638": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380109": {
+    "name": "Vorax Amputated Limb - Engorged",
+    "type": "Vorax Amputated Limb",
+    "price": 0.2275858789587895,
+    "updated_at": 1771803472
+  },
+  "7927": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7431": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7942": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7448": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7415": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7893": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7447": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7068": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7209": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "500140": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7413": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7940": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7401": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382192": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8330": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7891": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3211": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7426": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "10281": {
+    "name": "Shadow Overrealm Compass",
+    "type": "",
+    "price": 5.704447415329769,
+    "updated_at": 1771797701
+  },
+  "260101": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260105": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "261011": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4537": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260404": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7128": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8015": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7621": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7514": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7202": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8017": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7839": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7530": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382056": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "384000": {
+    "name": "Crude Magnetic Pointer",
+    "type": "Compass Recycling",
+    "price": 0.2942600176784203,
+    "updated_at": 1771802653
+  },
+  "382196": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382007": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "10292": {
+    "name": "Titanium-Alloy Scalpel",
+    "type": "",
+    "price": 32.07,
+    "updated_at": 1771798008
+  },
+  "382132": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "384001": {
+    "name": "Fine Magnetic Pointer",
+    "type": "Compass Recycling",
+    "price": 0.7412391844131819,
+    "updated_at": 1771802635
+  },
+  "382078": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382203": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382011": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382193": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380106": {
+    "name": "Tenacious Suture",
+    "type": "Vorax Suture",
+    "price": 1.981939393939394,
+    "updated_at": 1771803393
+  },
+  "382156": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360202": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382131": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380110": {
+    "name": "Vorax Amputated Limb - Throbbing",
+    "type": "Vorax Amputated Limb",
+    "price": 0.3118028257776849,
+    "updated_at": 1771803503
+  },
+  "382009": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350014": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350015": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350002": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3108": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380005": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380002": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1118": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7845": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8600": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360627": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3511": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260201": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7772": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8613": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260104": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8305": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260204": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260102": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7855": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7067": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260106": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7029": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7842": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1119": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4601": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8310": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "71001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382240": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7412": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360701": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "370601": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "10282": {
+    "name": "Containment Overrealm Compass",
+    "type": "",
+    "price": 150.98,
+    "updated_at": 1771797703
+  },
+  "8603": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4108": {
+    "name": "King's Boon",
+    "type": "",
+    "price": 1.0,
+    "updated_at": 1771412755
+  },
+  "7452": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380205": {
+    "name": "Vital Organ: Fine",
+    "type": "",
+    "price": 40.33363636363636,
+    "updated_at": 1771800865
+  },
+  "7221": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3411": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360615": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380206": {
+    "name": "Vital Organ: Matchless",
+    "type": "",
+    "price": 89.49933333333333,
+    "updated_at": 1771800861
+  },
+  "7898": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3709": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1219": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4649": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "819": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4725": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360626": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3311": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4646": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260501": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382243": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4211": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "12121": {
+    "name": "Doll Deep Space Probe",
+    "type": "Probe",
+    "price": 208.99,
+    "updated_at": 1771797937
+  },
+  "350728": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4011": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7039": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360603": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "381055": {
+    "name": "Flawless Heart: Bellicose",
+    "type": "Vorax: Special Organ",
+    "price": 157.85849056603774,
+    "updated_at": 1771799857
+  },
+  "4636": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382163": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260003": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8307": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4411": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1019": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1919": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "2119": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "384002": {
+    "name": "Perfect Magnetic Pointer",
+    "type": "Compass Recycling",
+    "price": 7.324942308105313,
+    "updated_at": 1771802616
+  },
+  "380101": {
+    "name": "Cutting Instrument",
+    "type": "Vorax Item",
+    "price": 19.9655,
+    "updated_at": 1771803426
+  },
+  "382030": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1819": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7127": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7025": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7101": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7129": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7074": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7464": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7041": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7105": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8009": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7178": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7962": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7130": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7203": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7740": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7739": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7605": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360103": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4728": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4625": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7065": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7435": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382150": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7087": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7620": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7109": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "5012": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7428": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8601": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7741": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7458": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7443": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382201": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7220": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7169": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "2019": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380102": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3011": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360402": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7533": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8602": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7516": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4101": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4009": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7874": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7471": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260202": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360616": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8002": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7049": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1619": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7532": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7495": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7733": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7931": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7028": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7726": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360605": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "619": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360203": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7144": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8013": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7858": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8028": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7120": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360611": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7808": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360617": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7031": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7731": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8020": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8014": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7055": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7724": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "338001": {
+    "name": "Wandering Star",
+    "type": "",
+    "price": 3.131790756336037,
+    "updated_at": 1771804170
+  },
+  "7439": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260405": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260206": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1319": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8026": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "381032": {
+    "name": "Flawless Spine: Extended",
+    "type": "Vorax: Special Organ",
+    "price": 56.785,
+    "updated_at": 1771801624
+  },
+  "381061": {
+    "name": "Flawless Heart: Extrasystolic",
+    "type": "Vorax: Special Organ",
+    "price": 41.40909090909091,
+    "updated_at": 1771800038
+  },
+  "381004": {
+    "name": "Flawless Wings: Leathern",
+    "type": "Vorax: Special Organ",
+    "price": 105.16129032258064,
+    "updated_at": 1771798182
+  },
+  "4648": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260403": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260002": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260303": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260406": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260402": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260205": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "219": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350416": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "414": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "260004": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4647": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360614": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3810": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "382154": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7140": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3910": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8329": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4723": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8300": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7742": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350706": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8616": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "8615": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "350124": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "7155": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "121": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1401": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3600": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "2001": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3100": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "3300": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "2000": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "1400": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4632": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "4722": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "360503": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412755
+  },
+  "380010": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382232": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "381082": {
+    "name": "Flawless Spine: Impalement",
+    "type": "Vorax: Special Organ",
+    "price": 45.47945205479452,
+    "updated_at": 1771801975
+  },
+  "381007": {
+    "name": "Flawless Skin: Tolerant",
+    "type": "Vorax: Special Organ",
+    "price": 45.05813953488372,
+    "updated_at": 1771798719
+  },
+  "4111": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4311": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382139": {
+    "name": "Organ: Verdant Steps",
+    "type": "Vorax Organ",
+    "price": 7255.8,
+    "updated_at": 1771802476
+  },
+  "3809": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "419": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4109": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382213": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "1519": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3911": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4643": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7513": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7168": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7134": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7529": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4622": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7030": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7884": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7102": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7512": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350007": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7122": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7091": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "8606": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7084": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7138": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7121": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382047": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382128": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4629": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "1719": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3610": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7157": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "380008": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382096": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4532": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4655": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "6222": {
+    "name": "Exiled Destiny",
+    "type": "Fluorescent Memory",
+    "price": 453.43333333333334,
+    "updated_at": 1771804130
+  },
+  "381017": {
+    "name": "Flawless Eyes: Impassive",
+    "type": "Vorax: Special Organ",
+    "price": 152.19,
+    "updated_at": 1771798906
+  },
+  "381054": {
+    "name": "Flawless Herat: Clangorous",
+    "type": "Vorax: Special Organ",
+    "price": 786.1666666666666,
+    "updated_at": 1771799675
+  },
+  "1419": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4525": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382208": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "382019": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4310": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3700": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4626": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3101": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3601": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3401": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4720": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3301": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3501": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4000": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "1428": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3205": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "2006": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3510": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4103": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4627": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4621": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4727": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3299": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3201": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "1402": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7143": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7008": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "900080": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4640": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4721": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7895": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350900": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350748": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350753": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4520": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350004": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350102": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "260203": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350522": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "350526": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "400030": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "7615": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "4730": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771412756
+  },
+  "3609": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771358942
+  },
+  "3111": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771368110
+  },
+  "260006": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771415015
+  },
+  "350009": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771420785
+  },
+  "350101": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771423079
+  },
+  "7153": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771440352
+  },
+  "382126": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771534487
+  },
+  "8010": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771603362
+  },
+  "360628": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771700781
+  },
+  "350708": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771706016
+  },
+  "7928": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771706445
+  },
+  "360301": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771720447
+  },
+  "4008": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771774714
+  },
+  "3410": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771777912
+  },
+  "381026": {
+    "name": "Flawless Spine: Elongated",
+    "type": "Vorax: Special Organ",
+    "price": 487.0,
+    "updated_at": 1771801487
+  },
+  "382022": {
+    "name": "Organ: Surging Inspiration",
+    "type": "Vorax Organ",
+    "price": 175.0,
+    "updated_at": 1771802358
+  },
+  "380107": {
+    "name": "Exquisite Suture",
+    "type": "Vorax Suture",
+    "price": 149.7,
+    "updated_at": 1771803407
+  },
+  "382046": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771782790
+  },
+  "382064": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771782790
+  },
+  "382137": {
+    "name": "",
+    "type": "",
+    "price": 0.0,
+    "updated_at": 1771782790
+  },
+  "238460": {
+    "name": "",
+    "type": "",
+    "price": 10.0,
+    "updated_at": 1771786049
+  },
+  "113337": {
+    "name": "",
+    "type": "",
+    "price": 36.76,
+    "updated_at": 1771788237
+  },
+  "112439": {
+    "name": "Verdant Steps 👢🔥🤑",
+    "type": "Lengendary Gear",
+    "price": 58721.75,
+    "updated_at": 1771800814
+  },
+  "1003": {
+    "name": "",
+    "type": "",
+    "price": 4749.5,
+    "updated_at": 1771793443
+  },
+  "12131": {
+    "name": "Outlaw Deep Space Probe",
+    "type": "Probe",
+    "price": 104.335,
+    "updated_at": 1771797935
+  },
+  "12111": {
+    "name": "Machine Deep Space Probe",
+    "type": "Probe",
+    "price": 60.83,
+    "updated_at": 1771797972
+  },
+  "12101": {
+    "name": "Might Deep Space Probe",
+    "type": "Probe",
+    "price": 96.44,
+    "updated_at": 1771797993
+  },
+  "381001": {
+    "name": "Flawless Wings: Bladed",
+    "type": "Vorax: Special Organ",
+    "price": 299.44444444444446,
+    "updated_at": 1771798074
+  },
+  "381002": {
+    "name": "Flawless Wings: Molten",
+    "type": "Vorax: Special Organ",
+    "price": 339.6666666666667,
+    "updated_at": 1771798101
+  },
+  "381003": {
+    "name": "Flawless Wings: Ossified",
+    "type": "Vorax: Special Organ",
+    "price": 1350.9268292682927,
+    "updated_at": 1771798130
+  },
+  "381023": {
+    "name": "Flawless Wings: Shell",
+    "type": "Vorax: Special Organ",
+    "price": 1426.8,
+    "updated_at": 1771798213
+  },
+  "381005": {
+    "name": "Flawless Skin: Crysaline",
+    "type": "Vorax: Special Organ",
+    "price": 72.44545454545455,
+    "updated_at": 1771798238
+  },
+  "381006": {
+    "name": "Flawless Skin: Barbed",
+    "type": "Vorax: Special Organ",
+    "price": 73.27027027027027,
+    "updated_at": 1771798696
+  },
+  "381008": {
+    "name": "Flawless Skin: Adamantine",
+    "type": "Vorax: Special Organ",
+    "price": 95.57954545454545,
+    "updated_at": 1771798737
+  },
+  "381009": {
+    "name": "Flawless Skin: Compensatory",
+    "type": "Vorax: Special Organ",
+    "price": 138.01041666666666,
+    "updated_at": 1771798760
+  },
+  "381010": {
+    "name": "Flawless Skin: Attenuated",
+    "type": "Vorax: Special Organ",
+    "price": 48.4,
+    "updated_at": 1771798777
+  },
+  "381011": {
+    "name": "Flawless Skin: Acid-Etched",
+    "type": "Vorax: Special Organ",
+    "price": 214.0,
+    "updated_at": 1771798793
+  },
+  "381012": {
+    "name": "Flawless Skin: Hyperplastic",
+    "type": "Vorax: Special Organ",
+    "price": 560.3958333333334,
+    "updated_at": 1771798812
+  },
+  "381013": {
+    "name": "Flawless Skin: Weidghtless",
+    "type": "Vorax: Special Organ",
+    "price": 26.36842105263158,
+    "updated_at": 1771798832
+  },
+  "381014": {
+    "name": "Flawless Skin: Glabrous",
+    "type": "Vorax: Special Organ",
+    "price": 70.37142857142857,
+    "updated_at": 1771798852
+  },
+  "381015": {
+    "name": "Flawless Skin: Dura",
+    "type": "Vorax: Special Organ",
+    "price": 2025.0153846153846,
+    "updated_at": 1771798871
+  },
+  "381016": {
+    "name": "Flawless Eyes: Rancorous",
+    "type": "Vorax: Special Organ",
+    "price": 99.02941176470588,
+    "updated_at": 1771798892
+  },
+  "381018": {
+    "name": "Flawless Eyes: Sinister",
+    "type": "Vorax: Special Organ",
+    "price": 195.42857142857142,
+    "updated_at": 1771798921
+  },
+  "381019": {
+    "name": "Flawless Eyes: Ardent",
+    "type": "Vorax: Special Organ",
+    "price": 19.120689655172413,
+    "updated_at": 1771798934
+  },
+  "381020": {
+    "name": "Flawless Eyes: Keen",
+    "type": "Vorax: Special Organ",
+    "price": 24.846153846153847,
+    "updated_at": 1771798945
+  },
+  "381021": {
+    "name": "Flawless Eyes: Tarnished",
+    "type": "Vorax: Special Organ",
+    "price": 14.81132075471698,
+    "updated_at": 1771798960
+  },
+  "381022": {
+    "name": "Flawless Eyes: Cursed",
+    "type": "Vorax: Special Organ",
+    "price": 2603.46875,
+    "updated_at": 1771798974
+  },
+  "381024": {
+    "name": "Flawless Eyes: Limpid",
+    "type": "Vorax: Special Organ",
+    "price": 973.5,
+    "updated_at": 1771798991
+  },
+  "381025": {
+    "name": "Flawless Eyes: Glistering",
+    "type": "Vorax: Special Organ",
+    "price": 237.20634920634922,
+    "updated_at": 1771799039
+  },
+  "381046": {
+    "name": "Flawless Embryo: Distened",
+    "type": "Vorax: Special Organ",
+    "price": 310.96,
+    "updated_at": 1771799057
+  },
+  "381047": {
+    "name": "Flawless Embryo: Lacerated",
+    "type": "Vorax: Special Organ",
+    "price": 17.75,
+    "updated_at": 1771799073
+  },
+  "381048": {
+    "name": "Flawless Embryo: Gnawed",
+    "type": "Vorax: Special Organ",
+    "price": 25.416666666666668,
+    "updated_at": 1771799084
+  },
+  "381049": {
+    "name": "Flawless Embryo: Aberrant",
+    "type": "Vorax: Special Organ",
+    "price": 32.32258064516129,
+    "updated_at": 1771799102
+  },
+  "381050": {
+    "name": "Flawless Embryo: Didymous",
+    "type": "Vorax: Special Organ",
+    "price": 13.385,
+    "updated_at": 1771799131
+  },
+  "381051": {
+    "name": "Flawless Embryo: Voracious",
+    "type": "Vorax: Special Organ",
+    "price": 31.861702127659573,
+    "updated_at": 1771799412
+  },
+  "381053": {
+    "name": "Flawless Embryo: Polyembryonic",
+    "type": "Vorax: Special Organ",
+    "price": 116.73076923076923,
+    "updated_at": 1771799632
+  },
+  "381052": {
+    "name": "Flawless Embryo: Compliant",
+    "type": "Vorax: Special Organ",
+    "price": 5.479591836734694,
+    "updated_at": 1771799429
+  },
+  "381056": {
+    "name": "Flawless Heart: Perplexed",
+    "type": "Vorax: Special Organ",
+    "price": 649.5,
+    "updated_at": 1771799895
+  },
+  "381057": {
+    "name": "Flawless Heart: Exuberant",
+    "type": "Vorax: Special Organ",
+    "price": 985.6428571428571,
+    "updated_at": 1771799943
+  },
+  "381058": {
+    "name": "Flawless Heart: Unmoored",
+    "type": "Vorax: Special Organ",
+    "price": 7.985294117647059,
+    "updated_at": 1771799956
+  },
+  "381059": {
+    "name": "Flawless Heart: Anginal",
+    "type": "Vorax: Special Organ",
+    "price": 11.946236559139784,
+    "updated_at": 1771799972
+  },
+  "381060": {
+    "name": "Flawless Heart: Arrested",
+    "type": "Vorax: Special Organ",
+    "price": 28.696969696969695,
+    "updated_at": 1771799995
+  },
+  "381062": {
+    "name": "Flawless Heart: Solidified",
+    "type": "Vorax: Special Organ",
+    "price": 31.567010309278352,
+    "updated_at": 1771800053
+  },
+  "381063": {
+    "name": "Flawless Heart: Vaporized",
+    "type": "Vorax: Special Organ",
+    "price": 11.813559322033898,
+    "updated_at": 1771800067
+  },
+  "381064": {
+    "name": "Flawless Heart: Liquefied",
+    "type": "Vorax: Special Organ",
+    "price": 26.489583333333332,
+    "updated_at": 1771800093
+  },
+  "381065": {
+    "name": "Flawless Tongue: Glib",
+    "type": "Vorax: Special Organ",
+    "price": 107.42857142857143,
+    "updated_at": 1771801134
+  },
+  "381066": {
+    "name": "Flawless Tongue: Supple",
+    "type": "Vorax: Special Organ",
+    "price": 35.36,
+    "updated_at": 1771801146
+  },
+  "381067": {
+    "name": "Flawless Tongue: Dexterous",
+    "type": "Vorax: Special Organ",
+    "price": 18.844086021505376,
+    "updated_at": 1771801168
+  },
+  "381068": {
+    "name": "Flawless Tongue: Eloquent",
+    "type": "Vorax: Special Organ",
+    "price": 28.936363636363637,
+    "updated_at": 1771801178
+  },
+  "381069": {
+    "name": "Flawless Tongue: Ursine",
+    "type": "Vorax: Special Organ",
+    "price": 24.402439024390244,
+    "updated_at": 1771801190
+  },
+  "381070": {
+    "name": "Flawless Tongue: Feline",
+    "type": "Vorax: Special Organ",
+    "price": 0.9946236559139784,
+    "updated_at": 1771801245
+  },
+  "381071": {
+    "name": "Flawless Tongue: Vulpine",
+    "type": "Vorax: Special Organ",
+    "price": 21.39622641509434,
+    "updated_at": 1771801259
+  },
+  "381072": {
+    "name": "Flawless Tongue: Ardent",
+    "type": "Vorax: Special Organ",
+    "price": 67.66071428571429,
+    "updated_at": 1771801273
+  },
+  "381073": {
+    "name": "Flawless Tongue: Inscirbed",
+    "type": "Vorax: Special Organ",
+    "price": 52.666666666666664,
+    "updated_at": 1771801287
+  },
+  "381074": {
+    "name": "Flawless Tongue: Apathetic",
+    "type": "Vorax: Special Organ",
+    "price": 63.696969696969695,
+    "updated_at": 1771801299
+  },
+  "381075": {
+    "name": "Flawless Liver: Scorched",
+    "type": "Vorax: Special Organ",
+    "price": 53.65060240963855,
+    "updated_at": 1771801327
+  },
+  "381076": {
+    "name": "Flawless Liver: Combusted",
+    "type": "Vorax: Special Organ",
+    "price": 57.2125,
+    "updated_at": 1771801403
+  },
+  "381077": {
+    "name": "Flawless Liver: Thudnerclap",
+    "type": "Vorax: Special Organ",
+    "price": 52.285714285714285,
+    "updated_at": 1771801415
+  },
+  "381078": {
+    "name": "Flawless Liver: Dazzling",
+    "type": "Vorax: Special Organ",
+    "price": 54.04597701149425,
+    "updated_at": 1771801427
+  },
+  "381079": {
+    "name": "Flawless Liver: Iced",
+    "type": "Vorax: Special Organ",
+    "price": 50.49,
+    "updated_at": 1771801447
+  },
+  "381080": {
+    "name": "Flawless Liver: Frosted",
+    "type": "Vorax: Special Organ",
+    "price": 55.705882352941174,
+    "updated_at": 1771801457
+  },
+  "381027": {
+    "name": "Flawless Spine: Hyperostosis",
+    "type": "Vorax: Special Organ",
+    "price": 45.673469387755105,
+    "updated_at": 1771801505
+  },
+  "381028": {
+    "name": "Flawless Nerve: Compelling",
+    "type": "Vorax: Special Organ",
+    "price": 1397.4285714285713,
+    "updated_at": 1771801527
+  },
+  "381029": {
+    "name": "Flawless Nerve: Entwined",
+    "type": "Vorax: Special Organ",
+    "price": 2951.8333333333335,
+    "updated_at": 1771801543
+  },
+  "381030": {
+    "name": "Flawless Nerve: Unsealed (Pre-Fix)",
+    "type": "Vorax: Special Organ",
+    "price": 1925.2745098039222,
+    "updated_at": 1771801568
+  },
+  "381031": {
+    "name": "Flawless Ears: Resonant",
+    "type": "Vorax: Special Organ",
+    "price": 178.9655172413793,
+    "updated_at": 1771801609
+  },
+  "381033": {
+    "name": "Flawless Spine: Fractured",
+    "type": "Vorax: Special Organ",
+    "price": 7.640625,
+    "updated_at": 1771801669
+  },
+  "381034": {
+    "name": "Flawless Ears: Echoing",
+    "type": "Vorax: Special Organ",
+    "price": 15.775,
+    "updated_at": 1771801732
+  },
+  "381035": {
+    "name": "Flawless Ears: Prolonged",
+    "type": "Vorax: Special Organ",
+    "price": 13.130434782608695,
+    "updated_at": 1771801766
+  },
+  "381036": {
+    "name": "Flawless Ears: Partitioned",
+    "type": "Vorax: Special Organ",
+    "price": 118.4,
+    "updated_at": 1771801787
+  },
+  "381037": {
+    "name": "Flawless Spine: Fragmented",
+    "type": "Vorax: Special Organ",
+    "price": 31.668367346938776,
+    "updated_at": 1771801800
+  },
+  "381038": {
+    "name": "Flawless Ears: Clairaudient",
+    "type": "Vorax: Special Organ",
+    "price": 8.895833333333334,
+    "updated_at": 1771801823
+  },
+  "381039": {
+    "name": "Flawless Nerve: Excited",
+    "type": "Vorax: Special Organ",
+    "price": 343.0,
+    "updated_at": 1771801839
+  },
+  "381041": {
+    "name": "Flawless Ears: Prostrate",
+    "type": "Vorax: Special Organ",
+    "price": 18.033898305084747,
+    "updated_at": 1771801855
+  },
+  "381042": {
+    "name": "Flawless Nerve: Conducting",
+    "type": "Vorax: Special Organ",
+    "price": 1522.1774193548388,
+    "updated_at": 1771801873
+  },
+  "381043": {
+    "name": "Flawless Spine: Malleable",
+    "type": "Vorax: Special Organ",
+    "price": 296.3066666666667,
+    "updated_at": 1771801891
+  },
+  "381044": {
+    "name": "Flawless Spine: Vermicular",
+    "type": "Vorax: Special Organ",
+    "price": 14.793103448275861,
+    "updated_at": 1771801905
+  },
+  "381045": {
+    "name": "Flawless Spine: Ruptured",
+    "type": "Vorax: Special Organ",
+    "price": 71.61904761904762,
+    "updated_at": 1771801921
+  },
+  "381081": {
+    "name": "Flawless Nerve: Unsealed (Suffix)",
+    "type": "Vorax: Special Organ",
+    "price": 814.4657534246576,
+    "updated_at": 1771801954
+  },
+  "381083": {
+    "name": "Flawless Nerve: Dominant",
+    "type": "Vorax: Special Organ",
+    "price": 110.11428571428571,
+    "updated_at": 1771801993
+  },
+  "382028": {
+    "name": "Organ: Legless Bird's Lament",
+    "type": "Vorax Organ",
+    "price": 7000.0,
+    "updated_at": 1771802022
+  },
+  "382062": {
+    "name": "Organ: Royal Cycle",
+    "type": "Vorax Organ",
+    "price": 1707.6,
+    "updated_at": 1771802053
+  },
+  "382073": {
+    "name": "",
+    "type": "",
+    "price": 8.049999999999999,
+    "updated_at": 1771802061
+  },
+  "382063": {
+    "name": "",
+    "type": "",
+    "price": 18.09090909090909,
+    "updated_at": 1771802064
+  },
+  "382061": {
+    "name": "Organ: Iced Drinker's Cage",
+    "type": "Vorax Organ",
+    "price": 865.1764705882352,
+    "updated_at": 1771802085
+  },
+  "382075": {
+    "name": "",
+    "type": "",
+    "price": 91.2,
+    "updated_at": 1771802111
+  },
+  "382244": {
+    "name": "Organ: Silent Avowal",
+    "type": "Vorax Organ",
+    "price": 3042.8571428571427,
+    "updated_at": 1771802128
+  },
+  "382103": {
+    "name": "Organ: Wings of Light",
+    "type": "Vorax Organ",
+    "price": 67.8,
+    "updated_at": 1771802150
+  },
+  "382098": {
+    "name": "",
+    "type": "",
+    "price": 181.0,
+    "updated_at": 1771802156
+  },
+  "382092": {
+    "name": "",
+    "type": "",
+    "price": 0.8205128205128204,
+    "updated_at": 1771802164
+  },
+  "382102": {
+    "name": "Organ: Miniature Void Sea",
+    "type": "Vorax Organ",
+    "price": 434.5,
+    "updated_at": 1771802188
+  },
+  "382111": {
+    "name": "",
+    "type": "",
+    "price": 80.0,
+    "updated_at": 1771802192
+  },
+  "382140": {
+    "name": "Organ: Lone Walker's Boots",
+    "type": "Vorax Organ",
+    "price": 1960.0,
+    "updated_at": 1771802218
+  },
+  "382168": {
+    "name": "Organ: Windbreath Convergence",
+    "type": "Vorax Organ",
+    "price": 321.61538461538464,
+    "updated_at": 1771802260
+  },
+  "382197": {
+    "name": "Organ: Forlorn Crystal",
+    "type": "Vorax Organ",
+    "price": 1375.1,
+    "updated_at": 1771802285
+  },
+  "382029": {
+    "name": "Organ: Solid River",
+    "type": "Vorax Organ",
+    "price": 927.2,
+    "updated_at": 1771802336
+  },
+  "382242": {
+    "name": "",
+    "type": "",
+    "price": 4.431818181818182,
+    "updated_at": 1771802342
+  },
+  "382237": {
+    "name": "Organ: Eternity",
+    "type": "Vorax Organ",
+    "price": 4499.5,
+    "updated_at": 1771802378
+  },
+  "382236": {
+    "name": "Organ: Light Hunter Belt",
+    "type": "Vorax Organ",
+    "price": 183.8,
+    "updated_at": 1771802396
+  },
+  "383000": {
+    "name": "Grandiose Conception",
+    "type": "",
+    "price": 25.3512657332324,
+    "updated_at": 1771803361
+  },
+  "380104": {
+    "name": "Imprinting Iron",
+    "type": "Vorax Suture",
+    "price": 7.981666666666667,
+    "updated_at": 1771803439
+  },
+  "350536": {
+    "name": "",
+    "type": "",
+    "price": 121.33333333333333,
+    "updated_at": 1771803595
+  },
+  "6223": {
+    "name": "Calamity's Devotion",
+    "type": "Fluorescent Memory",
+    "price": 777.7777777777778,
+    "updated_at": 1771804142
   }
 }

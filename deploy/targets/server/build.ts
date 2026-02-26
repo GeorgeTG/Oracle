@@ -155,10 +155,9 @@ export async function buildServer(options: ServerBuildOptions): Promise<boolean>
       return false;
     }
     
-    // Build both server and tray versions
+    // Build server executable
     const specs = [
-      { spec: join(SERVER_DIR, 'Oracle-Server.spec'), name: 'Oracle-Server' },
-      { spec: join(SERVER_DIR, 'Oracle-Server-Tray.spec'), name: 'Oracle-Server-Tray' }
+      { spec: join(SERVER_DIR, 'Oracle-Server.spec'), name: 'Oracle-Server' }
     ];
     
     const distPath = join(DEPLOY_DIR, 'build', 'dist');

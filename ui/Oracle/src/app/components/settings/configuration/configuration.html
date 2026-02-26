@@ -1,6 +1,24 @@
 <div class="p-6">
-  <h1 class="text-3xl font-bold mb-6 text-surface-0">Configuration</h1>
-  
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-3xl font-bold text-surface-0">Configuration</h1>
+    <div class="flex gap-3">
+      @for (comp of componentStatus; track comp.name) {
+        <div class="bg-surface-800 rounded-lg px-4 py-3 border border-surface-700 flex items-center gap-3">
+          <div class="w-2.5 h-2.5 rounded-full"
+               [class.bg-green-500]="comp.connected"
+               [class.bg-red-500]="!comp.connected"
+               [style.box-shadow]="comp.connected ? '0 0 6px rgba(34, 197, 94, 0.5)' : '0 0 6px rgba(239, 68, 68, 0.5)'"></div>
+          <div>
+            <div class="text-sm font-semibold text-surface-100 capitalize">{{ comp.name }}</div>
+            <div class="text-xs text-surface-400">
+              {{ comp.connected ? 'v' + comp.version : 'Disconnected' }}
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+
   <div class="bg-surface-800 rounded-lg p-6 max-w-2xl border border-surface-700">
     <h2 class="text-xl font-semibold mb-6 text-surface-100">WebSocket</h2>
     
@@ -57,7 +75,64 @@
       </div>
       <p-toggleswitch [(ngModel)]="aggregateNumbers" inputId="aggregate-numbers-toggle" />
     </div>
-    
+
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <label for="river-min-value" class="text-surface-100 font-medium block mb-1">
+          Currency River Min Value
+        </label>
+        <p class="text-sm text-gray-400">Hide items from currency river below this value</p>
+      </div>
+      <p-inputnumber [(ngModel)]="riverMinValue" inputId="river-min-value" [min]="0" [maxFractionDigits]="2" [showButtons]="true" [step]="1" class="w-28" />
+    </div>
+
+    <p-button label="Save" icon="pi pi-save" (click)="saveSettings()" severity="success" />
+  </div>
+
+  <div class="bg-surface-800 rounded-lg p-6 max-w-2xl border border-surface-700 mt-6">
+    <h2 class="text-xl font-semibold mb-6 text-surface-100">Global Hotkey</h2>
+    <p class="text-sm text-gray-400 mb-6">
+      Requires Oracle-Hotkey running as administrator to capture keys while the game has focus.
+    </p>
+
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <label class="text-surface-100 font-medium block mb-1">
+          Toggle Overlay
+        </label>
+        <p class="text-sm text-gray-400">Open or close the stats overlay</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="bg-surface-700 px-4 py-2 rounded text-surface-100 font-mono min-w-24 text-center">
+          {{ recordingToggleOverlay ? 'Press any key...' : toggleOverlayKey }}
+        </span>
+        <p-button
+          [label]="recordingToggleOverlay ? 'Cancel' : 'Record'"
+          [icon]="recordingToggleOverlay ? 'pi pi-times' : 'pi pi-circle'"
+          [severity]="recordingToggleOverlay ? 'danger' : 'secondary'"
+          (click)="startRecording('toggleOverlay')" />
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mb-6">
+      <div>
+        <label class="text-surface-100 font-medium block mb-1">
+          Edit Mode
+        </label>
+        <p class="text-sm text-gray-400">Toggle edit mode on transparent overlay (opens overlay if closed)</p>
+      </div>
+      <div class="flex items-center gap-3">
+        <span class="bg-surface-700 px-4 py-2 rounded text-surface-100 font-mono min-w-24 text-center">
+          {{ recordingHotkey ? 'Press any key...' : hotkeyKey }}
+        </span>
+        <p-button
+          [label]="recordingHotkey ? 'Cancel' : 'Record'"
+          [icon]="recordingHotkey ? 'pi pi-times' : 'pi pi-circle'"
+          [severity]="recordingHotkey ? 'danger' : 'secondary'"
+          (click)="startRecording('hotkey')" />
+      </div>
+    </div>
+
     <p-button label="Save" icon="pi pi-save" (click)="saveSettings()" severity="success" />
   </div>
 </div>

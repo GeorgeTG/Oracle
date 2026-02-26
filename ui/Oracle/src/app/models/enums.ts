@@ -88,6 +88,7 @@ export enum ServiceEventType {
   MAP_STARTED = 'map_started',
   MAP_FINISHED = 'map_finished',
   MAP_STATS = 'map_stats',
+  MAP_STATUS = 'map_status',
   STATS_UPDATE = 'stats_update',
   STATS_CONTROL = 'stats_control',
   SESSION_CONTROL = 'session_control',
@@ -100,6 +101,15 @@ export enum ServiceEventType {
   WEBSOCKET_CONNECTED = 'websocket_connected',
   WEBSOCKET_DISCONNECTED = 'websocket_disconnected',
   NOTIFICATION = 'notification',
+  ITEM_OBTAINED = 'item_obtained',
+  ITEM_DATA_CHANGED = 'item_data_changed',
+  HOTKEY_PRESSED = 'hotkey_pressed',
+  OVERLAY_BOUNDS_UPDATE = 'overlay_bounds_update',
+  HOVER_ENTER = 'hover_enter',
+  HOVER_LEAVE = 'hover_leave',
+  OVERLAY_INFO_TEXT = 'overlay_info_text',
+  VIEW_CHANGED = 'view_changed',
+  HEARTBEAT = 'heartbeat',
 }
 
 export enum NotificationSeverity {

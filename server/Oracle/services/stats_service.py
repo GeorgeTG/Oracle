@@ -15,6 +15,8 @@ from Oracle.services.events.notification_events import NotificationEvent, Notifi
 from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.events.session_events import PlayerChangedEvent, SessionRestoreEvent, SessionStartedEvent
 from Oracle.services.events.stats_events import StatsUpdateEvent, StatsControlEvent, StatsControlAction
+from Oracle.services.events.item_events import ItemDataChangedEvent, ItemObtainedEvent
+from Oracle.services.events.overlay_events import ViewChangedEvent
 from Oracle.services.model import Inventory
 from Oracle.services.service_base import ServiceBase
 from Oracle.services.tooling.decorators import event_handler
@@ -53,12 +55,19 @@ class StatsService(ServiceBase):
         self.items_per_hour: Dict[int, float] = defaultdict(float)
         
         # Track currency per map and per hour
-        self.currency_total: float = 0.0
+        self.currency_total: float = 0.0  # Farming currency only (for per hour calculations)
+        self.market_currency_total: float = 0.0  # Market transactions (tracked separately)
         self.currency_per_map: float = 0.0
         self.currency_per_hour: float = 0.0
         self.currency_current_per_hour: float = 0.0
         self.currency_current_raw: float = 0.0
         self.current_map_entry_cost: float = 0.0
+
+        # Per-item quantity tracking (for recalculation on price change)
+        self._current_map_items: Dict[int, float] = defaultdict(float)  # Current map item deltas
+        self._entry_cost_items_total: Dict[int, float] = defaultdict(float)  # All entry cost items
+        self._entry_cost_items_current: Dict[int, float] = defaultdict(float)  # Current map entry cost items
+        self._market_items: Dict[int, float] = defaultdict(float)  # Net market transactions (signed qty)
         
         # Track exp per hour (separating gains and losses)
         self._exp_gained_total: float = 0.0  # Total XP gained
@@ -81,6 +90,9 @@ class StatsService(ServiceBase):
 
         # Flag to track if we've started farming after player join
         self._first_map_after_join: bool = True
+
+        # Cached inventory value (recalculated at map start, updated incrementally)
+        self._inventory_value: float = 0.0
 
         # Current game view
         self._current_view: str = "unknown"
@@ -106,6 +118,13 @@ class StatsService(ServiceBase):
         self._map_start_level = self._last_level or 1
         self._map_exp_gained = 0.0
         
+        # Reset current map tracking
+        self._current_map_items.clear()
+        self._entry_cost_items_current.clear()
+
+        # Full inventory value calculation at map start
+        self._inventory_value = self._calculate_inventory_value()
+
         # Calculate entry cost from consumed items
         total = 0.0
 
@@ -114,6 +133,9 @@ class StatsService(ServiceBase):
         for item in event.consumed_items:
             price = self._price_db.get_price(item.item_id)
             total += (price * item.quantity)
+            # Track entry cost items for recalculation on price change
+            self._entry_cost_items_current[item.item_id] += item.quantity
+            self._entry_cost_items_total[item.item_id] += item.quantity
             logger.info(f"📊 Consumed item {item.item_id} {item.name} x{item.quantity} (-{price * item.quantity:.2f})")
 
         logger.info(f"📊 Total map entry cost: {total:.2f}")
@@ -173,11 +195,18 @@ class StatsService(ServiceBase):
         )
         await self.publish(map_stats_event)
 
+        # Reset current map tracking
+        self.currency_current_raw = 0.0
+        self.current_map_entry_cost = 0.0
+        self._current_map_items.clear()
+        self._entry_cost_items_current.clear()
+        self._map_start = datetime.now()
+
         # Recalculate rates
         hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
         if hours_elapsed > 0:
             self.currency_per_hour = self.currency_total / hours_elapsed
-        
+
         if self._total_maps > 0:
             self.currency_per_map = self.currency_total / self._total_maps
 
@@ -201,33 +230,42 @@ class StatsService(ServiceBase):
 
     @event_handler(ParserEventType.GAME_VIEW)
     async def on_game_view(self, event: GameViewEvent):
-        """Track game view changes."""
+        """Track game view changes and broadcast to UI."""
         self._current_view = event.view
+        await self.publish(ViewChangedEvent(
+            timestamp=event.timestamp,
+            view=event.view,
+        ))
 
     @event_handler(ServiceEventType.MARKET_TRANSACTION)
     async def on_market_transaction(self, event: MarketTransactionEvent):
         """Track market transactions and update total currency."""
         assert self._price_db is not None
-        
+
         # Calculate transaction value
         item_price = self._price_db.get_price(event.item_id)
         transaction_value = item_price * event.quantity
-        
+
         # For bought items, it's negative (spent currency)
         # For sold/gained items, it's positive (gained currency)
+        signed_qty = event.quantity if event.action != "bought" else -event.quantity
         if event.action == "bought":
             transaction_value = -transaction_value
-        
-        # Update total currency
+
+        # Track market items for recalculation on price change
+        self._market_items[event.item_id] += signed_qty
+
+        # Update both totals
         self.currency_total += transaction_value
-        
+        self.market_currency_total += transaction_value
+
         # Recalculate per hour rate
         hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
         if hours_elapsed > 0:
             self.currency_per_hour = self.currency_total / hours_elapsed
-        
+
         logger.info(f"📊 Market transaction: {event.action} {event.quantity}x item {event.item_id} = {transaction_value:.2f}fe (total: {self.currency_total:.2f}fe)")
-        
+
         # Publish updated stats
         await self._publish_stats()
 
@@ -254,36 +292,84 @@ class StatsService(ServiceBase):
         # Calculate value change: delta * price
         price = self._price_db.get_price(event.item_id)
         value_change = delta * price
-        
+
+        # Incrementally update cached inventory value
+        self._inventory_value += value_change
+
         # Only update stats if in FightCtrl view
         is_fighting = "FightCtrl" in self._current_view
         logger.debug(f"📊 Current view: {self._current_view}, is_fighting={is_fighting}")
         if is_fighting:
+            # Publish ItemObtainedEvent for real-time tracking
+            await self.publish(ItemObtainedEvent(
+                timestamp=datetime.now(),
+                item_id=event.item_id,
+                item_name=event.name,
+                delta=delta,
+                item_price=price,
+                total_value=value_change
+            ))
+
             # Update totals
             self._items_total[event.item_id] += delta
-            
+            self._current_map_items[event.item_id] += delta
+
             # Update currency
             self.currency_total += value_change
             self.currency_current_raw += value_change
-            
+
             # Recalculate rates
             hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
             if hours_elapsed > 0:
                 for item_id, total in self._items_total.items():
                     self.items_per_hour[item_id] = total / hours_elapsed
                 self.currency_per_hour = self.currency_total / hours_elapsed
-            
+
             if self._total_maps > 0:
                 self.currency_per_map = self.currency_total / self._total_maps
-            
+
             logger.debug(f"📊 Item change: {event.name or event.item_id} {event.action} delta={delta} (value: {value_change:.2f})")
-            
+
             # Publish stats update
             await self._publish_stats()
         else:
             logger.debug(f"📊 Item change outside FightCtrl: {event.name or event.item_id} {event.action} delta={delta} (view: {self._current_view})")
 
+    @event_handler(ServiceEventType.ITEM_DATA_CHANGED)
+    async def on_item_data_changed(self, event: ItemDataChangedEvent):
+        """Recalculate all currency values and inventory value when an item price changes."""
+        if not self._price_db:
+            return
 
+        self._recalculate_currency()
+        self._inventory_value = self._calculate_inventory_value()
+        logger.info(f"📊 Price changed for item {event.item_id} ({event.name}) -> {event.price:.2f}fe, recalculated currency: total={self.currency_total:.2f}, current={self.currency_current_raw:.2f}")
+        await self._publish_stats()
+
+    def _recalculate_currency(self):
+        """Recalculate all currency values from per-item quantity tracking."""
+        # Farming items (gained during FightCtrl)
+        farming = sum(self._price_db.get_price(item_id) * qty for item_id, qty in self._items_total.items())
+        # Entry costs (consumed items across all maps)
+        entry = sum(self._price_db.get_price(item_id) * qty for item_id, qty in self._entry_cost_items_total.items())
+        # Market transactions
+        market = sum(self._price_db.get_price(item_id) * qty for item_id, qty in self._market_items.items())
+
+        self.currency_total = farming - entry + market
+        self.market_currency_total = market
+
+        # Current map
+        current_farming = sum(self._price_db.get_price(item_id) * qty for item_id, qty in self._current_map_items.items())
+        current_entry = sum(self._price_db.get_price(item_id) * qty for item_id, qty in self._entry_cost_items_current.items())
+        self.currency_current_raw = current_farming - current_entry
+        self.current_map_entry_cost = current_entry
+
+        # Recalculate rates
+        hours_elapsed = (datetime.now() - self._session_start).total_seconds() / 3600.0
+        if hours_elapsed > 0:
+            self.currency_per_hour = self.currency_total / hours_elapsed
+        if self._total_maps > 0:
+            self.currency_per_map = self.currency_total / self._total_maps
 
     @event_handler(ParserEventType.EXP_UPDATE)
     async def on_exp_update(self, event: ExpUpdateEvent):
@@ -405,11 +491,15 @@ class StatsService(ServiceBase):
             f"{self.currency_per_hour:.2f}/h, "
             f"{self.exp_per_hour:.0f} exp/h"
         )
-        
+
         # Publish initial stats to UI
         await self._publish_stats()
 
-
+    @event_handler(ServiceEventType.CLIENT_CONNECTED)
+    async def on_client_connected(self, _event: object):
+        """Send current stats to newly connected client."""
+        logger.debug("📊 Client connected, sending current stats")
+        await self._publish_stats()
 
     async def _restart_tracking(self):
         """Restart stats tracking - reset all statistics."""
@@ -419,10 +509,16 @@ class StatsService(ServiceBase):
         self._items_total.clear()
         self.items_per_hour.clear()
         self.currency_total = 0.0
+        self.market_currency_total = 0.0
         self.currency_per_map = 0.0
         self.currency_per_hour = 0.0
         self.currency_current_per_hour = 0.0
         self.currency_current_raw = 0.0
+        self._current_map_items.clear()
+        self._entry_cost_items_total.clear()
+        self._entry_cost_items_current.clear()
+        self._market_items.clear()
+        self._inventory_value = 0.0
         self._exp_total = 0.0
         self._last_exp_percent = None
         self._last_level = None
@@ -445,17 +541,29 @@ class StatsService(ServiceBase):
 
 
 
+    def _calculate_inventory_value(self) -> float:
+        """Calculate total inventory value based on current prices."""
+        if not self._inventory or not self._price_db:
+            return 0.0
+        total = 0.0
+        for (_page, _slot), item in self._inventory.slots.items():
+            price = self._price_db.get_price(item.item_id)
+            total += price * item.quantity
+        return total
+
     async def _publish_stats(self):
         """Publish current statistics."""
         session_duration = (datetime.now() - self._session_start).total_seconds()
         map_duration = (datetime.now() - self._map_start).total_seconds()
         current_per_hour = self.currency_current_raw / (map_duration / 3600.0) if map_duration > 0 else 0.0
         self.currency_current_per_hour = current_per_hour
+        inventory_value = self._inventory_value
         logger.info(
             f"📊 Publishing stats update - "
             f"Total: {self.currency_per_hour:.2f}/h, "
             f"Current: {self.currency_current_raw:.2f} | {current_per_hour:.2f}/h, "
             f"Per Map: {self.currency_per_map:.2f}/map, "
+            f"Inventory: {inventory_value:.2f}fe"
         )
         event = StatsUpdateEvent(
             timestamp=datetime.now(),
@@ -470,9 +578,11 @@ class StatsService(ServiceBase):
             currency_per_map=self.currency_per_map,
             currency_per_hour=self.currency_per_hour,
             currency_total=self.currency_total,
+            market_currency_total=self.market_currency_total,
             currency_current_per_hour=current_per_hour,
             currency_current_raw=self.currency_current_raw,
-            map_timer=map_duration
+            map_timer=map_duration,
+            inventory_value=inventory_value
         )
         
         await self.publish(event)

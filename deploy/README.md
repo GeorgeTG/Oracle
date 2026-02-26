@@ -60,8 +60,8 @@ bun package
 
 ### Build Targets
 Each target has its own configuration in `targets/`:
-- **launcher/**: Python launcher GUI with PyInstaller spec
-- **server/**: FastAPI server with PyInstaller specs for console and tray versions
+- **launcher/**: Python launcher GUI with PyInstaller spec (includes system tray support)
+- **server/**: FastAPI server with PyInstaller spec
 - **frontend/**: Angular + Tauri desktop application
 - **package/**: Release packaging and ZIP creation
 
@@ -72,8 +72,7 @@ deploy/
 │   ├── launcher-venv/              # Launcher Python environment
 │   ├── server-venv/                # Server Python environment
 │   ├── Oracle-Launcher/            # PyInstaller build files
-│   ├── Oracle-Server/              # PyInstaller build files
-│   └── Oracle-Server-Tray/         # PyInstaller build files
+│   └── Oracle-Server/              # PyInstaller build files
 │
 └── output/
     ├── launcher/
@@ -82,7 +81,6 @@ deploy/
     │   └── build.json
     ├── server/
     │   ├── Oracle-Server.exe
-    │   ├── Oracle-Server-Tray.exe
     │   ├── config.toml
     │   ├── build.json
     │   └── [data files]
@@ -103,28 +101,22 @@ deploy/
 
 The launcher provides:
 - One-click server and UI startup
+- System tray integration (minimizes to tray on close)
 - Build information display
 - GitHub update checking
-- Graceful shutdown management
+- Graceful shutdown of server and UI processes
+
+**Tray Features:**
+- Show/Hide launcher window
+- Open UI (focuses existing or launches new)
+- About dialog
+- Quit (stops all processes)
 
 ### Manual Server Deployment
 
-#### Standard Console Server
 1. Navigate to `server/` directory
 2. Edit `config.toml` if needed
 3. Run `Oracle-Server.exe`
-
-#### System Tray Server
-1. Navigate to `server/` directory
-2. Edit `config.toml` if needed
-3. Run `Oracle-Server-Tray.exe`
-
-**Tray Features:**
-- Show/Hide console window
-- Open server in browser
-- Open API documentation
-- About dialog with license info
-- Graceful shutdown
 
 Server runs on `http://localhost:8000` by default.
 

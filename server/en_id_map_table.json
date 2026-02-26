@@ -338,5 +338,71 @@
     "name": "Secret Realm - Unholy Pedestal",
     "asset": "BZ_NaGouZhiXi100",
     "area": "Secret Realm"
-  }
+  },
+  "234043": {
+    "name": "Secret Realm - Invaluable Time",
+    "asset": "",
+    "area": "Secret Realm",
+    "difficulty": "T8+"
+  },
+  "300200": {
+    "name": "Law Bearer - Stage 3",
+    "area": "Cube Boss",
+    "asset": ""
+  },
+  "300201": {
+    "name": "Law Bearer - Stage 2",
+    "area": "Cube Boss",
+    "asset": ""
+  },
+  "300202": {
+    "name": "Law Bearer - Stage 1",
+    "area": "Cube Boss",
+    "asset": ""
+  },
+  "999901": {
+    "name": "Path of the Brave I",
+    "asset": "",
+    "area": "Path of the Brave"
+  },
+  "999902": {
+    "name": "Path of the Brave II",
+    "asset": "",
+    "area": "Path of the Brave"
+  },
+  "999903": {
+    "name": "Path of the Brave III",
+    "asset": "",
+    "area": "Path of the Brave"
+  },
+  "999904": {
+    "name": "Path of the Brave IV",
+    "asset": "",
+    "area": "Path of the Brave"
+  }, 
+  "999905": {
+    "name": "Path of the Brave V",
+    "asset": "",
+    "area": "Path of the Brave"
+  },
+
+  "300090": {
+    "name": "Lord of the Void Sea - Stage 2",
+    "asset": "",
+    "area": "Void Sea Boss"
+  },
+  "300091": {
+    "name": "Lord of the Void Sea - Stage 3",
+    "asset": "",
+    "area": "Void Sea Boss",
+    "difficulty": "Tier 3"
+  },
+  "230043": {
+    "name": "Shelly's Operating Theater",
+    "asset": "",
+    "area": "Vorax Dungeon",
+    "difficulty": "Vorax"
+  } 
+
+
 }

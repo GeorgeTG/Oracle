@@ -40,6 +40,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
     {
       title: 'Tracking',
       items: [
+        { label: 'Dashboard', icon: 'pi pi-chart-bar', route: '/tracking/dashboard' },
         { label: 'Maps', icon: 'pi pi-map-marker', route: '/tracking/maps' },
         { label: 'Sessions', icon: 'pi pi-history', route: '/tracking/sessions' },
         { label: 'Market', icon: 'pi pi-shopping-cart', route: '/tracking/market' },

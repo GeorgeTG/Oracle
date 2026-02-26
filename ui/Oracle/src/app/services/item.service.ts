@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { ConfigurationService } from './configuration.service';
+import { WebSocketService } from './websocket.service';
+import { ToastService } from './toast.service';
+import { ServiceEventType } from '../models/enums';
+import { ItemObtainedEvent } from '../models/service-events';
 
 export interface Item {
   id: number;
@@ -31,10 +35,29 @@ export interface ItemUpdate {
   providedIn: 'root'
 })
 export class ItemService {
+  private _itemChanged$ = new Subject<ItemObtainedEvent>();
+  itemChanged$ = this._itemChanged$.asObservable();
+
   constructor(
     private http: HttpClient,
-    private configService: ConfigurationService
-  ) {}
+    private configService: ConfigurationService,
+    private websocketService: WebSocketService,
+    private toastService: ToastService
+  ) {
+    this.websocketService.subscribe<ItemObtainedEvent>(
+      ServiceEventType.ITEM_OBTAINED
+    ).subscribe(event => {
+      this._itemChanged$.next(event);
+    });
+
+    this.websocketService.subscribe<any>(
+      ServiceEventType.ITEM_DATA_CHANGED
+    ).subscribe(event => {
+      const name = event.name || `Item #${event.item_id}`;
+      this.toastService.info('Item Updated', `${name} — Price: ${event.price}`);
+      this._itemChanged$.next(event);
+    });
+  }
 
   private getApiUrl(): string {
     return this.configService.getApiUrl();
@@ -85,6 +108,11 @@ export class ItemService {
   deleteItem(id: number): Observable<void> {
     const url = `${this.getApiUrl()}/items/${id}`;
     return this.http.delete<void>(url);
+  }
+
+  getCategories(): Observable<string[]> {
+    const url = `${this.getApiUrl()}/items/categories`;
+    return this.http.get<string[]>(url);
   }
 
   exportItems(): Observable<Blob> {

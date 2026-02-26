@@ -15,4 +15,9 @@ PyGithub>=2.1.0
 # PyInstaller for building executable
 pyinstaller>=6.0.0
 
-# No other dependencies needed - using built-in tkinter
+# System tray icon support
+pystray>=0.19.0
+Pillow>=10.0.0
+
+# Optional: pywin32 for better window focus handling on Windows
+# pywin32>=306

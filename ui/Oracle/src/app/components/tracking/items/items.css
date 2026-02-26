@@ -166,6 +166,45 @@
   color: rgba(99, 102, 241, 0.8) !important;
 }
 
+/* AutoComplete dark styling */
+::ng-deep .p-autocomplete-input {
+  background: rgba(30, 41, 59, 0.6) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: white !important;
+}
+
+::ng-deep .p-autocomplete-input:focus {
+  border-color: rgba(99, 102, 241, 0.8) !important;
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2) !important;
+}
+
+::ng-deep .p-autocomplete-overlay {
+  background: rgb(15, 23, 42) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+}
+
+::ng-deep .p-autocomplete-option {
+  color: rgba(255, 255, 255, 0.9) !important;
+  padding: 0.5rem 1rem !important;
+}
+
+::ng-deep .p-autocomplete-option:hover,
+::ng-deep .p-autocomplete-option.p-focus {
+  background: rgba(99, 102, 241, 0.2) !important;
+  color: white !important;
+}
+
+::ng-deep .p-autocomplete .p-button {
+  background: rgba(30, 41, 59, 0.8) !important;
+  border: 1px solid rgba(71, 85, 105, 0.5) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+::ng-deep .p-autocomplete .p-button:hover {
+  background: rgba(71, 85, 105, 0.5) !important;
+  color: white !important;
+}
+
 /* Empty message */
 ::ng-deep .p-datatable .p-datatable-tbody > tr > td.text-center {
   padding: 0.5rem 1rem !important;

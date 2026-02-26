@@ -183,13 +183,16 @@
         </div>
         <div class="col-span-2 border-b border-surface-700 pb-3">
           <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Category</label>
-          <input
-            pInputText
-            type="text"
+          <p-autocomplete
             [(ngModel)]="selectedItemDetail.category"
-            class="w-full"
+            [suggestions]="filteredCategories"
+            (completeMethod)="filterCategorySuggestions($event)"
+            [dropdown]="true"
             placeholder="Category"
-          />
+            [style]="{'width': '100%'}"
+            [inputStyle]="{'width': '100%'}"
+            appendTo="body"
+          ></p-autocomplete>
         </div>
         <div class="col-span-2 border-b border-surface-700 pb-3">
           <label class="text-xs uppercase tracking-wider text-gray-400 mb-1 block">Rarity</label>

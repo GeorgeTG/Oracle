@@ -242,11 +242,7 @@ class PriceDB(SingletonMixin):
             logger.warning("💰 Price DB not loaded yet, returning 0.0")
             return 0.0
         
-        price = self._cache.get(item_id)
-        if price is None:
-            logger.debug(f"💰 Item {item_id} not found in price table")
-            return 0.0
-        return price
+        return self._cache.get(item_id, 0.0)
     
     async def reload(self):
         """Reload prices by calling refresh_pricelist."""
@@ -257,7 +253,7 @@ class PriceDB(SingletonMixin):
     async def _on_item_data_changed(self, event: ItemDataChangedEvent):
         """
         Handle item data changed event.
-        Updates the price cache when an item is modified via API.
+        Updates the price cache and persists to database.
 
         Args:
             event: ItemDataChangedEvent containing updated item data
@@ -267,6 +263,34 @@ class PriceDB(SingletonMixin):
         if event.price >= 0:
             self._cache[event.item_id] = event.price
             logger.info(f"💰 Item price changed: [{event.item_id}] {event.name} | {old_price} -> {event.price}")
+
+            # Persist to database (create item if it doesn't exist)
+            try:
+                item = await Item.get_or_none(item_id=event.item_id)
+                if item:
+                    item.price = event.price
+                    if event.name:
+                        item.name = event.name
+                    if event.category:
+                        item.category = event.category
+                    await item.save()
+                else:
+                    # Resolve name/category from item_db if not provided
+                    name = event.name
+                    category = event.category
+                    if not name or not category:
+                        info = item_lookup(event.item_id)
+                        name = name or info.get("name")
+                        category = category or info.get("type")
+                    await Item.create(
+                        item_id=event.item_id,
+                        name=name,
+                        category=category,
+                        price=event.price,
+                    )
+                    logger.info(f"💰 Created new Item in DB: [{event.item_id}] {name}")
+            except Exception as e:
+                logger.error(f"💰 Failed to persist item price to DB: {e}")
         else:
             # If price is removed or invalid, remove from cache
             if event.item_id in self._cache:

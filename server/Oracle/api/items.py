@@ -8,6 +8,7 @@ from pydantic import BaseModel
 from Oracle.database.models import Item
 from Oracle.events import EventBus
 from Oracle.services.events import ItemDataChangedEvent
+from Oracle.parsing.utils.item_db import update_item as update_item_cache
 from Oracle.tooling.logger import Logger
 
 logger = Logger("ItemsRouter")
@@ -69,7 +70,7 @@ async def get_items(
         
         # Apply filters
         if category:
-            query = query.filter(category=category)
+            query = query.filter(category__icontains=category)
         if min_price is not None:
             query = query.filter(price__gte=min_price)
         if max_price is not None:
@@ -132,6 +133,26 @@ async def export_items(
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to export items: {str(e)}"
+        )
+
+
+@router.get(
+    "/categories",
+    summary="List all categories",
+    description="Get a list of all unique item categories.",
+    response_model=List[str]
+)
+async def get_categories():
+    """Get all unique item categories."""
+    try:
+        items = await Item.all().distinct().values_list("category", flat=True)
+        categories = sorted(set(c for c in items if c))
+        return categories
+    except Exception as e:
+        logger.error(f"Failed to fetch categories: {e}")
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Failed to fetch categories: {str(e)}"
         )
 
 
@@ -239,8 +260,11 @@ async def create_item(item_data: ItemCreate):
             price=item.price
         ))
 
+        # Update item_db cache
+        update_item_cache(item.item_id, item.name, item.category)
+
         return ItemResponse.model_validate(item)
-    
+
     except HTTPException:
         raise
     except Exception as e:
@@ -285,9 +309,12 @@ async def update_item(item_id: int, item_data: ItemUpdate):
             category=item.category,
             price=item.price
         ))
-        
+
+        # Update item_db cache
+        update_item_cache(item.item_id, item.name, item.category)
+
         return ItemResponse.model_validate(item)
-    
+
     except HTTPException:
         raise
     except Exception as e:

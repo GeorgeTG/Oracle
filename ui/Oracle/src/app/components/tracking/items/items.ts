@@ -1,21 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ItemService, Item } from '../../../services/item.service';
 import { ToastService } from '../../../services/toast.service';
-import { TableModule } from 'primeng/table';
+import { TableModule, Table } from 'primeng/table';
 import { InputText } from 'primeng/inputtext';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
+import { AutoComplete } from 'primeng/autocomplete';
 import { save } from '@tauri-apps/plugin-dialog';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tracking-items',
-  imports: [CommonModule, FormsModule, TableModule, InputText, DialogModule, ButtonModule],
+  imports: [CommonModule, FormsModule, TableModule, InputText, DialogModule, ButtonModule, AutoComplete],
   templateUrl: './items.html',
   styleUrl: './items.css',
 })
-export class ItemsComponent implements OnInit {
+export class ItemsComponent implements OnInit, OnDestroy {
+  @ViewChild('dt') table!: Table;
+  private itemChangedSub?: Subscription;
   items: Item[] = [];
   loading: boolean = false;
   exporting: boolean = false;
@@ -29,6 +33,10 @@ export class ItemsComponent implements OnInit {
   filterMinPrice: number | null = null;
   filterMaxPrice: number | null = null;
 
+  // Category autocomplete
+  categories: string[] = [];
+  filteredCategories: string[] = [];
+
   constructor(
     private itemService: ItemService,
     private toastService: ToastService
@@ -36,6 +44,20 @@ export class ItemsComponent implements OnInit {
 
   ngOnInit() {
     this.loadItems();
+    this.loadCategories();
+    this.itemChangedSub = this.itemService.itemChanged$.subscribe(event => {
+      this.loadItems();
+      // Auto-filter to the changed item
+      setTimeout(() => {
+        if (this.table) {
+          this.table.filterGlobal(String(event.item_id), 'contains');
+        }
+      }, 500);
+    });
+  }
+
+  ngOnDestroy() {
+    this.itemChangedSub?.unsubscribe();
   }
 
   loadItems() {
@@ -57,6 +79,18 @@ export class ItemsComponent implements OnInit {
           this.loading = false;
         }
       });
+  }
+
+  loadCategories() {
+    this.itemService.getCategories().subscribe({
+      next: (categories) => { this.categories = categories; },
+      error: () => { this.categories = []; }
+    });
+  }
+
+  filterCategorySuggestions(event: { query: string }) {
+    const query = event.query.toLowerCase();
+    this.filteredCategories = this.categories.filter(c => c.toLowerCase().includes(query));
   }
 
   onFilterChange() {

@@ -38,11 +38,13 @@ class StatsUpdateEvent(ServiceEvent):
     exp_gained_total: float = 0.0  # Total XP gained
     exp_lost_total: float = 0.0  # Total XP lost
     currency_per_map: float = 0.0  # Average currency per map
-    currency_per_hour: float = 0.0  # Currency gained per hour
-    currency_total: float = 0.0  # Total net currency (maps + market)
+    currency_per_hour: float = 0.0  # Currency gained per hour (farming only)
+    currency_total: float = 0.0  # Total farming currency (excludes market)
+    market_currency_total: float = 0.0  # Total market transactions (tracked separately)
     currency_current_per_hour: float = 0.0  # Current map currency per hour
     currency_current_raw: float = 0.0  # Total currency in current map
     map_timer: float = 0.0  # Current map duration in seconds
+    inventory_value: float = 0.0  # Total inventory value based on current prices
     type: ServiceEventType = ServiceEventType.STATS_UPDATE
     
     def __repr__(self) -> str:

@@ -1,56 +1,321 @@
-<div [ngClass]="isTransparentMode ? 'transparent-container' : 'p-3 bg-gray-900 min-h-screen'">
+<!-- Edit Mode Branding (centered) -->
+@if (editMode) {
+  <div class="edit-mode-branding">
+    <img src="assets/favicon-32x32.png" alt="Oracle" class="w-16 h-16 mb-4">
+    <div class="text-xl font-bold text-white">Oracle Edit Mode</div>
+    <div class="text-sm text-gray-400 mt-2">Press "PG UP" to Exit</div>
+  </div>
+}
+
+<!-- Radial Control Menu - always visible -->
+<div class="radial-menu"
+  [class.radial-menu-interactive]="editMode || hoverMode"
+  [style.bottom]="radialPosition ? 'auto' : '24px'"
+  [style.right]="radialPosition ? 'auto' : '24px'"
+  [style.left]="radialPosition?.left || 'auto'"
+  [style.top]="radialPosition?.top || 'auto'"
+>
+  <div class="radial-ring" (mousedown)="(editMode || hoverMode) && onRadialDragStart($event)"></div>
+  <div class="radial-center" (mousedown)="(editMode || hoverMode) && onRadialDragStart($event)">
+    <img src="assets/favicon-32x32.png" alt="Oracle" class="radial-logo">
+  </div>
+  @for (panel of panelArray; track panel.config.id) {
+    <button class="radial-btn" [ngClass]="panel.config.radialPosition"
+      [class.active]="panel.visible && !panel.viewHidden"
+      (click)="togglePanel(panel.config.id)" [title]="panel.config.header">
+      <i [class]="panel.config.icon"></i>
+    </button>
+  }
+  <button class="radial-btn radial-top-right" (click)="newSession()" title="New Session">
+    <i class="pi pi-refresh"></i>
+  </button>
+</div>
+
+<!-- Stats Dialog -->
+<p-dialog
+  header="📊 Stats"
+  [(visible)]="showStats"
+  [modal]="false"
+  [draggable]="true"
+  [resizable]="true"
+  [closable]="true"
+  [style]="getDialogStyle('stats')"
+  styleClass="overlay-dialog dialog-stats"
+  (onHide)="onDialogHide('stats')"
+  (onShow)="onDialogShow('stats')"
+  (onDragEnd)="onDialogDragEnd('stats')"
+>
   @if (stats) {
-    <div class="grid grid-cols-2 gap-2" [ngClass]="isTransparentMode ? 'transparent-grid' : ''">
-      <div class="bg-gray-800 p-2 rounded">
-        <div class="text-gray-400 text-xs">Total Maps</div>
-        <div class="text-sm font-bold">{{ stats.total_maps }}</div>
-      </div>
-      
-      <div class="bg-gray-800 p-2 rounded">
-        <div class="text-gray-400 text-xs">Session Duration</div>
-        <div class="text-sm font-bold">{{ stats.session_duration | duration }}</div>
+    <div class="grid grid-cols-2 gap-2">
+      <div class="stat-cell">
+        <div class="stat-label">Total Maps</div>
+        <div class="stat-value">{{ stats.total_maps }}</div>
       </div>
 
-      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_total ?? 0)">
-        <div class="text-gray-400 text-xs">Net Currency</div>
-        <div class="text-sm font-bold">{{ (stats.currency_total ?? 0) | currency:false:'fe':2 }}</div>
+      <div class="stat-cell">
+        <div class="stat-label">Session</div>
+        <div class="stat-value">{{ stats.session_duration | duration }}</div>
       </div>
 
-      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_per_hour ?? 0)">
-        <div class="text-gray-400 text-xs">{{ currencyLabel }}</div>
-        <div class="text-sm font-bold">{{ (stats.currency_per_hour ?? 0) | currency:true }}</div>
+      <div class="stat-cell border transition-all duration-300" [ngClass]="getValueGlowClass(stats.currency_total ?? 0)">
+        <div class="stat-label">Net Currency</div>
+        <div class="stat-value">{{ (stats.currency_total ?? 0) | currency:false:'fe':2 }}</div>
       </div>
 
-      <div class="bg-gray-800 p-2 rounded">
-        <div class="text-gray-400 text-xs">{{ expLabel }}</div>
-        <div class="text-sm font-bold">{{ (stats.exp_per_hour ?? 0) | currency:true:'exp':0 }}</div>
+      <div class="stat-cell border transition-all duration-300" [ngClass]="getValueGlowClass(stats.currency_per_hour ?? 0)">
+        <div class="stat-label">{{ currencyLabel }}</div>
+        <div class="stat-value">{{ (stats.currency_per_hour ?? 0) | currency:true }}</div>
       </div>
 
-      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_per_map ?? 0)">
-        <div class="text-gray-400 text-xs">Currency / Map</div>
-        <div class="text-sm font-bold">{{ (stats.currency_per_map ?? 0) | currency:false:'fe':2 }}</div>
+      <div class="stat-cell">
+        <div class="stat-label">{{ expLabel }}</div>
+        <div class="stat-value">{{ (stats.exp_per_hour ?? 0) | currency:true:'exp':0 }}</div>
       </div>
 
-      <div class="bg-gray-800 p-2 rounded">
-        <div class="text-gray-400 text-xs">Map Timer</div>
-        <div class="text-sm font-bold">{{ (stats.map_timer ?? 0) | duration }}</div>
+      <div class="stat-cell border transition-all duration-300" [ngClass]="getValueGlowClass(stats.currency_per_map ?? 0)">
+        <div class="stat-label">Currency / Map</div>
+        <div class="stat-value">{{ (stats.currency_per_map ?? 0) | currency:false:'fe':2 }}</div>
       </div>
 
-      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_current_per_hour ?? 0)">
-        <div class="text-gray-400 text-xs">Current / {{ currentUnit }}</div>
-        <div class="text-sm font-bold">{{ (stats.currency_current_per_hour ?? 0) | currency:true:'fe':2 }}</div>
+      <div class="stat-cell">
+        <div class="stat-label">Time / Map</div>
+        <div class="stat-value">{{ stats.total_maps > 0 ? (stats.total_time / stats.total_maps | duration) : '-' }}</div>
       </div>
 
-      <div class="bg-gray-800 p-2 rounded transition-all duration-300 border" [ngClass]="getValueGlowClass(stats.currency_current_raw ?? 0)">
-        <div class="text-gray-400 text-xs">Current Currency</div>
-        <div class="text-sm font-bold">{{ (stats.currency_current_raw ?? 0) | currency:false:'fe':2 }}</div>
+      <div class="stat-cell">
+        <div class="stat-label">Inventory Value</div>
+        <div class="stat-value">{{ (stats.inventory_value ?? 0) | currency:false:'fe':2 }}</div>
       </div>
-
-
     </div>
   } @else {
-    <div class="text-center text-gray-500 py-4">
-      <p class="text-xs">Waiting for stats...</p>
+    <div class="text-center text-gray-500 py-2 text-xs">Waiting for stats...</div>
+  }
+</p-dialog>
+
+<!-- Recent Items Dialog -->
+<p-dialog
+  header="🎒 Recent Items"
+  [(visible)]="showItems"
+  [modal]="false"
+  [draggable]="true"
+  [resizable]="true"
+  [closable]="true"
+  [style]="getDialogStyle('items')"
+  styleClass="overlay-dialog dialog-items"
+  (onHide)="onDialogHide('items')"
+  (onShow)="onDialogShow('items')"
+  (onDragEnd)="onDialogDragEnd('items')"
+>
+  @if (itemHistory.length > 0) {
+    <div class="space-y-1">
+      @for (item of itemHistory; track $index) {
+        <div class="flex justify-between items-center text-xs">
+          <span class="truncate mr-2" [ngClass]="item.delta > 0 ? 'text-green-300' : 'text-red-300'">
+            {{ item.item_name || 'Item #' + item.item_id }}
+          </span>
+          <div class="flex gap-2 whitespace-nowrap">
+            <span [ngClass]="item.delta > 0 ? 'text-green-400' : 'text-red-400'">
+              {{ item.delta > 0 ? '+' : '' }}{{ item.delta }}
+            </span>
+            <span class="text-yellow-400 w-20 text-right flex items-center justify-end gap-1">
+              {{ item.item_price | currency:false:'':2 }}
+              <img src="assets/fe_icon.png" alt="fe" class="w-4 h-4">
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="text-xs text-gray-500">No items yet</div>
+  }
+</p-dialog>
+
+<!-- Notable Items Dialog -->
+<p-dialog
+  header="⭐ Notable Items"
+  [(visible)]="showNotable"
+  [modal]="false"
+  [draggable]="true"
+  [resizable]="true"
+  [closable]="true"
+  [style]="getDialogStyle('notable')"
+  styleClass="overlay-dialog dialog-notable"
+  (onHide)="onDialogHide('notable')"
+  (onShow)="onDialogShow('notable')"
+  (onDragEnd)="onDialogDragEnd('notable')"
+>
+  @if (notableItems.length > 0) {
+    <div class="space-y-1">
+      @for (item of notableItems; track $index) {
+        <div class="flex justify-between items-center text-xs">
+          <span class="truncate mr-2 text-yellow-200">
+            {{ item.item_name || 'Item #' + item.item_id }}
+          </span>
+          <div class="flex gap-2 whitespace-nowrap">
+            <span [ngClass]="item.delta > 0 ? 'text-green-400' : 'text-red-400'">
+              {{ item.delta > 0 ? '+' : '' }}{{ item.delta }}
+            </span>
+            <span class="text-yellow-400 w-20 text-right flex items-center justify-end gap-1">
+              {{ item.item_price | currency:false:'':2 }}
+              <img src="assets/fe_icon.png" alt="fe" class="w-4 h-4">
+            </span>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="text-xs text-gray-500">No notable items yet</div>
+  }
+</p-dialog>
+
+<!-- Map Details Dialog -->
+<p-dialog
+  header="🗺️ Map Details"
+  [(visible)]="showMap"
+  [modal]="false"
+  [draggable]="true"
+  [resizable]="true"
+  [closable]="true"
+  [style]="getDialogStyle('map')"
+  styleClass="overlay-dialog dialog-map"
+  (onHide)="onDialogHide('map')"
+  (onShow)="onDialogShow('map')"
+  (onDragEnd)="onDialogDragEnd('map')"
+>
+  @if (stats) {
+    <div class="grid grid-cols-2 gap-2">
+      <div class="stat-cell col-span-2">
+        @if (currentMap?.map; as map) {
+          <div class="stat-value text-cyan-400">{{ map.name }}</div>
+          <div class="stat-label">{{ map.area }} {{ map.difficulty ? '- ' + map.difficulty : '' }}</div>
+        } @else {
+          <div class="stat-value text-gray-500">No active map</div>
+        }
+      </div>
+
+      <div class="stat-cell">
+        <div class="stat-label">Map Timer</div>
+        <div class="stat-value">{{ (stats.map_timer ?? 0) | duration }}</div>
+      </div>
+
+      <div class="stat-cell border transition-all duration-300" [ngClass]="getValueGlowClass(stats.currency_current_raw ?? 0)">
+        <div class="stat-label">Current Currency</div>
+        <div class="stat-value">{{ (stats.currency_current_raw ?? 0) | currency:false:'fe':2 }}</div>
+      </div>
+
+      <div class="stat-cell border transition-all duration-300" [ngClass]="getValueGlowClass(stats.currency_current_per_hour ?? 0)">
+        <div class="stat-label">Current / {{ currentUnit }}</div>
+        <div class="stat-value">{{ (stats.currency_current_per_hour ?? 0) | currency:true:'fe':2 }}</div>
+      </div>
+
+      <div class="col-span-2 flex gap-2 mt-1">
+        <button class="map-detail-btn" (click)="showConsumedItems()"
+          [disabled]="!currentMap?.consumed_items?.length">
+          <i class="pi pi-box"></i> Entry Cost
+        </button>
+        <button class="map-detail-btn" (click)="showAffixes()"
+          [disabled]="!currentAffixes.length">
+          <i class="pi pi-bolt"></i> Affixes
+        </button>
+      </div>
     </div>
   }
-</div>
+</p-dialog>
+
+<!-- Consumed Items Popup -->
+<p-dialog
+  header="📦 Entry Cost Items"
+  [(visible)]="showConsumedPopup"
+  [modal]="true"
+  [draggable]="true"
+  [closable]="true"
+  [style]="{ width: '300px' }"
+  styleClass="overlay-dialog overlay-popup-dialog"
+  (onHide)="onPopupHide()"
+>
+  @if (currentMap?.consumed_items?.length) {
+    <div class="space-y-1">
+      @for (item of currentMap!.consumed_items!; track item.item_id) {
+        <div class="flex justify-between items-center text-xs">
+          <span class="text-gray-200 truncate mr-2">{{ item.name || 'Item #' + item.item_id }}</span>
+          <span class="text-red-400 whitespace-nowrap">x{{ item.quantity }}</span>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="text-xs text-gray-500 text-center">No consumed items</div>
+  }
+</p-dialog>
+
+<!-- Affixes Popup -->
+<p-dialog
+  header="⚡ Map Affixes"
+  [(visible)]="showAffixesPopup"
+  [modal]="true"
+  [draggable]="true"
+  [closable]="true"
+  [style]="{ width: '340px' }"
+  styleClass="overlay-dialog overlay-popup-dialog"
+  (onHide)="onPopupHide()"
+>
+  @if (currentAffixes.length) {
+    <div class="space-y-2">
+      @for (affix of currentAffixes; track affix.affix_id) {
+        <div class="affix-item">
+          <div class="text-xs font-semibold text-cyan-400">Affix #{{ affix.affix_id }}</div>
+          <div class="text-xs text-gray-300">{{ affix.description || 'No description' }}</div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="text-xs text-gray-500 text-center">No affixes detected</div>
+  }
+</p-dialog>
+
+<!-- Currency River -->
+@if (showRiver) {
+  <div class="currency-river"
+    [class.currency-river-edit]="editMode"
+    [style.left]="getPanelPosition('river').left"
+    [style.top]="getPanelPosition('river').top"
+    (mousedown)="editMode && onElementDragStart($event, 'river')"
+  >
+    @if (editMode) {
+      <div class="river-edit-label">💰 Currency River</div>
+    }
+    @for (item of riverItems; track item.id) {
+      <div class="river-item" [ngClass]="item.price >= 0 ? 'river-positive' : 'river-negative'"
+        [class.river-large]="getAbsPrice(item.price) >= 20"
+        [class.river-xlarge]="getAbsPrice(item.price) >= 100"
+      >
+        <span class="river-value">{{ item.price | currency:false:'':2 }}</span>
+        <img src="assets/fe_icon.png" alt="fe" class="river-icon">
+      </div>
+    }
+  </div>
+}
+
+<!-- Info Text River -->
+@if (showInfoText) {
+  <div class="info-text-river"
+    [class.info-text-river-edit]="editMode"
+    [style.left]="getPanelPosition('infoText').left"
+    [style.top]="getPanelPosition('infoText').top"
+    (mousedown)="editMode && onElementDragStart($event, 'infoText')"
+  >
+    @if (editMode) {
+      <div class="info-text-edit-label">ℹ️ Info Text</div>
+    }
+    @for (item of infoTextItems; track item.id) {
+      <div class="info-text-item"
+        [ngClass]="'info-text-' + item.severity"
+        [style.animation-duration.ms]="item.duration"
+      >
+        {{ item.text }}
+      </div>
+    }
+  </div>
+}
+
+<!-- Confirm Dialog -->
+<p-confirmDialog styleClass="overlay-confirm-dialog"></p-confirmDialog>

@@ -3,13 +3,13 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SessionDetails } from '../../../services/sessions.service';
 import { Dialog } from 'primeng/dialog';
-import { Tag } from 'primeng/tag';
 import { Tabs } from 'primeng/tabs';
 import { InputText } from 'primeng/inputtext';
 import { Textarea } from 'primeng/textarea';
 import { MapDetailComponent } from '../map-detail/map-detail';
 import { CurrencyPipe } from '../../../pipes/currency.pipe';
 import { DurationPipe } from '../../../pipes/duration.pipe';
+import { DifficultyPipe } from '../../../pipes/difficulty.pipe';
 import { TabList } from 'primeng/tabs';
 import { Tab } from 'primeng/tabs';
 import { TabPanels } from 'primeng/tabs';
@@ -18,7 +18,7 @@ import { TabPanel } from 'primeng/tabs';
 @Component({
   selector: 'app-session-details',
   standalone: true,
-  imports: [CommonModule, FormsModule, Dialog, Tag, Tabs, TabList, Tab, TabPanels, TabPanel, MapDetailComponent, CurrencyPipe, DurationPipe, InputText, Textarea],
+  imports: [CommonModule, FormsModule, Dialog, Tabs, TabList, Tab, TabPanels, TabPanel, MapDetailComponent, CurrencyPipe, DurationPipe, DifficultyPipe, InputText, Textarea],
   templateUrl: './session-details.html',
   styleUrl: './session-details.css',
 })

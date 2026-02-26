@@ -27,6 +27,8 @@ class ParserEventType(str, Enum):
     S12_GAMEPLAY = "s12_gameplay"
     TRANSITION_STYLE = "transition_style"
     PLAYER_JOIN = "player_join"
-    
+    MARKET_PRICE_REQUEST = "market_price_request"
+    MARKET_PRICE_RESPONSE = "market_price_response"
+
     def __str__(self) -> str:
         return self.value

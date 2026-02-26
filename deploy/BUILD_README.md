@@ -70,7 +70,6 @@ bun run build.ts --help
 - `-t, --target <type>` - Build target: `server`, `frontend`, `launcher`, or `all` (default: `all`)
 - `-r, --release` - Create release build (production mode with executables)
 - `-c, --clean` - Clean output directory before building
-- `--tray` - Build server with system tray support
 
 ## Output Structure
 

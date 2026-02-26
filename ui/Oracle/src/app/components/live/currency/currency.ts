@@ -7,8 +7,9 @@ import { CheckboxModule } from 'primeng/checkbox';
 import { WebSocketService } from '../../../services/websocket.service';
 import { StatsService } from '../../../services/stats.service';
 import { ConfigurationService } from '../../../services/configuration.service';
+import { OverlayService } from '../../../services/overlay.service';
 import { ServiceEventType } from '../../../models/enums';
-import { StatsUpdateEvent, MapStartedEvent } from '../../../models/service-events';
+import { StatsUpdateEvent, MapStartedEvent, ItemObtainedEvent } from '../../../models/service-events';
 import { DifficultyPipe } from '../../../pipes/difficulty.pipe';
 import { CurrencyPipe } from '../../../pipes/currency.pipe';
 import { DurationPipe } from '../../../pipes/duration.pipe';
@@ -23,12 +24,13 @@ export class CurrencyComponent implements OnInit, OnDestroy {
   private statsSubscription?: Subscription;
   private mapSubscription?: Subscription;
   private configSubscription?: Subscription;
-  private overlayWindow: any = null;
-  private toggleInProgress: boolean = false;
-  
+  private itemObtainedSubscription?: Subscription;
   stats: StatsUpdateEvent | null = null;
   currentMap: MapStartedEvent | null = null;
-  overlayOpen: boolean = false;
+
+  // Item obtained history
+  itemHistory: ItemObtainedEvent[] = [];
+  maxHistoryItems: number = 50;
   
   currencyLabel: string = 'Currency / Hour';
   expLabel: string = 'EXP / Hour';
@@ -43,12 +45,14 @@ export class CurrencyComponent implements OnInit, OnDestroy {
   currentPerHourSparkline: any;
   currentCurrencySparkline: any;
   expPerHourSparkline: any;
+  inventoryValueSparkline: any;
   sparklineOptions: any;
   
   constructor(
     private websocketService: WebSocketService,
     private statsService: StatsService,
-    private configService: ConfigurationService
+    private configService: ConfigurationService,
+    public overlayService: OverlayService
   ) {}
   
   async ngOnInit() {
@@ -67,11 +71,24 @@ export class CurrencyComponent implements OnInit, OnDestroy {
         await unregister('PageUp');
       }
       
-      await register('PageUp', () => {
-        console.log('[Currency] Hotkey triggered - toggling stats overlay');
-        this.toggleStatsOverlay();
+      await register('PageUp', (event: any) => {
+        // Only trigger on key press, not release
+        if (event.state === 'Released') return;
+        console.log('[Currency] Edit mode hotkey triggered');
+        this.overlayService.handlePageUp();
       });
       console.log('[Currency] Global shortcut registered: PageUp');
+
+      // Register global shortcut for Page Down key (toggle overlay)
+      if (await isRegistered('PageDown')) {
+        await unregister('PageDown');
+      }
+      await register('PageDown', (event: any) => {
+        if (event.state === 'Released') return;
+        console.log('[Currency] Toggle overlay hotkey triggered');
+        this.overlayService.toggleOverlay();
+      });
+      console.log('[Currency] Global shortcut registered: PageDown');
     } catch (e) {
       console.error('[Currency] Error registering global shortcut:', e);
     }
@@ -94,12 +111,33 @@ export class CurrencyComponent implements OnInit, OnDestroy {
       console.log('[Currency] Map started:', event);
       this.currentMap = event;
     });
+
+    // Subscribe to item obtained events
+    this.itemObtainedSubscription = this.websocketService.subscribe<ItemObtainedEvent>(ServiceEventType.ITEM_OBTAINED).subscribe(event => {
+      console.log('[Currency] Item obtained:', event);
+      this.itemHistory.unshift(event);
+      // Keep only the last maxHistoryItems
+      if (this.itemHistory.length > this.maxHistoryItems) {
+        this.itemHistory = this.itemHistory.slice(0, this.maxHistoryItems);
+      }
+    });
   }
   
-  ngOnDestroy() {
+  async ngOnDestroy() {
     this.statsSubscription?.unsubscribe();
     this.mapSubscription?.unsubscribe();
     this.configSubscription?.unsubscribe();
+    this.itemObtainedSubscription?.unsubscribe();
+
+    // Unregister global shortcuts
+    try {
+      const { unregister, isRegistered } = await import('@tauri-apps/plugin-global-shortcut');
+      if (await isRegistered('PageUp')) await unregister('PageUp');
+      if (await isRegistered('PageDown')) await unregister('PageDown');
+    } catch {}
+
+    // Close overlay window when main window closes
+    await this.overlayService.closeOverlay();
   }
   
   newSession() {
@@ -188,6 +226,7 @@ export class CurrencyComponent implements OnInit, OnDestroy {
     this.currentPerHourSparkline = { labels: [], datasets: [] };
     this.currentCurrencySparkline = { labels: [], datasets: [] };
     this.expPerHourSparkline = { labels: [], datasets: [] };
+    this.inventoryValueSparkline = { labels: [], datasets: [] };
     
     this.chartData = {
       labels: [],
@@ -309,105 +348,26 @@ export class CurrencyComponent implements OnInit, OnDestroy {
         tension: 0.4
       }]
     };
-    
+
+    // Inventory Value sparkline (cyan)
+    this.inventoryValueSparkline = {
+      labels: sparklineLabels,
+      datasets: [{
+        data: history.inventoryValue.slice(sparklineStartIdx),
+        borderColor: '#06b6d4',
+        backgroundColor: 'rgba(6, 182, 212, 0.2)',
+        fill: true,
+        tension: 0.4
+      }]
+    };
+
     // Trigger updates
     this.currencyPerHourSparkline = { ...this.currencyPerHourSparkline };
     this.currencyPerMapSparkline = { ...this.currencyPerMapSparkline };
     this.currentPerHourSparkline = { ...this.currentPerHourSparkline };
     this.currentCurrencySparkline = { ...this.currentCurrencySparkline };
     this.expPerHourSparkline = { ...this.expPerHourSparkline };
+    this.inventoryValueSparkline = { ...this.inventoryValueSparkline };
   }
 
-  async toggleStatsOverlay(): Promise<void> {
-    // Prevent multiple simultaneous toggles
-    if (this.toggleInProgress) {
-      console.log('[Currency] Toggle already in progress, ignoring');
-      return;
-    }
-    
-    this.toggleInProgress = true;
-    
-    try {
-      const { WebviewWindow } = await import('@tauri-apps/api/webviewWindow');
-      
-      // Try to get existing window by label
-      const existingWindow = await WebviewWindow.getByLabel('stats-overlay');
-      
-      // If overlay is open or existing window found, close it
-      if (existingWindow) {
-        console.log('[Currency] Found existing stats overlay window, destroying...');
-        try {
-          await existingWindow.destroy();
-          console.log('[Currency] Stats overlay window destroyed');
-        } catch (e) {
-          console.error('[Currency] Error destroying window:', e);
-        }
-        this.overlayWindow = null;
-        this.overlayOpen = false;
-        
-        // Wait a bit to ensure window is fully destroyed
-        await new Promise(resolve => setTimeout(resolve, 100));
-        return;
-      }
-
-      // Otherwise, open it
-      console.log('[Currency] Creating new stats overlay window');
-      const isTransparent = localStorage.getItem('transparent_overlay') === 'true';
-      
-      // Restore saved position if available
-      const savedPosition = localStorage.getItem('stats_overlay_position');
-      let windowConfig: any = {
-        url: '/overlay/stats',
-        title: 'Stats Overlay',
-        width: 400,
-        height: 300,
-        resizable: true,
-        alwaysOnTop: true,
-        decorations: !isTransparent,
-        transparent: isTransparent,
-        skipTaskbar: isTransparent
-      };
-      
-      if (savedPosition) {
-        try {
-          const pos = JSON.parse(savedPosition);
-          windowConfig.x = pos.x;
-          windowConfig.y = pos.y;
-          windowConfig.width = pos.width;
-          windowConfig.height = pos.height;
-        } catch (e) {
-          console.error('[Currency] Error parsing saved position:', e);
-        }
-      }
-      
-      this.overlayWindow = new WebviewWindow('stats-overlay', windowConfig);
-
-      this.overlayWindow.once('tauri://created', () => {
-        this.overlayOpen = true;
-        console.log('Stats overlay window created');
-      });
-
-      this.overlayWindow.once('tauri://error', (e: any) => {
-        this.overlayOpen = false;
-        this.overlayWindow = null;
-        console.error('Failed to create stats overlay window:', e);
-      });
-
-      // Listen for window close event to update state
-      this.overlayWindow.listen('tauri://destroyed', () => {
-        this.overlayOpen = false;
-        this.overlayWindow = null;
-        console.log('Stats overlay window destroyed event');
-      });
-    } catch (error) {
-      this.overlayOpen = false;
-      this.overlayWindow = null;
-      console.error('Error toggling stats overlay:', error);
-    } finally {
-      // Reset toggle lock after a short delay
-      setTimeout(() => {
-        this.toggleInProgress = false;
-      }, 200);
-    }
-  }
 }

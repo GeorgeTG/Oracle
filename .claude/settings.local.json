@@ -6,7 +6,15 @@
       "Bash(python -c:*)",
       "Bash(python -m py_compile:*)",
       "Bash(where:*)",
-      "Bash(bun build:launcher:*)"
+      "Bash(bun build:launcher:*)",
+      "Bash(del:*)",
+      "Bash(python3 -m venv:*)",
+      "Bash(c:/Users/georg/Documents/Projects/Oracle/deploy/build/hotkey-venv/Scripts/pip.exe install:*)",
+      "Bash(bun run:*)",
+      "Bash(powershell -Command:*)"
+    ],
+    "additionalDirectories": [
+      "c:\\Users\\georg\\Documents\\Projects\\Oracle"
     ]
   }
 }

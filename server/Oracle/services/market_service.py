@@ -1,18 +1,22 @@
 """Market tracking service - monitors auction house activity."""
 from datetime import datetime
-from typing import Optional
+from typing import Optional, Dict
 
 from Oracle.services.service_base import ServiceBase
 from Oracle.services.events.market_events import MarketActionEvent, MarketAction, MarketTransactionEvent
 from Oracle.services.tooling.decorators import event_handler
 from Oracle.parsing.parsers.events.game_view import GameViewEvent
 from Oracle.parsing.parsers.events.item_change import ItemChangeEvent
+from Oracle.parsing.parsers.events.market_price_request import MarketPriceRequestEvent
+from Oracle.parsing.parsers.events.market_price_response import MarketPriceResponseEvent
 from Oracle.parsing.parsers.events.parser_event_type import ParserEventType
 from Oracle.services.events.service_event import ServiceEventType
+from Oracle.services.events.item_events import ItemDataChangedEvent
 from Oracle.database.models import MarketTransaction, Session, Item
 from Oracle.tooling.logger import Logger
 from Oracle.services.events.inventory import RequestInventoryEvent
 from Oracle.services.model.inventory_model import Inventory
+from Oracle.parsing.utils.item_db import item_lookup
 
 logger = Logger("MarketService")
 
@@ -35,6 +39,9 @@ class MarketService(ServiceBase):
         
         self._total_quantity: int = 0
         self._last_event: Optional[ItemChangeEvent] = None
+
+        # Price search: maps request SynId → real item_id
+        self._price_requests: Dict[int, int] = {}
         
     async def startup(self):
         """Start the service."""
@@ -209,3 +216,45 @@ class MarketService(ServiceBase):
             # Start batching for new item
             self._total_quantity = quantity_delta
             self._last_event = event
+
+    @event_handler(ParserEventType.MARKET_PRICE_REQUEST)
+    async def on_market_price_request(self, event: MarketPriceRequestEvent):
+        """Store request_id → item_id mapping for price search correlation."""
+        self._price_requests[event.request_id] = event.item_id
+        logger.debug(f"🏪 Price request: SynId={event.request_id} → item_id={event.item_id}")
+
+    @event_handler(ParserEventType.MARKET_PRICE_RESPONSE)
+    async def on_market_price_response(self, event: MarketPriceResponseEvent):
+        """Handle market price search response, resolve real item_id from request mapping."""
+        if not event.success or not event.prices:
+            return
+
+        item_id = self._price_requests.pop(event.request_id, None)
+        if item_id is None:
+            logger.warning(f"🏪 No matching request for SynId={event.request_id}, ignoring response")
+            return
+
+        # Outlier filtering: remove prices that appear only once and are >= 2x the median of the rest
+        prices = list(event.prices)
+        if len(prices) > 2:
+            sorted_prices = sorted(prices)
+            median = sorted_prices[len(sorted_prices) // 2]
+            filtered = [p for p in prices if not (prices.count(p) == 1 and p >= median * 2)]
+            if filtered:
+                prices = filtered
+
+        # Mean of filtered prices
+        price = sum(prices) / len(prices)
+
+        # Resolve item name
+        info = item_lookup(item_id)
+        name = info.get("name")
+        category = info.get("type")
+        logger.info(f"🏪 Price search for {name} ({item_id}): {len(event.prices)} listings, weighted mean = {price:.4f}")
+
+        await self.publish(ItemDataChangedEvent(
+            item_id=item_id,
+            name=name,
+            category=category,
+            price=price,
+        ))
