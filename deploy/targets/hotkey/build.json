@@ -1,7 +1,7 @@
 {
   "name": "hotkey",
   "version": "2.0.0",
-  "build": "2026-02-26_17-52-41-276Z",
+  "build": "2026-02-28_22-42-36-001Z",
   "root": "hotkey",
   "venv": true,
   "dir": "deploy/build",

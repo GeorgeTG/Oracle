@@ -10,6 +10,7 @@ from Oracle.parsing.parsers.events.game_view import GameViewEvent
 
 from Oracle.events import EventBus
 from Oracle.services.events.inventory import RequestInventoryEvent, InventorySnapshotEvent, InventoryUpdateEvent
+from Oracle.services.events.notification_events import NotificationEvent, NotificationSeverity
 from Oracle.services.events.service_event import ServiceEventType
 from Oracle.services.events.session_events import PlayerChangedEvent, SessionRestoreEvent
 from Oracle.services.model import InventoryItem, InventorySnapshot, Inventory
@@ -90,6 +91,11 @@ class InventoryService(ServiceBase):
         player_name = self.get_player_name()
         if not player_name:
             logger.warning("🧱 Cannot persist inventory: no player name")
+            await self.publish(NotificationEvent(
+                title="No Character Data",
+                content="Change area or relog to get character data",
+                severity=NotificationSeverity.WARNING,
+            ))
             return
         
         player = await self.get_player(player_name)

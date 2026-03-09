@@ -11,6 +11,7 @@
         "@angular/forms": "^20.1.4",
         "@angular/platform-browser": "^20.1.4",
         "@angular/router": "^20.1.4",
+        "@ngrx/signals": "^21.0.1",
         "@primeng/themes": "^21.0.1",
         "@tailwindcss/postcss": "^4.1.17",
         "@tauri-apps/api": "^2",
@@ -300,6 +301,8 @@
     "@napi-rs/nice-win32-ia32-msvc": ["@napi-rs/nice-win32-ia32-msvc@1.1.1", "", { "os": "win32", "cpu": "ia32" }, "sha512-CNQqlQT9MwuCsg1Vd/oKXiuH+TcsSPJmlAFc5frFyX/KkOh0UpBLEj7aoY656d5UKZQMQFP7vJNa1DNUNORvug=="],
 
     "@napi-rs/nice-win32-x64-msvc": ["@napi-rs/nice-win32-x64-msvc@1.1.1", "", { "os": "win32", "cpu": "x64" }, "sha512-vB+4G/jBQCAh0jelMTY3+kgFy00Hlx2f2/1zjMoH821IbplbWZOkLiTYXQkygNTzQJTq5cvwBDgn2ppHD+bglQ=="],
+
+    "@ngrx/signals": ["@ngrx/signals@21.0.1", "", { "dependencies": { "tslib": "^2.3.0" }, "peerDependencies": { "@angular/core": "^21.0.0", "rxjs": "^6.5.3 || ^7.4.0" }, "optionalPeers": ["rxjs"] }, "sha512-krmZDhgHrnmZrxfEJ41bp/aM8Mc55k5B2N7oCLT5w4M3YbOkbnWPkP6bBWMv4XPI+2rqVgkLRW6DaWLwoESaBw=="],
 
     "@npmcli/agent": ["@npmcli/agent@3.0.0", "", { "dependencies": { "agent-base": "^7.1.0", "http-proxy-agent": "^7.0.0", "https-proxy-agent": "^7.0.1", "lru-cache": "^10.0.1", "socks-proxy-agent": "^8.0.3" } }, "sha512-S79NdEgDQd/NGCay6TCoVzXSj74skRZIKJcpJjC5lOq34SZzyI6MqtiiWoiVWoVrTcGjNeC4ipbh1VIHlpfF5Q=="],
 

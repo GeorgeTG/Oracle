@@ -16,6 +16,7 @@
     "@angular/forms": "^20.1.4",
     "@angular/platform-browser": "^20.1.4",
     "@angular/router": "^20.1.4",
+    "@ngrx/signals": "^21.0.1",
     "@primeng/themes": "^21.0.1",
     "@tailwindcss/postcss": "^4.1.17",
     "@tauri-apps/api": "^2",

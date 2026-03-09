@@ -6,6 +6,7 @@ from tkinter import ttk, filedialog, messagebox
 import ctypes
 import json
 import os
+import re
 import sys
 import subprocess
 import platform
@@ -224,6 +225,23 @@ class OracleLauncher:
                                     relief='flat')
         self.terminal_text.pack(fill='both', expand=True)
         scrollbar.config(command=self.terminal_text.yview)
+
+        # ANSI color tags (One Dark palette)
+        self.terminal_text.tag_configure('ansi_red',     foreground='#e06c75')
+        self.terminal_text.tag_configure('ansi_green',   foreground='#98c379')
+        self.terminal_text.tag_configure('ansi_yellow',  foreground='#e5c07b')
+        self.terminal_text.tag_configure('ansi_blue',    foreground='#61afef')
+        self.terminal_text.tag_configure('ansi_magenta', foreground='#c678dd')
+        self.terminal_text.tag_configure('ansi_cyan',    foreground='#56b6c2')
+        self.terminal_text.tag_configure('ansi_white',   foreground='#abb2bf')
+        self.terminal_text.tag_configure('ansi_bright_red',    foreground='#ff7b7b')
+        self.terminal_text.tag_configure('ansi_bright_green',  foreground='#b5e890')
+        self.terminal_text.tag_configure('ansi_bright_yellow', foreground='#ffd080')
+        self.terminal_text.tag_configure('ansi_bright_cyan',   foreground='#7de0e8')
+        self.terminal_text.tag_configure('ts', foreground='#5c6370')
+        # Emoji font tag for Windows emoji rendering
+        self.terminal_text.tag_configure('emoji', font=('Segoe UI Emoji', 9))
+
         self.terminal_text.insert('1.0', 'Ready to start Oracle server...\n')
         self.terminal_text.config(state='disabled')
 
@@ -446,32 +464,66 @@ class OracleLauncher:
             self.stop_btn.config(state='disabled')
 
     def stop_server(self):
-        """Stop the Oracle server"""
-        try:
-            self.update_status("Stopping server...")
-            self.add_terminal_log("\n" + "=" * 80)
-            self.add_terminal_log("Stopping Oracle Server...")
-            self.add_terminal_log("=" * 80)
+        """Stop the Oracle server via WebSocket graceful shutdown, fallback to kill"""
+        self.update_status("Stopping server...")
+        self.add_terminal_log("\n" + "=" * 80)
+        self.add_terminal_log("Stopping Oracle Server...")
+        self.add_terminal_log("=" * 80)
+        self.stop_btn.config(state='disabled')
+        threading.Thread(target=self._stop_server_thread, daemon=True).start()
 
-            if self.server_process:
+    def _stop_server_thread(self):
+        """Background thread: send WS shutdown, wait for graceful exit, then kill if needed"""
+        graceful = False
+
+        if self.server_process:
+            try:
+                import asyncio
+                import websockets
+
+                server_config = self.config_data.get('server', {})
+                host = server_config.get('host', '127.0.0.1')
+                port = server_config.get('port', 8000)
+                ws_url = f"ws://{host}:{port}/ws"
+
+                async def send_shutdown():
+                    async with websockets.connect(ws_url, open_timeout=3) as ws:
+                        await ws.send(json.dumps({"command": "shutdown"}))
+                        try:
+                            await asyncio.wait_for(ws.recv(), timeout=2.0)
+                        except asyncio.TimeoutError:
+                            pass
+
+                asyncio.run(send_shutdown())
+                self.add_terminal_log("✓ Shutdown command sent via WebSocket")
+
+                # Wait for graceful exit
+                try:
+                    self.server_process.wait(timeout=8)
+                    graceful = True
+                    self.add_terminal_log("✓ Server exited gracefully")
+                except subprocess.TimeoutExpired:
+                    pass
+
+            except Exception as e:
+                self.add_terminal_log(f"WS shutdown failed ({e}), falling back to terminate...")
+
+            if not graceful and self.server_process:
                 self.server_process.terminate()
                 try:
                     self.server_process.wait(timeout=5)
+                    self.add_terminal_log("Server terminated")
                 except subprocess.TimeoutExpired:
                     self.server_process.kill()
                     self.add_terminal_log("Server forcefully killed (timeout)")
 
-                self.server_process = None
+            self.server_process = None
 
-            self.server_running = False
-            self.start_btn.config(state='normal')
-            self.stop_btn.config(state='disabled')
-            self.update_status("Server stopped")
-            self.add_terminal_log("Server stopped successfully")
-
-        except Exception as e:
-            self.update_status(f"Error stopping server: {e}", error=True)
-            self.add_terminal_log(f"ERROR stopping server: {e}")
+        self.server_running = False
+        self.root.after(0, lambda: self.start_btn.config(state='normal'))
+        self.root.after(0, lambda: self.stop_btn.config(state='disabled'))
+        self.root.after(0, lambda: self.update_status("Server stopped"))
+        self.add_terminal_log("Server stopped successfully")
 
     def start_hotkey_handler(self):
         """Start the Oracle Hotkey Handler (requires admin privileges)"""
@@ -490,7 +542,11 @@ class OracleLauncher:
 
         try:
             # Look for hotkey executable
-            hotkey_exe = self.launcher_dir / "hotkey" / "Oracle-Hotkey.exe"
+            hotkey_exe = self.launcher_dir / "Oracle-Hotkey.exe"
+            if not hotkey_exe.exists():
+                hotkey_exe = self.launcher_dir / "hotkey" / "Oracle-Hotkey.exe"
+            if not hotkey_exe.exists():
+                hotkey_exe = self.base_path / "Oracle-Hotkey.exe"
             if not hotkey_exe.exists():
                 hotkey_exe = self.base_path / "hotkey" / "Oracle-Hotkey.exe"
             if not hotkey_exe.exists():
@@ -508,7 +564,9 @@ class OracleLauncher:
                     raise FileNotFoundError(
                         "Oracle-Hotkey.exe not found.\n"
                         "Expected locations:\n"
+                        f"  {self.launcher_dir / 'Oracle-Hotkey.exe'}\n"
                         f"  {self.launcher_dir / 'hotkey' / 'Oracle-Hotkey.exe'}\n"
+                        f"  {self.base_path / 'Oracle-Hotkey.exe'}\n"
                         f"  {self.base_path / 'hotkey' / 'Oracle-Hotkey.exe'}"
                     )
 
@@ -928,17 +986,85 @@ and conditions.
         else:
             self.status_label.config(foreground='green')
 
+    # ANSI escape code pattern
+    _ANSI_RE = re.compile(r'\033\[([0-9;]*)m')
+    # ANSI code → tag name (None = reset/default color)
+    _ANSI_TAG = {
+        '31': 'ansi_red',     '0;31': 'ansi_red',     '1;31': 'ansi_bright_red',
+        '32': 'ansi_green',   '0;32': 'ansi_green',   '1;32': 'ansi_bright_green',
+        '33': 'ansi_yellow',  '0;33': 'ansi_yellow',  '1;33': 'ansi_bright_yellow',
+        '34': 'ansi_blue',    '0;34': 'ansi_blue',
+        '35': 'ansi_magenta', '0;35': 'ansi_magenta',
+        '36': 'ansi_cyan',    '0;36': 'ansi_cyan',    '1;36': 'ansi_bright_cyan',
+        '37': 'ansi_white',   '0;37': 'ansi_white',
+        '91': 'ansi_bright_red',   '92': 'ansi_bright_green',
+        '93': 'ansi_bright_yellow','96': 'ansi_bright_cyan',
+        '0': None, '': None,
+    }
+    # Emoji/non-BMP unicode range (basic emoji block detection)
+    _EMOJI_RE = re.compile(
+        r'[\U00002600-\U000027BF\U0001F300-\U0001FAFF\U00002702-\U000027B0'
+        r'\U0000231A-\U0000231B\U00002328\U000023CF\U000023E9-\U000023F3'
+        r'\U000023F8-\U000023FA\U000025AA-\U000025AB\U000025B6\U000025C0'
+        r'\U000025FB-\U000025FE\U00002614-\U00002615\U00002648-\U00002653'
+        r'\U0000267F\U00002693\U000026A1\U000026AA-\U000026AB\U000026BD-\U000026BE'
+        r'\U000026C4-\U000026C5\U000026CE\U000026D4\U000026EA\U000026F2-\U000026F3'
+        r'\U000026F5\U000026FA\U000026FD\U00002702\U00002705\U00002708-\U0000270D'
+        r'\U0000270F\U00002712\U00002714\U00002716\U0000271D\U00002721\U00002728'
+        r'\U00002733-\U00002734\U00002744\U00002747\U0000274C\U0000274E'
+        r'\U00002753-\U00002755\U00002757\U00002763-\U00002764\U00002795-\U00002797'
+        r'\U000027A1\U000027B0\U000027BF\u2139\u2194-\u2199\u21A9-\u21AA'
+        r'\u231A-\u231B\u2328\u23CF\u23E9-\u23F3\u23F8-\u23FA\u25AA-\u25AB'
+        r'\u25B6\u25C0\u25FB-\u25FE\u2600-\u2604\u260E\u2611\u2614-\u2615'
+        r'\u2618\u261D\u2620\u2622-\u2623\u2626\u262A\u262E-\u262F'
+        r'\u2638-\u263A\u2640\u2642\u2648-\u2653\u265F-\u2660\u2663'
+        r'\u2665-\u2666\u2668\u267B\u267E-\u267F\u2692-\u2697\u2699'
+        r'\u269B-\u269C\u26A0-\u26A1\u26AA-\u26AB\u26B0-\u26B1\u26BD-\u26BE'
+        r'\u26C4-\u26C5\u26CE-\u26CF\u26D1\u26D3-\u26D4\u26E9-\u26EA'
+        r'\u26F0-\u26F5\u26F7-\u26FA\u26FD\u2702\u2705\u2708-\u270D\u270F'
+        r'\u2712\u2714\u2716\u271D\u2721\u2728\u2733-\u2734\u2744\u2747'
+        r'\u274C\u274E\u2753-\u2755\u2757\u2763-\u2764\u2795-\u2797'
+        r'\u27A1\u27B0\u27BF\u2934-\u2935\u2B05-\u2B07\u2B1B-\u2B1C'
+        r'\u2B50\u2B55\u3030\u303D\u3297\u3299✓✗✘→←]'
+    )
+
+    def _insert_with_tag(self, text: str, color_tag: str | None):
+        """Insert text with optional color tag, applying emoji tag for emoji chars."""
+        if not text:
+            return
+        parts = self._EMOJI_RE.split(text)
+        emojis = self._EMOJI_RE.findall(text)
+        for i, part in enumerate(parts):
+            if part:
+                tags = (color_tag,) if color_tag else ()
+                self.terminal_text.insert('end', part, tags)
+            if i < len(emojis):
+                tags = ('emoji', color_tag) if color_tag else ('emoji',)
+                self.terminal_text.insert('end', emojis[i], tags)
+
     def add_terminal_log(self, message: str):
-        """Add a message to the terminal output with automatic cleanup"""
+        """Add a message to the terminal output with ANSI color parsing."""
         try:
             self.terminal_text.config(state='normal')
             timestamp = datetime.now().strftime('%H:%M:%S')
-            self.terminal_text.insert('end', f"[{timestamp}] {message}\n")
+            self.terminal_text.insert('end', f"[{timestamp}] ", 'ts')
+
+            # Parse ANSI escape codes and insert colored segments
+            pos = 0
+            current_tag = None
+            for m in self._ANSI_RE.finditer(message):
+                start, end = m.span()
+                if start > pos:
+                    self._insert_with_tag(message[pos:start], current_tag)
+                current_tag = self._ANSI_TAG.get(m.group(1))
+                pos = end
+            if pos < len(message):
+                self._insert_with_tag(message[pos:], current_tag)
+            self.terminal_text.insert('end', '\n')
 
             # Prevent memory buildup: keep only last 1000 lines
             line_count = int(self.terminal_text.index('end-1c').split('.')[0])
             if line_count > 1000:
-                # Delete oldest lines (keep last 800)
                 self.terminal_text.delete('1.0', f'{line_count - 800}.0')
 
             self.terminal_text.see('end')
@@ -949,55 +1075,57 @@ and conditions.
     # ============== TRAY ICON METHODS ==============
 
     def create_tray_icon_image(self):
-        """Load icon from .ico file or create a simple one."""
-        icon_path = self.server_dir / "favicon.ico"
-        if not icon_path.exists():
-            icon_path = self.dev_server_path / "favicon.ico"
-
-        if icon_path.exists():
-            try:
-                img = Image.open(icon_path)
-                if img.size != (64, 64):
+        """Load icon from .ico file or create a simple fallback."""
+        candidates = [
+            self.launcher_dir / "favicon.ico",
+            self.base_path / "favicon.ico",
+            self.server_dir / "favicon.ico",
+            self.dev_server_path / "favicon.ico",
+        ]
+        for icon_path in candidates:
+            if icon_path.exists():
+                try:
+                    img = Image.open(icon_path)
                     img = img.resize((64, 64), Image.Resampling.LANCZOS)
-                return img
-            except Exception:
-                pass
+                    return img
+                except Exception:
+                    continue
 
-        # Fallback: Create a 64x64 image with a circle
-        width = 64
-        height = 64
-        color1 = (52, 152, 219)  # Blue
-        color2 = (255, 255, 255)  # White
-
-        image = Image.new('RGB', (width, height), color1)
+        # Fallback: simple geometric icon
+        image = Image.new('RGBA', (64, 64), (0, 0, 0, 0))
         dc = ImageDraw.Draw(image)
-        dc.ellipse([8, 8, 56, 56], fill=color2, outline=color1, width=2)
-        dc.ellipse([20, 20, 44, 44], fill=color1, outline=color2, width=3)
-
+        dc.ellipse([2, 2, 62, 62], fill=(52, 152, 219, 255))
+        dc.ellipse([14, 14, 50, 50], fill=(255, 255, 255, 255))
+        dc.ellipse([22, 22, 42, 42], fill=(52, 152, 219, 255))
         return image
 
     def setup_tray(self):
         """Setup the system tray icon and menu."""
+        def server_label(icon, item):
+            return "Stop Server" if self.server_running else "Start Server"
+
+        def server_action(icon, item):
+            if self.server_running:
+                threading.Thread(target=self._stop_server_thread, daemon=True).start()
+            else:
+                self.root.after(0, self.start_oracle)
+
+        def ui_label(icon, item):
+            running = self.ui_process and self.ui_process.poll() is None
+            return "Show UI" if running else "Start UI"
+
+        def about_action(icon, item):
+            self.root.after(0, self._tray_open_about)
+
         menu = pystray.Menu(
-            pystray.MenuItem(
-                "Show Launcher",
-                self.tray_show_window
-            ),
+            pystray.MenuItem("Show Oracle Launcher", self.tray_show_window, default=True),
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem(
-                "Open UI",
-                self.tray_open_ui
-            ),
+            pystray.MenuItem(ui_label, self.tray_open_ui),
+            pystray.MenuItem(server_label, server_action),
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem(
-                "About",
-                self.tray_show_about
-            ),
+            pystray.MenuItem("About / License", about_action),
             pystray.Menu.SEPARATOR,
-            pystray.MenuItem(
-                "Quit",
-                self.tray_quit
-            )
+            pystray.MenuItem("Quit", self.tray_quit),
         )
 
         self.tray_icon = pystray.Icon(
@@ -1005,11 +1133,18 @@ and conditions.
             self.create_tray_icon_image(),
             "Oracle Launcher",
             menu,
-            on_activate=self.tray_show_window  # Double-click shows window
+            on_activate=self.tray_show_window,
         )
 
-        # Run tray icon in background thread
         threading.Thread(target=self.tray_icon.run, daemon=True).start()
+
+    def _tray_open_about(self):
+        """Show launcher window and switch to the About tab."""
+        self._show_window()
+        try:
+            self.notebook.select(2)  # About is the 3rd tab (index 2)
+        except Exception:
+            pass
 
     def tray_show_window(self, icon=None, item=None):
         """Show the launcher window."""
@@ -1070,32 +1205,8 @@ and conditions.
                                    "Please start the server first before opening the UI.")
 
     def tray_show_about(self, icon=None, item=None):
-        """Show About dialog."""
-        if sys.platform == 'win32':
-            def show_dialog():
-                user32 = ctypes.windll.user32
-                MB_OK = 0x0
-                MB_ICONINFORMATION = 0x40
-                MB_TOPMOST = 0x00040000
-
-                about_text = (
-                    "Oracle Launcher v1.0.0\n\n"
-                    "Launcher for Oracle Server and UI\n\n"
-                    "========================================\n\n"
-                    "MIT License - Copyright (c) 2025\n"
-                    "Oracle Contributors\n\n"
-                    "THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT\n"
-                    "WARRANTY OF ANY KIND, EXPRESS OR IMPLIED."
-                )
-
-                user32.MessageBoxW(
-                    0,
-                    about_text,
-                    "About Oracle Launcher",
-                    MB_OK | MB_ICONINFORMATION | MB_TOPMOST
-                )
-
-            threading.Thread(target=show_dialog, daemon=True).start()
+        """Show About - opens launcher to About tab."""
+        self.root.after(0, self._tray_open_about)
 
     def tray_quit(self, icon=None, item=None):
         """Quit the application and cleanup."""

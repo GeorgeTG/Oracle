@@ -1,5 +1,8 @@
 """WebSocket API router - handles WebSocket connections."""
+import asyncio
 import json
+import os
+import signal
 from datetime import datetime
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 
@@ -73,6 +76,15 @@ async def ws_endpoint(ws: WebSocket, event_bus: EventBus = Depends(get_event_bus
                 elif command == "hover_leave":
                     logger.info("WS hover_leave command received")
                     await event_bus.publish(HoverLeaveEvent(timestamp=datetime.now()))
+                elif command == "shutdown":
+                    logger.info("WS shutdown command received, initiating graceful shutdown...")
+                    try:
+                        await ws.send_text(json.dumps({"type": "shutdown_acknowledged"}))
+                        await ws.close()
+                    except Exception:
+                        pass
+                    asyncio.get_event_loop().call_later(0.2, lambda: os.kill(os.getpid(), signal.SIGTERM))
+                    return
             except json.JSONDecodeError:
                 pass
     except WebSocketDisconnect:

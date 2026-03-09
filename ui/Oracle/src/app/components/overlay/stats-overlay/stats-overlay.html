@@ -16,7 +16,8 @@
   [style.top]="radialPosition?.top || 'auto'"
 >
   <div class="radial-ring" (mousedown)="(editMode || hoverMode) && onRadialDragStart($event)"></div>
-  <div class="radial-center" (mousedown)="(editMode || hoverMode) && onRadialDragStart($event)">
+  <div class="radial-center" [ngClass]="isLogReading ? 'logo-glow-green' : 'logo-glow-red'"
+    (mousedown)="(editMode || hoverMode) && onRadialDragStart($event)">
     <img src="assets/favicon-32x32.png" alt="Oracle" class="radial-logo">
   </div>
   @for (panel of panelArray; track panel.config.id) {

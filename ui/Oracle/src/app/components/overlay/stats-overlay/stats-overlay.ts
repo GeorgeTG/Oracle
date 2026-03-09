@@ -1,19 +1,18 @@
-import { Component, OnInit, OnDestroy, HostBinding, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding, NgZone, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subscription } from 'rxjs';
+import { StatsStore } from '../../../store/stats.store';
+import { ItemStore } from '../../../store/item.store';
 import { StatsService } from '../../../services/stats.service';
 import { WebSocketService } from '../../../services/websocket.service';
 import { ConfigurationService } from '../../../services/configuration.service';
 import { OverlayService } from '../../../services/overlay.service';
-import { ServiceEventType, ParserEventType } from '../../../models/enums';
-import { StatsUpdateEvent, ItemObtainedEvent, MapStartedEvent, OverlayInfoTextEvent, ViewChangedEvent } from '../../../models/service-events';
-import { StageAffixEvent } from '../../../models/parser-events';
-import { CurrencyPipe } from '../../../pipes/currency.pipe';
-import { DurationPipe } from '../../../pipes/duration.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
+import { CurrencyPipe } from '../../../pipes/currency.pipe';
+import { DurationPipe } from '../../../pipes/duration.pipe';
 
 // --- Panel Registry Types ---
 
@@ -89,11 +88,20 @@ enum OverlayState {
   styleUrl: './stats-overlay.css',
 })
 export class StatsOverlayComponent implements OnInit, OnDestroy {
-  private statsSubscription?: Subscription;
+  // Stores (signal-based — no subscription management needed)
+  protected statsStore = inject(StatsStore);
+  protected itemStore = inject(ItemStore);
+
+  private configService = inject(ConfigurationService);
+  private overlayService = inject(OverlayService);
+  private statsService = inject(StatsService);
+  private websocketService = inject(WebSocketService);
+  private confirmationService = inject(ConfirmationService);
+  private ngZone = inject(NgZone);
+
+  // Only remaining subscription: config periodic unit (not WebSocket-driven)
   private configSubscription?: Subscription;
-  private itemObtainedSubscription?: Subscription;
-  private mapSubscription?: Subscription;
-  private viewChangeSubscription?: Subscription;
+
   private destroyListener?: any;
   private toggleEditModeListener?: any;
   private hoverModeListener?: any;
@@ -101,6 +109,7 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
   private lastBoundsJson: string = '';
   private boundsBroadcastInterval?: ReturnType<typeof setInterval>;
   private appWindow: any = null;
+
   state: OverlayState = OverlayState.Normal;
   isDragging: boolean = false;
   confirmDialogOpen: boolean = false;
@@ -108,11 +117,20 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
   get editMode(): boolean { return this.state === OverlayState.Edit; }
   get hoverMode(): boolean { return this.state === OverlayState.Hover; }
 
+  // Template-compatible getters delegating to signal stores
+  get stats() { return this.statsStore.lastStats(); }
+  get currentMap() { return this.statsStore.lastMap(); }
+  get currentAffixes() { return this.statsStore.currentAffixes(); }
+  get isLogReading() { return this.statsStore.isLogReading(); }
+  get itemHistory() { return this.itemStore.recentItems(); }
+  get notableItems() { return this.itemStore.notableItems(); }
+  get riverItems() { return this.itemStore.riverItems(); }
+  get infoTextItems() { return this.itemStore.infoTextItems(); }
+
   // --- Panel Registry ---
   panels = new Map<string, PanelState>();
   get panelArray(): PanelState[] { return Array.from(this.panels.values()); }
 
-  // Getter/setter pairs for template two-way binding compatibility
   get showStats(): boolean { return this.isPanelVisible('stats'); }
   set showStats(v: boolean) { this.panels.get('stats')!.visible = v; }
 
@@ -131,92 +149,45 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
   get showInfoText(): boolean { return this.isPanelVisible('infoText'); }
   set showInfoText(v: boolean) { this.panels.get('infoText')!.visible = v; }
 
-  // --- Data properties (unique per panel) ---
-  stats: StatsUpdateEvent | null = null;
-  currentMap: MapStartedEvent | null = null;
-  itemHistory: ItemObtainedEvent[] = [];
-  maxHistoryItems: number = 20;
-  notableItems: ItemObtainedEvent[] = [];
-  maxNotableItems: number = 10;
-  notableMinValue: number = 50;
-
+  // Labels driven by config
   currencyLabel: string = 'Currency / Hour';
   expLabel: string = 'EXP / Hour';
   currentUnit: string = 'Hour';
 
-  // Currency river
-  riverItems: { id: number; delta: number; price: number; name: string }[] = [];
-  private riverIdCounter = 0;
-  private riverItemSubscription?: Subscription;
-
   // Map detail popups
-  currentAffixes: { affix_id: number; description: string }[] = [];
   showConsumedPopup: boolean = false;
   showAffixesPopup: boolean = false;
-  private affixSubscription?: Subscription;
 
-  // Info text
-  infoTextItems: { id: number; text: string; severity: string; duration: number }[] = [];
-  private infoTextIdCounter = 0;
-  private infoTextSubscription?: Subscription;
-
-  // Radial menu position (not a panel)
+  // Radial menu position
   radialPosition: { left: string; top: string } | null = null;
 
-  // View state
-  private currentGameView: string = '';
-
   @HostBinding('class.transparent-mode')
-  get isTransparentModeBinding(): boolean {
-    return this.configService.isTransparentOverlay();
-  }
+  get isTransparentModeBinding(): boolean { return this.configService.isTransparentOverlay(); }
 
   @HostBinding('class.edit-mode')
-  get isEditModeBinding(): boolean {
-    return this.editMode;
-  }
+  get isEditModeBinding(): boolean { return this.editMode; }
 
   @HostBinding('class.hover-mode')
-  get isHoverModeBinding(): boolean {
-    return this.hoverMode;
-  }
+  get isHoverModeBinding(): boolean { return this.hoverMode; }
 
-  get isTransparentMode(): boolean {
-    return this.configService.isTransparentOverlay();
-  }
+  get isTransparentMode(): boolean { return this.configService.isTransparentOverlay(); }
 
   private async changeState(newState: OverlayState): Promise<void> {
     if (this.state === newState) return;
     const prev = this.state;
     this.state = newState;
     this.isDragging = false;
-
     if (this.isTransparentMode && this.appWindow) {
       await this.appWindow.setIgnoreCursorEvents(newState === OverlayState.Normal);
     }
-
     console.log(`[StatsOverlay] State: ${prev} -> ${newState}`);
   }
 
-  constructor(
-    private statsService: StatsService,
-    private websocketService: WebSocketService,
-    private configService: ConfigurationService,
-    private overlayService: OverlayService,
-    private confirmationService: ConfirmationService,
-    private ngZone: NgZone
-  ) {
-    // Build panel states from config
+  constructor() {
     for (const config of PANEL_CONFIGS) {
-      this.panels.set(config.id, {
-        config,
-        visible: true,
-        position: null,
-        viewHidden: false,
-      });
+      this.panels.set(config.id, { config, visible: true, position: null, viewHidden: false });
     }
 
-    // Restore dialog visibility
     const saved = localStorage.getItem('overlay_panel_visibility');
     if (saved) {
       try {
@@ -227,7 +198,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       } catch {}
     }
 
-    // Restore dialog positions
     const positions = localStorage.getItem('overlay_dialog_positions');
     if (positions) {
       try {
@@ -249,77 +219,23 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       this.expLabel = `EXP / ${unit}`;
     });
 
-    this.statsSubscription = this.statsService.getStats().subscribe(event => {
-      this.stats = event;
-    });
-
-    this.itemObtainedSubscription = this.websocketService.subscribe<ItemObtainedEvent>(ServiceEventType.ITEM_OBTAINED).subscribe(event => {
-      this.itemHistory.unshift(event);
-      if (this.itemHistory.length > this.maxHistoryItems) {
-        this.itemHistory = this.itemHistory.slice(0, this.maxHistoryItems);
-      }
-      // Track notable items (price >= 50)
-      if (event.item_price >= this.notableMinValue) {
-        this.notableItems.unshift(event);
-        if (this.notableItems.length > this.maxNotableItems) {
-          this.notableItems = this.notableItems.slice(0, this.maxNotableItems);
-        }
-      }
-    });
-
-    this.mapSubscription = this.statsService.getMapEvents().subscribe(event => {
-      this.currentMap = event;
-      this.currentAffixes = []; // Clear affixes on new map
-    });
-
-    // Subscribe to affix events
-    this.affixSubscription = this.websocketService.subscribe<StageAffixEvent>(ParserEventType.STAGE_AFFIX).subscribe(event => {
-      if (event.affixes?.length) {
-        this.currentAffixes = event.affixes.map((a: any) => ({
-          affix_id: a.affix_id,
-          description: a.description || ''
-        }));
-      }
-    });
-
-    // Currency river - subscribe to item events, auto-remove after animation
-    this.riverItemSubscription = this.websocketService.subscribe<ItemObtainedEvent>(ServiceEventType.ITEM_OBTAINED).subscribe(event => {
-      if (!this.showRiver) return;
-      const totalValue = event.delta * event.item_price;
-      if (Math.abs(totalValue) < this.configService.getConfig().riverMinValue) return;
-      const id = this.riverIdCounter++;
-      this.riverItems.push({ id, delta: event.delta, price: totalValue, name: event.item_name || `Item #${event.item_id}` });
-      // Remove after animation completes (4.5s)
-      setTimeout(() => {
-        this.riverItems = this.riverItems.filter(r => r.id !== id);
-      }, 4500);
-    });
-
-    // Info text - subscribe to overlay info text events, auto-remove after duration
-    this.infoTextSubscription = this.websocketService.subscribe<OverlayInfoTextEvent>(ServiceEventType.OVERLAY_INFO_TEXT).subscribe(event => {
-      if (!this.showInfoText) return;
-      const duration = event.duration ?? 3000;
-      const id = this.infoTextIdCounter++;
-      this.infoTextItems.push({ id, text: event.text, severity: event.severity, duration });
-      setTimeout(() => {
-        this.infoTextItems = this.infoTextItems.filter(r => r.id !== id);
-      }, duration);
-    });
-
-    // Subscribe to view changes for auto-hide/show
-    this.viewChangeSubscription = this.websocketService
-      .subscribe<ViewChangedEvent>(ServiceEventType.VIEW_CHANGED)
-      .subscribe(event => this.applyViewRules(event.view));
-
     this.setupWindowCleanup();
   }
 
-  // --- Panel Registry Methods ---
+  // --- Panel visibility with view rules (reads from StatsStore signal) ---
 
   isPanelVisible(id: string): boolean {
     const p = this.panels.get(id);
-    return p ? p.visible && !p.viewHidden : false;
+    if (!p || !p.visible) return false;
+    const rules = p.config.viewRules;
+    if (!rules) return true;
+    const view = this.statsStore.currentGameView();
+    if (rules.hide?.some(v => view.includes(v))) return false;
+    if (rules.show?.length) return rules.show.some(v => view.includes(v));
+    return true;
   }
+
+  // --- Panel Registry Methods ---
 
   togglePanel(id: string): void {
     const p = this.panels.get(id);
@@ -331,16 +247,11 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
   onDialogHide(id: string): void {
     const p = this.panels.get(id);
     if (!p) return;
-    // Don't persist hide if it was auto-hidden by view rules
-    if (!p.viewHidden) {
-      p.visible = false;
-      this.saveVisibility();
-    }
+    p.visible = false;
+    this.saveVisibility();
   }
 
-  onDialogShow(_id: string): void {
-    // Position is handled via [style] binding + CSS absolute positioning
-  }
+  onDialogShow(_id: string): void {}
 
   onDialogDragEnd(id: string): void {
     this.isDragging = false;
@@ -363,31 +274,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
     return p.position || p.config.defaultPosition;
   }
 
-  // --- View State ---
-
-  private applyViewRules(view: string): void {
-    this.currentGameView = view;
-    for (const [, panel] of this.panels) {
-      const rules = panel.config.viewRules;
-      if (!rules) {
-        panel.viewHidden = false;
-        continue;
-      }
-      // Hide when view matches any hide rule
-      if (rules.hide?.some(v => view.includes(v))) {
-        panel.viewHidden = true;
-        continue;
-      }
-      // If show rules defined, hide unless view matches one of them
-      if (rules.show?.length) {
-        panel.viewHidden = !rules.show.some(v => view.includes(v));
-        continue;
-      }
-      panel.viewHidden = false;
-    }
-    setTimeout(() => this.broadcastBounds(), 100);
-  }
-
   // --- Overlay Window Setup ---
 
   private async setupOverlayWindow() {
@@ -401,7 +287,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
         await this.appWindow.setDecorations(false);
         await this.appWindow.setShadow(false);
 
-        // Use manual fullscreen with slight oversize to hide Windows DWM 1px border
         const { currentMonitor } = await import('@tauri-apps/api/window');
         const { PhysicalPosition, PhysicalSize } = await import('@tauri-apps/api/dpi');
         const monitor = await currentMonitor();
@@ -410,10 +295,8 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
           await this.appWindow.setSize(new PhysicalSize(monitor.size.width + 4, monitor.size.height + 4));
         }
 
-        // Start in Normal state (click-through ON)
         await this.appWindow.setIgnoreCursorEvents(true);
 
-        // Listen for edit mode toggle from main window
         const { listen } = await import('@tauri-apps/api/event');
         let lastToggleTime = 0;
         this.toggleEditModeListener = await listen('toggle-edit-mode', async () => {
@@ -426,7 +309,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
           });
         });
 
-        // Listen for hover mode changes from overlay service
         this.hoverModeListener = await listen('set-hover-mode', async (event: any) => {
           const enabled = event.payload?.enabled ?? false;
           if (this.state === OverlayState.Edit || this.isDragging || this.confirmDialogOpen) return;
@@ -435,20 +317,12 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
           });
         });
 
-        // Start broadcasting bounding boxes for hover detection
         this.startBoundsBroadcast();
 
-        // Detect PrimeNG dialog drag start via header mousedown
         const onHeaderMouseDown = (e: Event) => {
-          if ((e.target as HTMLElement).closest('.p-dialog-header')) {
-            this.isDragging = true;
-          }
+          if ((e.target as HTMLElement).closest('.p-dialog-header')) this.isDragging = true;
         };
-        const onHeaderMouseUp = () => {
-          if (this.isDragging) {
-            this.isDragging = false;
-          }
-        };
+        const onHeaderMouseUp = () => { if (this.isDragging) this.isDragging = false; };
         document.addEventListener('mousedown', onHeaderMouseDown);
         document.addEventListener('mouseup', onHeaderMouseUp);
         this.dialogDragListener = () => {
@@ -501,7 +375,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       menuEl.style.right = 'auto';
       menuEl.style.bottom = 'auto';
     };
-
     const onMouseUp = () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -510,7 +383,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       this.saveDialogPositions();
       this.broadcastBounds();
     };
-
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   }
@@ -529,7 +401,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       el.style.left = `${origLeft + (e.clientX - startX)}px`;
       el.style.top = `${origTop + (e.clientY - startY)}px`;
     };
-
     const onMouseUp = () => {
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -538,7 +409,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       this.saveDialogPositions();
       this.broadcastBounds();
     };
-
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
   }
@@ -547,7 +417,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
 
   async newSession() {
     this.confirmDialogOpen = true;
-
     if (this.isTransparentMode && this.appWindow) {
       await this.appWindow.setIgnoreCursorEvents(false);
     }
@@ -562,13 +431,8 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       message: 'Start a new session? Current stats will be reset.',
       header: 'New Session',
       icon: 'pi pi-refresh',
-      accept: async () => {
-        this.statsService.newSession().subscribe();
-        await onDialogClose();
-      },
-      reject: async () => {
-        await onDialogClose();
-      }
+      accept: async () => { this.statsService.newSession().subscribe(); await onDialogClose(); },
+      reject: async () => { await onDialogClose(); }
     });
   }
 
@@ -625,10 +489,8 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
       bounds.push({
         panel: id,
         visible: this.isPanelVisible(id),
-        x: Math.round(rect.left),
-        y: Math.round(rect.top),
-        width: Math.round(rect.width),
-        height: Math.round(rect.height),
+        x: Math.round(rect.left), y: Math.round(rect.top),
+        width: Math.round(rect.width), height: Math.round(rect.height),
       });
     }
     const radial = this.getRadialMenuBounds();
@@ -641,12 +503,9 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
     if (!el) return null;
     const rect = el.getBoundingClientRect();
     return {
-      panel: 'radial-menu',
-      visible: true,
-      x: Math.round(rect.left),
-      y: Math.round(rect.top),
-      width: Math.round(rect.width),
-      height: Math.round(rect.height),
+      panel: 'radial-menu', visible: true,
+      x: Math.round(rect.left), y: Math.round(rect.top),
+      width: Math.round(rect.width), height: Math.round(rect.height),
     };
   }
 
@@ -665,16 +524,11 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
 
   // --- Utility ---
 
-  getAbsPrice(price: number): number {
-    return Math.abs(price);
-  }
+  getAbsPrice(price: number): number { return Math.abs(price); }
 
   getValueGlowClass(value: number): string {
-    if (value > 0) {
-      return 'shadow-[0_0_15px_rgba(16,185,129,0.6)] border-green-500';
-    } else if (value < 0) {
-      return 'shadow-[0_0_15px_rgba(239,68,68,0.6)] border-red-500';
-    }
+    if (value > 0) return 'shadow-[0_0_15px_rgba(16,185,129,0.6)] border-green-500';
+    if (value < 0) return 'shadow-[0_0_15px_rgba(239,68,68,0.6)] border-red-500';
     return 'shadow-[0_0_15px_rgba(245,158,11,0.6)] border-yellow-500';
   }
 
@@ -686,7 +540,6 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
         const { getCurrentWindow } = await import('@tauri-apps/api/window');
         this.appWindow = getCurrentWindow();
       }
-
       this.destroyListener = await this.appWindow.onCloseRequested(async () => {
         await this.cleanup();
       });
@@ -696,17 +549,7 @@ export class StatsOverlayComponent implements OnInit, OnDestroy {
   }
 
   private async cleanup() {
-    this.statsSubscription?.unsubscribe();
-    this.itemObtainedSubscription?.unsubscribe();
-    this.mapSubscription?.unsubscribe();
-    this.affixSubscription?.unsubscribe();
-    this.riverItemSubscription?.unsubscribe();
-    this.infoTextSubscription?.unsubscribe();
-    this.viewChangeSubscription?.unsubscribe();
-    if (this.boundsBroadcastInterval) {
-      clearInterval(this.boundsBroadcastInterval);
-    }
-
+    clearInterval(this.boundsBroadcastInterval);
     if (this.isTransparentMode) {
       document.documentElement.style.backgroundColor = '';
       document.body.style.backgroundColor = '';

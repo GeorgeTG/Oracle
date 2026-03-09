@@ -32,13 +32,13 @@ class InventorySnapshotEvent(ServiceEvent):
     type: ServiceEventType = ServiceEventType.INVENTORY_SNAPSHOT
     snapshot: InventorySnapshot
 
-    def to_dict(self) -> Dict[str, str | Dict[str, str | Inventory]]:
+    def to_dict(self) -> dict:
         return {
             "timestamp": self.timestamp.isoformat(),
             "type": str(self.type),
             "snapshot": {
                 "timestamp": self.snapshot.timestamp.isoformat(),
-                "data": self.snapshot.data,
+                "data": self.snapshot.data.to_dict(),
             },
         }
 
@@ -55,13 +55,11 @@ class InventoryUpdateEvent(ServiceEvent):
     inventory: Inventory
     type: ServiceEventType = ServiceEventType.INVENTORY_UPDATE
     
-    def to_dict(self) -> Dict[str, str | Dict[str, int]]:
+    def to_dict(self) -> dict:
         return {
             "timestamp": self.timestamp.isoformat(),
             "type": str(self.type),
-            "inventory": {
-                "slots": len(self.inventory.slots),
-            },
+            "inventory": self.inventory.to_dict(),
         }
     
     def __repr__(self) -> str:

@@ -11,6 +11,7 @@ export interface AffixModel {
 
 // Generated from services\model\inventory_model.py
 export interface InventoryItem {
+  slot: number;
   item_id: number;
   quantity: number;
   name?: string;
@@ -18,8 +19,9 @@ export interface InventoryItem {
 }
 
 // Generated from services\model\inventory_model.py
+// slots: { [page: string]: InventoryItem[] }
 export interface Inventory {
-  slots: Record<number, number>;
+  slots: Record<string, InventoryItem[]>;
 }
 
 // Generated from services\model\inventory_model.py

@@ -1,7 +1,8 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, inject, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ItemService, Item } from '../../../services/item.service';
+import { ItemStore } from '../../../store/item.store';
 import { ToastService } from '../../../services/toast.service';
 import { TableModule, Table } from 'primeng/table';
 import { InputText } from 'primeng/inputtext';
@@ -9,7 +10,6 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { AutoComplete } from 'primeng/autocomplete';
 import { save } from '@tauri-apps/plugin-dialog';
-import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-tracking-items',
@@ -19,7 +19,7 @@ import { Subscription } from 'rxjs';
 })
 export class ItemsComponent implements OnInit, OnDestroy {
   @ViewChild('dt') table!: Table;
-  private itemChangedSub?: Subscription;
+  private itemStore = inject(ItemStore);
   items: Item[] = [];
   loading: boolean = false;
   exporting: boolean = false;
@@ -37,28 +37,42 @@ export class ItemsComponent implements OnInit, OnDestroy {
   categories: string[] = [];
   filteredCategories: string[] = [];
 
+  private lastItemCount = 0;
+
   constructor(
     private itemService: ItemService,
     private toastService: ToastService
-  ) {}
+  ) {
+    // Reload item list when a new item is obtained (recentItems length changes)
+    effect(() => {
+      const items = this.itemStore.recentItems();
+      if (items.length > this.lastItemCount && this.lastItemCount > 0) {
+        const latest = items[0];
+        this.loadItems();
+        setTimeout(() => {
+          if (this.table && latest) {
+            this.table.filterGlobal(String(latest.item_id), 'contains');
+          }
+        }, 500);
+      }
+      this.lastItemCount = items.length;
+    });
+
+    // Reload when item data changes (price/name updated)
+    effect(() => {
+      const changeId = this.itemStore.lastDataChangeId();
+      if (changeId > 0) {
+        this.loadItems();
+      }
+    });
+  }
 
   ngOnInit() {
     this.loadItems();
     this.loadCategories();
-    this.itemChangedSub = this.itemService.itemChanged$.subscribe(event => {
-      this.loadItems();
-      // Auto-filter to the changed item
-      setTimeout(() => {
-        if (this.table) {
-          this.table.filterGlobal(String(event.item_id), 'contains');
-        }
-      }, 500);
-    });
   }
 
-  ngOnDestroy() {
-    this.itemChangedSub?.unsubscribe();
-  }
+  ngOnDestroy() {}
 
   loadItems() {
     this.loading = true;

@@ -1,3 +1,6 @@
 pynput
 websocket-client
 tomli
+
+# Build only (used by deploy/setup.ts to build Oracle-Hotkey.exe)
+pyinstaller>=6.0.0

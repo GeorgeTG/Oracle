@@ -76,6 +76,26 @@ class Inventory:
         }
         return new_inv
 
+    def to_dict(self) -> dict:
+        """Serialize inventory to dict for WebSocket transmission.
+
+        Format: {page: [{slot, item_id, quantity, name, category}, ...]}
+        Keys are string page numbers to be JSON-safe.
+        """
+        pages: dict = {}
+        for (page, slot), item in self.slots.items():
+            page_key = str(page)
+            if page_key not in pages:
+                pages[page_key] = []
+            pages[page_key].append({
+                "slot": slot,
+                "item_id": item.item_id,
+                "quantity": item.quantity,
+                "name": item.name,
+                "category": item.category,
+            })
+        return {"slots": pages}
+
     def __repr__(self) -> str:
         """Pretty representation of inventory with emojis per page."""
         if not self.slots:

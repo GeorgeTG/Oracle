@@ -2,8 +2,8 @@
 # Python 3.10+
 
 # TOML parsing (for reading config.toml)
-# Install from source to avoid mypyc compiled modules that cause issues with PyInstaller
-tomli>=2.0.0 --no-binary tomli
+# Note: tomli is installed --no-binary via setup.ts to avoid mypyc issues with PyInstaller
+tomli>=2.0.0
 tomli-w>=1.0.0
 
 # Sun Valley ttk theme (modern Windows 11 style)
@@ -12,12 +12,15 @@ sv-ttk>=2.0.0
 # GitHub API for checking updates
 PyGithub>=2.1.0
 
-# PyInstaller for building executable
-pyinstaller>=6.0.0
-
 # System tray icon support
 pystray>=0.19.0
 Pillow>=10.0.0
 
+# WebSocket client for graceful server shutdown
+websockets>=13.0
+
 # Optional: pywin32 for better window focus handling on Windows
 # pywin32>=306
+
+# Build only (not needed at runtime - used by deploy/setup.ts to build Oracle-Launcher.exe)
+pyinstaller>=6.0.0

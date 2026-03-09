@@ -11,7 +11,17 @@
       "Bash(python3 -m venv:*)",
       "Bash(c:/Users/georg/Documents/Projects/Oracle/deploy/build/hotkey-venv/Scripts/pip.exe install:*)",
       "Bash(bun run:*)",
-      "Bash(powershell -Command:*)"
+      "Bash(powershell -Command:*)",
+      "Bash(c:UsersgeorgDocumentsProjectsOraclelauncher.venvScriptspip.exe install websockets)",
+      "Bash(cmd.exe /c \"c:\\\\Users\\\\georg\\\\Documents\\\\Projects\\\\Oracle\\\\launcher\\\\.venv\\\\Scripts\\\\pip.exe install websockets\")",
+      "Bash(cmd.exe /c \"c:\\\\Users\\\\georg\\\\Documents\\\\Projects\\\\Oracle\\\\deploy\\\\build\\\\launcher-venv\\\\Scripts\\\\pip.exe install websockets\")",
+      "Bash(cmd.exe /c \"c:\\\\Users\\\\georg\\\\Documents\\\\Projects\\\\Oracle\\\\launcher\\\\.venv\\\\Scripts\\\\pip.exe install -r c:\\\\Users\\\\georg\\\\Documents\\\\Projects\\\\Oracle\\\\launcher\\\\requirements.txt --no-binary tomli 2>&1\")",
+      "Bash(cmd.exe /c \"c:\\\\Users\\\\georg\\\\Documents\\\\Projects\\\\Oracle\\\\launcher\\\\.venv\\\\Scripts\\\\pip.exe show websockets 2>&1 | findstr Version\")",
+      "Bash(cmd.exe /c \"c:\\\\Users\\\\georg\\\\Documents\\\\Projects\\\\Oracle\\\\deploy\\\\build\\\\launcher-venv\\\\Scripts\\\\pip.exe show websockets 2>&1 | findstr Version\")",
+      "Bash(.venv/Scripts/pip install \"pystray>=0.19.0\" \"Pillow>=10.0.0\")",
+      "Bash(deploy/build/launcher-venv/Scripts/pip install \"pystray>=0.19.0\" \"Pillow>=10.0.0\")",
+      "Bash(deploy/build/hotkey-venv/Scripts/pip show pyinstaller)",
+      "Bash(bun add @ngrx/signals)"
     ],
     "additionalDirectories": [
       "c:\\Users\\georg\\Documents\\Projects\\Oracle"
